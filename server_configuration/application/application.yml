@@ -1,0 +1,23 @@
+proxy:
+  title: Safer Streets Priority Finder
+  landing-page: https://highriskstreetsfinder.com/app/safer-streets-priority-finder
+  hide-navbar: true
+  heartbeat-rate: 10000
+  heartbeat-timeout: 1800000
+  container-wait-time: 120000
+  port: 8080
+  authentication: none #
+  docker:
+      internal-networking: true
+  specs:
+    - id: safer-streets-priority-finder
+      display-name: Safer Streets Priority Finder
+      container-cmd: ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');USDOTvulusrTOOL::run_app()"]
+      container-image: tooledesign/vulusr_beta
+      container-network: sp-net
+server:
+  useForwardHeaders: true  
+
+logging:
+  file:
+    shinyproxy.log
