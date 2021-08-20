@@ -97,7 +97,7 @@ To stop the container, use the command, ```docker stop ssfp```.
 
 Prune off unwanted containers with, ```docker container prune ssfp ```. 
 
-### Step 4. Launch local project
+### Step 4. Locally launch the Safer Streets Priority Finder
 
 Navigate to the safer-streets-priority-finder directory. This directory should container a Dockerfile. 
 
