@@ -167,15 +167,11 @@ Run the following command to spawn a new Docker container running the SSPF model
 
 Enter the following text:
 
-\[postgres\]
-
-host=%hostname%
-
-dbname=%databasename%
-
-username=%username%
-
-password=%password%
+    \[postgres\]
+    host=%hostname%
+    dbname=%databasename%
+    username=%username%
+    password=%password%
 
 Substitute in the connection values you used when you set up the PostgreSQL database earlier. When done, exit nano and save the file.
 
