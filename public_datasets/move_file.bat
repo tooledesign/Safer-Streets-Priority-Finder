@@ -1,1 +1,0 @@
-$scp -i /Users/Bikingman/usdot_vul_usr_2021.pem /Users/Bikingman/Documents/GitHub/a0137_vulnerable_user_risk_network_tool/99x_main_tool_dev/public_datasets/index.html  ubuntu@ec2-54-166-128-20.compute-1.amazonaws.com:~/data/
