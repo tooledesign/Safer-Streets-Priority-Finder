@@ -39,8 +39,7 @@ mod_reporter_ui <- function(id){
                 fluidRow(
                   col_12(
                     actionButton(ns("download_instructions"), "Instructions", class = "btn btn-primary"),
-                    downloadButton(ns('download_report'), label = "Download Report", class = 'btn btn-primary'),
-                    uiOutput(ns("download_report_notice"))
+                    downloadButton(ns('download_report'), label = "Download Report", class = 'btn btn-primary')
                   )
                 ),
                 hr(),
@@ -1049,11 +1048,6 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
             )
           )
           
-          # notify user is building a report 
-          shinyjs::runjs(code = paste0('$("#', session$ns('download_report'), '").removeClass("leaflet_block");'))
-          shinyjs::runjs(code = paste0('$("#', session$ns('download_report'), '").addClass("leaflet_none");'))
-          output$download_report_notice <- renderUI({"Building Report."})
-          
           # heave lifting starts here 
           downloader_function(connection=connection,
                               user_id=user_id, 
@@ -1073,11 +1067,6 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
   
           files <- list(list.files(pattern = "\\_rm.pdf$"))
           do.call(file.remove, files)
-          
-          # bring button back 
-          shinyjs::runjs(code = paste0('$("#', session$ns('download_report'), '").removeClass("leaflet_none");'))
-          shinyjs::runjs(code = paste0('$("#', session$ns('download_report'), '").addClass("leaflet_block");'))
-          output$download_report_notice <- renderUI({NULL})
           
         waiter::waiter_hide()
       }
