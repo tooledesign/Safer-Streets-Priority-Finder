@@ -93,9 +93,9 @@ After that's complete, you launch a container with,
 
 At this time, your model processor is running in a detached Docker container listening for a user to request a model. The model will port everything to the PostgreSQL database identified in the env_variables.R file. 
 
-To stop the container, use the command, ```docker stop ssfp```. 
+To stop the container, use the command, ```docker stop sspf_model_processor```. 
 
-Prune off unwanted containers with, ```docker container prune ssfp ```. 
+Prune off unwanted containers with, ```docker container prune sspf_model_processor ```. 
 
 ### Step 4. Locally launch the Safer Streets Priority Finder
 
