@@ -1,6 +1,6 @@
 # Safer-Streets-Priority-Finder
 
-The Safer Streets Priority Finder enables you to analyze the risk to bicyclists and pedestrians on your community’s roads. You can use your local road, crash, and study area data or select from nationally available datasets to:
+The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicyclists and pedestrians on your community’s roads. You can use your local road, crash, and study area data or select from nationally available datasets to:
 
 1. Explore descriptive statistics related to your crash data
 2. Develop a Sliding Windows Analysis using historical crash data to inform a High Injury Network
@@ -52,7 +52,7 @@ You can update the system variables on the CL with ```nano``` text editor.
 
 Update all variables in that file. Here's a breakdown of what each variable refers to: 
 
-1. **SSPF_EMAIL_PASSWORD** - password to an email account that sends a notification to users that a model has started or finished.
+1. **SSPF_EMAIL_PASSWORD** - password to an email account that sends a notification to users that a model has started or finished
 2. **SSPF_EMAIL_ADDRESS** - email address to send notification 
 3. **SSPF_AMAZON_HOST_ADDRESS***  - host address to PostgreSQL Relational Database 
 4. **SSPF_AMAZON_PASSWORD** - password to PostgreSQL Relational Database
