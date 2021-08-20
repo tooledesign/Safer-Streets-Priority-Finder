@@ -252,7 +252,6 @@ if (!is.null(params$severity_stacked)) {
 ## Crashes by Functional Classification
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-write.csv(params$fclass_chart, 'test2.csv')
 if (!is.null(params$fclass_chart)) {
 fclass_c <- plotly::plot_ly(params$fclass_chart, x = ~fclass_mapped, y = ~k, name = 'Fatality (K)', type = 'bar')  %>%
   plotly::add_trace(y = ~a, name = 'Incapacitating Injury (A)')  %>%
@@ -278,7 +277,6 @@ webshot::webshot(url = "fclass_cl_rm.html", file = "fclass_cl_rm.png", delay = 1
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-write.csv(params$fclass_table, 'test3.csv')
 if (!is.null(params$fclass_table)) {
   knitr::kable(params$fclass_table)
 } else {
