@@ -9,7 +9,7 @@ The Safer Streets Priority Finder enables you to analyze the risk to bicyclists 
 [Checkout the Safer Streets Priority Finder Tool here.](https://www.saferstreetspriorityfinder.com/)
 
 
-## What You Need To Locally Launch The Safer Streets Priority Finder
+## How to launch the SSPF, what you'll need
 
 ### 1. Linux 
 You'll need sudo access on a Linux command line. 
@@ -32,7 +32,7 @@ Fill out your system variables, so the Docker container can link the user inform
 ### 5. Docker Installed 
 If you don't already have an Docker installed on your machine, you can get started [here](https://docs.docker.com/get-docker/).
 
-## Launching the application locally 
+## Launching the application
 
 There are two ways to do this. The easiest way forward will be to hookup the tool to your postgres database and launch a Docker container with the model processor. Once those are ready, launch the tool from your RStudio command line. 
 
