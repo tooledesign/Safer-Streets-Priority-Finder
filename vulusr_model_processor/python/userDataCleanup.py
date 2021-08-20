@@ -26,6 +26,37 @@ def cleanupStaleRuns(type, threshold=6):
 def deleteStaleRun(user_id, run_id, type):
     with conn.cursor() as cur:
         cur.execute("DROP TABLE IF EXISTS local_user_data.{}_{}_{};".format('crashes' if type == 'crash' else type, user_id, run_id))
+        cur.execute(""" 
+        UPDATE gen_management.accounts 
+        SET time_since_model_desired = NULL,
+                model_status = NULL,
+                model_process_time = NULL,
+                time_mode_finished = NULL,
+                move_windows_long_comp = NULL,
+                model_comp = NULL,     
+                crash_o_year_col = NULL,
+                crash_o_serv_col = NULL,
+                crash_o_rep_id_col = NULL,
+                crash_o_source = NULL,
+                crash_o_mode_col = NULL,
+                road_o_name = NULL,
+                road_o_source = NULL,
+                road_o_id = NULL,
+                roads_fun_c_col = NULL,
+                o_k_cost = NULL,
+                o_a_cost = NULL, 
+                o_b_cost = NULL,
+                o_c_cost = NULL,
+                o_o_cost = NULL,
+                discount_rate = NULL,
+                sa_bbox_north_4326 = NULL,
+                sa_bbox_south_4326 = NULL,
+                sa_bbox_east_4326 = NULL, 
+                sa_bbox_west_4326 = NULL,
+                sa_o_source = NULL,
+                roads_o_fun_c_col = NULL 
+        WHERE   user_id = %s AND run_id = %s;
+        """)
         cur.execute("UPDATE gen_management.accounts SET date_{}_deleted = current_timestamp(0) WHERE user_id = %s AND run_id = %s;".format(type), (user_id, run_id))
         conn.commit()
 
@@ -35,3 +66,4 @@ def process(types = ['crash', 'roads', 'sa']):
 
 if __name__ == "__main__":
     process()
+    
