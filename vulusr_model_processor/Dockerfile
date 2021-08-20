@@ -40,7 +40,6 @@ RUN Rscript -e 'remotes::install_version("RPostgreSQL",upgrade="never", version 
 RUN Rscript -e 'remotes::install_version("emayili",upgrade="never", version = "0.4.15")'
 
 COPY env_variables.R /srv/shiny-server/App/env_variables.R
-RUN Rscript -e 'source("/srv/shiny-server/App/env_variables.R")'
 
 RUN mkdir /build_zone
 ADD . /build_zone
