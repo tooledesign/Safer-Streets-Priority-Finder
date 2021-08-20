@@ -81,7 +81,7 @@ mod_manage_roads_upload_ui <- function(id){
                    ############ Second slide, user select variables 
                    tags$div(id=ns("roads_slides2"), class="leaflet_none", checked=NA, 
                             bs4Card(inputId=ns('roads_upload_2'), title='Attribute Selection', width = 12, closable=F,
-                            p('Please indicate how the functional classification and road name attributes from your data correspond to standard values.'),
+                            p('Please indicate how the functional classification, road name, and unique identifier attributes from your data correspond to standard values.'),
                             br(),
                             fluidRow(
                               column(6,
