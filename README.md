@@ -185,11 +185,11 @@ Edit the root-level cron jobs:
 
 Add a line for controlling the ```dockerManager.py``` tool.
 
-```* * * * * python3 /home/ubuntu/dockerManager.py```
+```* * * * * python3 path/to/vulusr_model_processor/directory/python/dockerManager.py```
 
 Save and exit.
 
-By default, ```dockerManager.py``` should be stored at ```~/dockerManager.py```. If you store it elsewhere, be sure to update the filepath accordingly in the previous step when editing the crontab file.
+By default, ```dockerManager.py``` should be stored at ```./vulusr_model_processor/python/dockerManager.py```. If you store it elsewhere, be sure to update the filepath accordingly in the previous step when editing the crontab file. The full file path must be entered in the crontab file.
 
 ## Cleaning up stale user data automatically
 
@@ -199,7 +199,7 @@ Follow steps 1 and 2 from the above process for ```dockerManager.py``` if you ha
 
 ```userDataCleanup.py``` can run less frequently. As with step 3 above, add a line to the root-level crontab file. e.g. to run userDataCleanup.py once weekly on Saturdays at 2am, add the following line to the root-level crontab file:
 
-```0 2 * * 6 python3 /home/ubuntu/userDataCleanup.py```
+```0 2 * * 6 python3 path/to/vulusr_model_processor/directory/python/userDataCleanup.py```
 
 ## Final notes
 
