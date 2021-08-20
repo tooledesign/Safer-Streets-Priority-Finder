@@ -1,6 +1,6 @@
 proxy:
-  title: Safer Streets Priority Finder
-  landing-page: https://highriskstreetsfinder.com/app/safer-streets-priority-finder
+  title: Safe Streets Priority Finder
+  landing-page: https://highriskstreetsfinder.com/app/safe-streets-priority-finder
   hide-navbar: true
   heartbeat-rate: 10000
   heartbeat-timeout: 1800000
@@ -14,8 +14,8 @@ proxy:
 
   # Below is a list of Shiny app and their config (including who can access to which)
   specs:
-    - id: safer-streets-priority-finder
-      display-name: Safer Streets Priority Finder
+    - id: safe-streets-priority-finder
+      display-name: Safe Streets Priority Finder
       container-cmd: ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');safer_streets_priority_finder::run_app()"]
       container-image: tooledesign/vulusr_beta
       container-network: sp-net
@@ -26,3 +26,4 @@ server:
 logging:
   file:
     shinyproxy.log
+

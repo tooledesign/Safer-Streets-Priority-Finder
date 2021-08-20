@@ -1,0 +1,8 @@
+Attribute	Data Type	Explanation
+p_key	Integer	Unique identifier
+sev_cat	String	KABCO scale crash severity category
+mode	String	Primary vehicle mode involved in crash
+crsh_cs	Float	Crash cost
+in_s_ar	Boolean	True if crash occurred within study area
+f_class	String	Functional classification as assigned by the user
+User Columns	Any	Attributes from original data are maintained

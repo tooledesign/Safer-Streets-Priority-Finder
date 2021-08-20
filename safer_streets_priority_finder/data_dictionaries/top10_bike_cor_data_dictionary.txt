@@ -1,0 +1,5 @@
+Attribute	Data Type	Explanation
+id	Integer	Unique identifier
+name	String	Road name of sliding window segment
+f_class	String	Road functional classification. Derived from value user assigned while uploading roads data
+bike_cr_sc	Integer	Bicycle crash score weighted by 3 for K/A, 1 for B, and 0 for C/O crashes

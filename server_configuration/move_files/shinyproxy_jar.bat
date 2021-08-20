@@ -1,1 +1,1 @@
-cp -R /home/ubuntu/application/shinyproxy/target/shinyproxy-2.5.0.jar /home/ubuntu/application/Safer-Streets-Priority-Finder 
+cp -R /home/ubuntu/application/shinyproxy/target/shinyproxy-2.5.0.jar /home/ubuntu/shinyproxy-docker-compose-demo/application 

@@ -1,0 +1,354 @@
+ /*  general palette
+ 4f8a8b - blue ish
+ ffcb74 - yellow ish
+ b1b493 - brown ish 
+ 07031a -black ish
+ */
+ 
+ html, body {
+  height: 100% !important;
+}
+
+.btn-default {
+  border-radius: 3px !important;
+}
+
+.btn-light {
+  color: #424242 !important;
+  background-color: #fff !important;
+  border-color: #f0efeb !important;
+  box-shadow: 0px !important;
+}
+
+.modal {
+  color: #424242 !important;  
+}
+
+.bttn-fill.bttn-default, .bttn-minimal.bttn-primary {
+  color: #424242 !important;
+}
+
+#shiny-tab-welcome > div.jumbotron.bg-primary {
+  padding: 1rem 2rem !important;
+  border: 1px solid grey !important;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px grey !important;
+}
+
+#shiny-tab-welcome > div:nth-child(3) > div:nth-child(1) > div > div > div.widget-user-header.bg-info, #shiny-tab-welcome > div:nth-child(3) > div:nth-child(2) > div > div > div.widget-user-header.bg-info, #shiny-tab-welcome > div:nth-child(4) > div > div > div > div.widget-user-header.bg-info {
+  max-height: 80px !important;
+
+  
+}
+#shiny-tab-welcome > div:nth-child(3) > div:nth-child(2) > div > div > div.widget-user-image, #shiny-tab-welcome > div:nth-child(3) > div:nth-child(1) > div > div > div.widget-user-image, #shiny-tab-welcome > div:nth-child(4) > div > div > div > div.widget-user-image {
+    top: 50px !important;
+}
+
+#shiny-tab-welcome > div:nth-child(3) > div:nth-child(1) > div > div, #shiny-tab-welcome > div:nth-child(3) > div:nth-child(2) > div > div, #shiny-tab-welcome > div:nth-child(4) > div > div > div {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px lightgrey !important;
+}
+
+#app > div > aside > a:hover {
+  background-color: #264653 !important;
+}
+
+#shiny-modal > div > div > div.modal-header > h4 {
+     font-size: 1.2rem;
+     line-height: 1.3;
+}
+
+.bttn-fill.bttn-default:before {
+  background: #277da1 !important;
+  border-radius: 3px !important;
+  webkit-box-shadow: 0px !important;
+  opacity: .9 !important;
+}
+
+.badge {
+  margin: auto !important;
+}
+
+#to_login_button, #add_scenario_button, #create_account_button, #more_information {
+ margin: inherit !important; 
+ width: -webkit-fill-available !important;
+}
+
+#reporter_ui_1-dang_cor_map {
+  position: absolute !important;
+  bottom: 0 !important;
+}
+#visualize_data_reporter_ui_1-abs_controls {
+    background-color: rgba(255,255,255,0.76) !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-bottom: 10px !important;
+    padding-top: 5px !important;
+    border-radius: 0px 0px 0px 5px !important;
+
+}
+
+.form-group {
+  margin-bottom: .25rem !important; 
+}
+#visualize_data_reporter_ui_1-data_explore_map.leaflet-container {
+    overflow: visible !important;
+}
+
+#app > div > div > section {
+  
+}
+
+#shiny-tab-welcome > div.jumbotron.bg-primary > hr.my-4 {
+    display: none !important;
+}
+
+.inputs_entry_modals > .form-group  {
+  text-align: center !important;
+  margin: auto !important;
+}
+
+#small_intro {
+      padding-bottom: 15px !important;
+}
+
+ 
+.login_well {
+    padding: 5px 0;
+    margin: auto !important;
+    height:auto !important; 
+}
+
+.login_buttons{
+    text-align: center;
+}
+
+.btn-lg {
+  display: none !important;
+}
+
+.leaflet_none {
+  display: none !important;
+}
+.leaflet_block {
+  display: block !important;
+}
+
+
+a.dropdown-toggle {
+  color: #000 !important;
+}
+
+.badge-success {
+  padding: .5em !important;
+}
+
+.intro_start_buttons {
+  margin-top: 1px !important;
+}
+
+.modal-backdrop.fade {
+transition: opacity 0.3s !important;
+-webkit-transition: opacity 0.3s !important;
+opacity: .3 !important;
+filter: alpha(opacity=0) !important;
+
+}
+.modal-backdrop.fade.in {
+transition: opacity 0.3s !important;
+-webkit-transition: opacity 0.3s !important;
+opacity: 0.5 !important;
+filter: alpha(opacity=50) !important;
+ box-shadow: 0 0 8px #264653 !important;
+}
+ 
+#scenario_choice > div.inputs_entry_modals > div > div > button:focus, #scenario_choice > div.inputs_entry_modals > div > div > button:active {
+ outline: 0px solid #264653 !important;
+ box-shadow: 0 0 3px #264653 !important;
+}
+
+#shiny-tab-welcome > div.jumbotron.bg-primary > p:nth-child(8) {
+  max-height: 0px !important;
+}
+
+.content-wrapper {
+    background: whitesmoke !important;
+}
+
+#login_buttons {
+  max-width: 60% !important;
+  text-align: center !important;
+  margin: auto !important;
+}
+ 
+#sw-drop-social_media_share {
+      display: inline-block !important;
+}
+ 
+.bttn-material-circle.bttn-primary {
+  background: #337ab7 !important;
+}
+
+.bttn-material-circle.bttn-warning {
+   background: #f0a846 !important;
+}
+ 
+/* class to visually hide loading screens */
+.visually-hidden {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* styling for loading container */
+.loading-container {
+    position: relative;
+}
+
+/* loading ui  */
+.loading-container .loading-ui {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f6f6f6;
+    text-align: center;
+    z-index: 9999;
+}
+
+/* styles for loading message */
+.loading-container .loading-message {
+    font-size: 16pt;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+
+/* default loading: blinking dots */
+.loading-container .dots-container .dots {
+    display: inline-block;
+    margin-right: 12px;
+    background-color: #299996;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+}
+
+@-webkit-keyframes dotBlink {
+    0% { opacity: 0; }
+    75% { opacity: 1; }
+}
+
+@keyframes dotBlink {
+    0% { opacity: 0; }
+    75% { opacity: 1; }
+}
+
+#dot1 {
+    -webkit-animation: dotBlink 1s infinite;
+    animation: dotBlink 1s infinite;
+}
+
+#dot2 {
+    -webkit-animation: dotBlink 1s .2s infinite;
+    animation: dotBlink 1s .2s infinite;
+}
+
+#dot3 {
+    -webkit-animation: dotBlink 1s .4s infinite;
+    animation: dotBlink 1s .4s infinite;
+}
+
+#sw-drop-social_media {
+  display: inline-block !important;
+}
+
+#sw-content-social_media {
+      right: -180px !important;
+}
+
+.share_communication{
+  box-shadow: 0px !important;
+  background: rgba(193, 66, 66, 0) !important;
+  border-color: rgba(193, 66, 66, 0) !important;
+  color: darkgrey !important;
+  font-size: .75rem !important;
+  width: 20px !important;
+}
+
+.share_communication_top {
+  box-shadow: 0px !important;
+  background: rgba(193, 66, 66, 0) !important;
+  border-color: rgba(193, 66, 66, 0) !important;
+  color: white !important;
+  font-size: .75rem !important;
+  width: 20px !important;
+}
+
+.share_communication:hover{
+  color: lightgrey !important;
+  animation: popout 1s ease !important;
+  transform: scale(1.1) !important;
+  transition: all .3s ease-in-out !important; 
+}
+
+.share_communication_top:hover {
+  box-shadow: 0px !important;
+  background: rgba(193, 66, 66, 0) !important;
+  border-color: rgba(193, 66, 66, 0) !important;
+  color: white !important;
+  font-size: .75rem !important;
+  width: 20px !important;
+}
+
+#logout_model_drop {
+      padding-right: 20px !important;
+}
+
+#top_right {
+  min-width: 150px !important;
+}
+
+#top_right > div > span:nth-child(3), #top_right > div > span:nth-child(1) {
+  background-color: rgba(193, 66, 66, 0) !important;
+  padding-right: 5px !important;
+}
+
+#app > div > nav, #app > div > aside > a {
+      max-height: 52px !important;
+}
+
+#app > div > footer {
+  border-top: 0px solid white;  
+  background-color: white !important;
+}
+
+.leaflet-control-attribution.leaflet-control {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: lightgrey !important;
+}
+
+.leaflet-control-attribution.leaflet-control a:link { color: #007bff; }
+.leaflet-control-attribution.leaflet-control a:visited { color: #007bff; }
+.leaflet-control-attribution.leaflet-control a:hover { color: #007bff; }
+ 
+#visualize_data_reporter_ui_1-data_explore_map {
+  color: white !important;
+}
+
+#visualize_data_reporter_ui_1-data_explore_map.leaflet-container {
+  overflow: hidden !important;
+}
+
+.btn-file {
+  border-radius: .25rem 0rem 0rem .25rem !important;
+}
+
+#visualize_data_reporter_ui_1-abs_controls > div:nth-child(4) > div.input-group > input, #load_data_ui_1-manage_crash_upload_ui_1-crash_upload_1 > div.card-body > div:nth-child(1) > div > div:nth-child(3) > div > div.input-group > input {
+  height: calc(2.025rem + 1px) !important;
+}
