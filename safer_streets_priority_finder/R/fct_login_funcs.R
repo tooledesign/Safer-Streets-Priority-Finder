@@ -2,25 +2,23 @@
 # returns true if study exists 
 test_for_run <- function(connection, username, run_id){
   tryCatch({
-  username <- DBI::dbQuoteString(connection,username)
-  run_id <- DBI::dbQuoteString(connection,run_id)
-  q <- glue::glue('SELECT user_id 
-                   FROM gen_management.accounts 
-                   WHERE username = {username} 
-                   AND run_id = {run_id}
-                  ;')
-  length <- length(DBI::dbGetQuery(connection, q))
-  if (length  == 0 ) {
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+    username <- DBI::dbQuoteString(connection,username)
+    run_id <- DBI::dbQuoteString(connection,run_id)
+    q <- glue::glue('SELECT (EXISTS (SELECT FROM gen_management.accounts WHERE username = {username} AND run_id = {run_id} ))::INTEGER;')
+    exists <- DBI::dbGetQuery(connection, q)[1,1] 
+    if (exists  == 0 ) {
+      return('FALSE')
+    } else if (exists == 1) {
+      return('TRUE')
+    } else if (is.null(exists)){
+      return('ERROR')
+    }
   }, 
   error = function(cond){
     c <- toString(cond)
     Add_Modal(title = 'Something Went Wrong.', body=c)
   })
-  }
+}
 
 # returns user id associated with login credentials 
 get_user_id <- function(connection, username, password){
