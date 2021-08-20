@@ -111,7 +111,95 @@ Then build the Safer Streets Priority Finder with the following:
 
 ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9000:3838 sspf``` 
 
-Now navigate to http://localhost:9001/, and you should see the Safer Streets Priority Finder. 
+Now navigate to http://localhost:9001/, and you should see the Safer Streets Priority Finder.
+
+## Maintaining the model processor manually
+
+The model processor is designed to run **one time only** before needing to have the Docker container refreshed. This process can be done manually via the following steps, or can be automated (details below following the manual process).
+
+### Step 1. Stop the model processor Docker container.
+
+Run the following command to stop the Docker container that is running the model processor.
+
+```docker stop sspf_model_processor```
+
+### Step 2. Remove the old Docker container.
+
+Run the following commmand to remove the old Docker container.
+
+```docker container prune -f```
+
+### Step 3. Reset Docker container status flag in PostgreSQL database.
+
+Run the following SQL query from a SQL editor (psql, DBeaver, PGAdmin, etc.) to update the Docker container status flag.
+
+```UPDATE gen_management.docker_status SET is_fresh = TRUE;```
+
+### Step 4. Start a new docker container to run the SSPF model processor.
+
+Run the following command to spawn a new Docker container running the SSPF model processor.
+
+```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9001:3839 sspf_model_processor```
+
+## Maintaining the model processor automatically
+
+**If you want to automate the process outlined in the above section, to avoid having to manually reset the Docker container each time you run a model, use the ```dockerManager.py``` [script](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/vulusr_model_processor/python/dockerManager.py).**
+
+```dockerManager.py``` is a python tool that automatically refreshes the model processor Docker container after successfully running a model, and is run by a linux cron job. The following instructions detail how to set up and use this tool.
+
+### Step 1. Setup psycopg2
+
+```psycopg2``` is a python module required for communicating with the PostgreSQL database. If you have already installed PostgreSQL locally on the same machine on which you are running the model processor, then this requirement is already satisfied. If you are using a remote PostgreSQL server, separate from the model processor machine, run the following commands to install psycopg2 without having to fully install PostgreSQL.
+
+```sudo apt-get install libpq-dev```
+
+```sudo su```
+
+```pip3 install psycopg2```
+
+```exit```
+
+### Step 2. Set up environmental configuration.
+
+```dockerManager.py``` requires connecting to the PostgreSQL database, and so needs the connection credentials. Store these credentials in a configparser file located at ```~/.sspf_config```. Do the following to set up the config file:
+
+```nano ~/.sspf_config```
+
+Enter the following text:
+
+\[postgres\]
+host=%hostname%
+dbname=%databasename%
+username=%username%
+password=%password%
+
+Substitute in the connection values you used when you set up the PostgreSQL database earlier. When done, exit nano and save the file.
+
+### Step 3. Set up cron job
+
+```dockerManager.py``` relies on a linux cron job to run the python script every X minutes, typically every 1 minute. Do the following to set up the cron job information.
+
+Edit the root-level cron jobs:
+
+```sudo crontab -e```
+
+Add a line for controlling the ```dockerManager.py``` tool.
+
+```* * * * * python3 /home/ubuntu/dockerManager.py```
+
+Save and exit.
+
+By default, ```dockerManager.py``` should be stored at ```~/dockerManager.py```. If you store it elsewhere, be sure to update the filepath accordingly in the previous step when editing the crontab file.
+
+## Cleaning up stale user data automatically
+
+Similar to the above automated process, this repo includes a tool (```userDataCleanup.py```) that automatically removes old user data from the PostgreSQL server from previous model runs, if the user has been inactive for at least 6 months. If you wish to implement this functionality, follow a similar process to set up a cronjob to regularly run the tool.
+
+Follow steps 1 and 2 from the above process for ```dockerManager.py``` if you have not already.
+
+```userDataCleanup.py``` can run less frequently. As with step 3 above, add a line to the root-level crontab file. e.g. to run userDataCleanup.py once weekly on Saturdays at 2am, add the following line to the root-level crontab file:
+
+```0 2 * * 6 python3 /home/ubuntu/userDataCleanup.py```
 
 ## Final notes
 
