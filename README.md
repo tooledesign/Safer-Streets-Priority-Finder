@@ -8,6 +8,8 @@ The Safer Streets Priority Finder enables you to analyze the risk to bicyclists 
 
 [Checkout the Safer Streets Priority Finder Tool here.](https://www.saferstreetspriorityfinder.com/)
 
+<img width="677" alt="Screen Shot 2021-08-19 at 4 30 40 PM" src="https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/landing_page/images/nola_bike_crash_score_w_study_reduced_social_media.png">
+
 
 ## How to launch the SSPF, what you'll need
 
