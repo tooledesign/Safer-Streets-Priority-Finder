@@ -69,6 +69,8 @@ Now do the same for the model processor.
 
 ### Step 3. Docker setup
 
+Note: by default, Docker runs on root. Either make sure you are logged in as root by using `sudo su`, or prepend all of the following Docker commands with `sudo`.
+
 First, make sure you're logged into your Docker account. 
 
 ``` docker login ```
