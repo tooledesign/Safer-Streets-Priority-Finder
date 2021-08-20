@@ -39,3 +39,5 @@ There are two ways to do this. The easiest way forward will be to hookup the too
 To Launch the model processor ```cd``` to the directory with the model process Dockerfile: ```./Safer-Streets-Priority-Finder/vulusr_model_processor/```. Then build the docker container with, ```docker build -t ssfp .```. After that's complete, you launch the container with, ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9000:3838 vulusr_beta```. The container will be running at port 9000 in this case. To stop the container, use the command, ```docker stop ssfp```. Prune off unwanted containers with, ```docker container prune ssfp ```. 
 
 Once you have your model processor running, open RStudio and open the project file found [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/safer_streets_priority_finder.Rproj).
+
+If you have any questions you can reach out to the developers by emailing, saferstreetspriorityfinder@tooledesign.com.
