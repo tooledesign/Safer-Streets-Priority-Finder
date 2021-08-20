@@ -62,7 +62,9 @@ Update all variables in that file. Here's a breakdown of what each variable refe
 Now do the same for the model processor. 
 
 ``` cd .. ``` 
+
 ``` cd Safer-Streets-Priority-Finder/vulusr_model_processor/ ```
+
 ``` nano env_variables.R ```
 
 ### Step 3. Docker setup
