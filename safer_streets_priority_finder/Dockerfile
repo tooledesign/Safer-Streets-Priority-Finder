@@ -99,7 +99,6 @@ RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = 
 
 
 COPY env_variables.R /srv/shiny-server/App/env_variables.R
-RUN Rscript -e 'source("/srv/shiny-server/App/env_variables.R")'
 
 RUN mkdir /build_zone
 ADD . /build_zone
