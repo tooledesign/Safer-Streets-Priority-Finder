@@ -170,7 +170,7 @@ Enter the following text:
     [postgres]
     host=%hostname%
     dbname=%databasename%
-    username=%username%
+    user=%username%
     password=%password%
 
 Substitute in the connection values you used when you set up the PostgreSQL database earlier. When done, exit nano and save the file.
