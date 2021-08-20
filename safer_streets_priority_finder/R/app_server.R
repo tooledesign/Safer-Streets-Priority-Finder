@@ -14,7 +14,7 @@
 app_server <- function( input, output, session ) {
   
   # set local environment in docker container 
-  #setwd('/srv/shiny-server/App')
+  # setwd('/srv/shiny-server/App')
 
   # load scripts 
   source(file.path(getwd(), 'env_variables.R'), local = TRUE)
@@ -283,11 +283,13 @@ app_server <- function( input, output, session ) {
         # check for account, if none - flag 
        run <- test_for_run(connection = connection, username = tolower(input$username), run_id = tolower(input$additional_scenario))
  
-      if (run){
-        shiny_warming_alert( title = "Whoa!", text = "That study already exists!" )
-        
-        # else create new scenario 
-      }  else {
+       if (run == 'TRUE'){
+         shiny_warming_alert( title = "Whoa!", text = "That study already exists!" )
+         
+       }  else if (run == 'ERROR'){
+         shiny_warming_alert( title = "Error", text = "It looks like the SSPF ran into an error. This likely relates to a disconnected server. Try reloading the page." )
+         
+       }  else if (run == 'FALSE'){
         
         # Adds new run to user account
         add_run(connection = connection, 
