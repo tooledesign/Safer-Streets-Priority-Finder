@@ -29,16 +29,16 @@ services:
   shinyproxy:
     image: tooledesign/shinyproxy-example
     depends_on:
-      - safer-streets-priority-finder
+      - safe-streets-priority-finder
     container_name: shinyproxy
     expose:
       - 8080
     volumes:
-      - /home/ubuntu/shinyproxy-docker-compose-demo/application/application.yml:/opt/shinyproxy/application.yml
+      - /home/ubuntu/application/nginx-certbot/application/application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - sp-net
-  safer-streets-priority-finder:
+  safe-streets-priority-finder:
     image: tooledesign/vulusr_beta
 
 networks:

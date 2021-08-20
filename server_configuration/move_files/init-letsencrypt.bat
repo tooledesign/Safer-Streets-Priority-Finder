@@ -1,0 +1,2 @@
+cp -R /home/ubuntu/application/Safer-Streets-Priority-Finder/server_configuration/app.conf  /home/ubuntu/application/Safer-Streets-Priority-Finder/server_configuration/data/nginx
+chmod +x /home/ubuntu/Safer-Streets-Priority-Finder/server_configuration/init-letsencrypt.sh

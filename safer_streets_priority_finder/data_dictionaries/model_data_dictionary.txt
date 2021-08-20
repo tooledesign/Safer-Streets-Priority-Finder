@@ -1,0 +1,47 @@
+Attribute	Data Type 	Explanation
+pkey	Integer	"Primary Key, Used internally by the tool"
+orig_pkey	Integer	Unique identifier field from users input data
+name	String	Segment street name
+f_class	String	Functional classification as assigned by the user
+length	Float	Length of the segment in meters
+tot_all	Integer	Total observed crashes near the segment
+tot_bk_all	Integer	Total observed bicycle crashes near the segment
+tot_bk_k	Integer	Total observed bicycle K crashes near the segment
+tot_bk_a	Integer	Total observed bicycle A crashes near the segment
+tot_bk_b	Integer	Total observed bicycle B crashes near the segment
+tot_bk_c	Integer	Total observed bicycle C crashes near the segment
+tot_bk_o	Integer	Total observed bicycle O crashes near the segment
+tot_pd_all	Integer	Total observed pedestrian crashes near the segment
+tot_pd_k	Integer	Total observed pedestrian K crashes near the segment
+tot_pd_a	Integer	Total observed pedestrian A crashes near the segment
+tot_pd_b	Integer	Total observed pedestrian B crashes near the segment
+tot_pd_c	Integer	Total observed pedestrian C crashes near the segment
+tot_pd_o	Integer	Total observed pedestrian O crashes near the segment
+bike_score	Float	"Bicycle crash score weighted by 3 for K/A, 1 for B, and 0 for C/O crashes"
+ped_score	Float	"Pedestrian crash score weighted by 3 for K/A, 1 for B, and 0 for C/O crashes"
+est_bk_k	Float	Model estimated annual crash rate per mile for bicycle K crashes
+est_bk_a	Float	Model estimated annual crash rate per mile for bicycle A crashes
+est_bk_b	Float	Model estimated annual crash rate per mile for bicycle B crashes
+est_bk_c	Float	Model estimated annual crash rate per mile for bicycle C crashes
+est_bk_o	Float	Model estimated annual crash rate per mile for bicycle O crashes
+est_pd_k	Float	Model estimated annual crash rate per mile for pedestrian K crashes
+est_pd_a	Float	Model estimated annual crash rate per mile for pedestrian A crashes
+est_pd_b	Float	Model estimated annual crash rate per mile for pedestrian B crashes
+est_pd_c	Float	Model estimated annual crash rate per mile for pedestrian C crashes
+est_pd_o	Float	Model estimated annual crash rate per mile for pedestrian O crashes
+e_cr_bk_k	Float	Estimated 5-year bicycle K crashes on the segment
+e_cr_bk_a	Float	Estimated 5-year bicycle A crashes on the segment
+e_cr_bk_b	Float	Estimated 5-year bicycle B crashes on the segment
+e_cr_bk_c	Float	Estimated 5-year bicycle C crashes on the segment
+e_cr_bk_o	Float	Estimated 5-year bicycle O crashes on the segment
+e_cr_pd_k	Float	Estimated 5-year pedestrian K crashes on the segment
+e_cr_pd_a	Float	Estimated 5-year pedestrian A crashes on the segment
+e_cr_pd_b	Float	Estimated 5-year pedestrian B crashes on the segment
+e_cr_pd_c	Float	Estimated 5-year pedestrian C crashes on the segment
+e_cr_pd_o	Float	Estimated 5-year pedestrian O crashes on the segment
+t_es_b_cst	Float	Estimated 5-year societal cost due to bicycle crashes on the segment
+t_es_p_cst	Float	Estimated 5-year societal cost due to pedestrian crashes on the segment
+r_b_cst_1y	Float	Estimated annual societal cost per mile due to bicycle crashes on the segment
+r_b_cst_5y	Float	Estimated 5-year societal cost per mile due to bicycle crashes on the segment
+r_p_cst_1y	Float	Estimated annual societal cost per mile due to pedestrian crashes on the segment
+r_p_cst_5y	Float	Estimated 5-year societal cost per mile due to pedestrian crashes on the segment

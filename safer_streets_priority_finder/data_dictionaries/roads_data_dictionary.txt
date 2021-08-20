@@ -1,0 +1,4 @@
+Attribute	Data Type	Explanation
+p_key	Integer	Unique identifier
+f_class	String	Functional classification as assigned by the user
+User Columns	Any	Attributes from original data are maintained
