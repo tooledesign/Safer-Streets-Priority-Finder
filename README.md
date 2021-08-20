@@ -193,7 +193,7 @@ By default, ```dockerManager.py``` should be stored at ```./vulusr_model_process
 
 ## Cleaning up stale user data automatically
 
-Similar to the above automated process, this repo includes a tool (```userDataCleanup.py```) that automatically removes old user data from the PostgreSQL server from previous model runs, if the user has been inactive for at least 6 months. If you wish to implement this functionality, follow a similar process to set up a cronjob to regularly run the tool.
+Similar to the above automated process, this repository includes a tool (```userDataCleanup.py```) that automatically removes old user data from the PostgreSQL server from previous model runs, if the user has been inactive for at least 6 months. If you wish to implement this functionality, follow a similar process to set up a cronjob to regularly run the tool.
 
 Follow steps 1 and 2 from the above process for ```dockerManager.py``` if you have not already.
 
