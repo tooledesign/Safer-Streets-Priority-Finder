@@ -113,6 +113,6 @@ Now navigate to http://localhost:9001/, and you should see the Safer Streets Pri
 
 ## Final notes
 
-If you want to run the UI from your local RStudio environment, [here's a list](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/required_libraries.R) of libraries that you'll need. Open [this project] within RStudio]. Then open and run [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/dev/run_dev.R) and that should launch the UI on your local computer. 
+If you want to run the UI from your local RStudio environment, [here's a list](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/required_libraries.R) of libraries that you'll need. Open [this project](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/safer_streets_priority_finder.Rproj) within RStudio. Then open and run [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/dev/run_dev.R) and that should launch the UI on your local computer. 
 
 If you have any questions you can reach out to the developers by emailing, saferstreetspriorityfinder@tooledesign.com.
