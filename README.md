@@ -6,27 +6,36 @@ The Safer Streets Priority Finder enables you to analyze the risk to bicyclists 
 2. Develop a Sliding Windows Analysis using historical crash data to inform a High Injury Network
 3. Develop a Safer Streets Model to estimate risk along your road network, even in areas that haven't had any reported crashes recently
 
-## Getting Started 
+[Checkout the Safer Streets Priority Finder Tool here.](https://www.saferstreetspriorityfinder.com/)
 
-You can launch a local instance of the tool as long as you have a Docker Hub account and access to a Linux command line. If you don't have a Docker Hub account you can visit [here](https://hub.docker.com/) to get one. One  tool with the following, 
 
-#### Step 1: One a linux command line and pull the image 
+## What You Need To Locally Launch The Safer Streets Priority Finder
 
-Log in to docker 
+### 1. Linux 
+You'll need sudo access on a Linux command line. 
 
-```sudo docker login```
+### 2. A PostgreSQL database
+You'll need to build a PostgreSQL database that follows the schema and table structure provided [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/build_psql_db.sql).
 
-Now, pull the two docker files for this tool
+### 3. Static tables 
+Upload the following table into the 'static' schema on the PostgreSQL datatable. 
+1. [Latest 5 years of FARS data](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/)  
+2. [USDOT-OST / Pedestrian-Fatality-Risk-Project](https://github.com/USDOT-OST/Pedestrian-Fatality-Risk-Project)
+3. [US Census Counties](https://www.census.gov/data.html)
+4. [National Open Street Map Roads Dataset, Avaiable from GeoFabrik](https://www.geofabrik.de/data/download.html)
 
-```sudo docker pull tooledesign/vulusr_beta```
+Each dataset listed above needs a state and county [Federal Information Processing Standards (FIPS)](https://www.nist.gov/standardsgov/compliance-faqs-federal-information-processing-standards-fips#:~:text=FIPS%20are%20standards%20and%20guidelines,by%20the%20Secretary%20of%20Commerce) code, where the state FIPS code is always two digits in length, and county codes are three digits, including leading zeros as needed. FIPS codes on each dataset should be stored in TEXT or VARCHAR format. 
 
-```sudo docker pull tooledesign/vulusr_beta_processor_v1```
-#### Step 2: Namespace the containers 
+### 4. Complete system variables 
+Fill out your system variables, so the Docker container can link the user information with the data. You'll need to do this [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/env_variables.R) and [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/vulusr_model_processor/env_variables.R). Do not relocate this file. 
 
-It's best practice to namespace containers you've downloaded locally. 
+### 5. Docker Installed 
+If you don't already have an Docker installed on your machine, you can get started [here](https://docs.docker.com/get-docker/).
 
-```docker tag {YOUR USER NAME}/minifying minifying```
+## Launching the application locally 
 
-```docker tag {YOUR USER NAME}/vulusr_beta vulusr_beta```
+There are two ways to do this. The easiest way forward will be to hookup the tool to your postgres database and launch a Docker container with the model processor. Once those are ready, launch the tool from your RStudio command line. 
 
-### Step 3: launch the containers 
+To Launch the model processor ```cd``` to the directory with the model process Dockerfile: ```./Safer-Streets-Priority-Finder/vulusr_model_processor/```. Then build the docker container with, ```docker build -t ssfp .```. After that's complete, you launch the container with, ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9000:3838 vulusr_beta```. The container will be running at port 9000 in this case. To stop the container, use the command, ```docker stop ssfp```. Prune off unwanted containers with, ```docker container prune ssfp ```. 
+
+Once you have your model processor running, open RStudio and open the project file found [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/safer_streets_priority_finder.Rproj).
