@@ -167,7 +167,7 @@ Run the following command to spawn a new Docker container running the SSPF model
 
 Enter the following text:
 
-    \[postgres\]
+    [postgres]
     host=%hostname%
     dbname=%databasename%
     username=%username%
