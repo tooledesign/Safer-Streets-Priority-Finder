@@ -1,0 +1,29 @@
+﻿ogc_fid,mode,severity,road_fclass,mileage,n_crashes,beta_crashes
+1,bicyclist,fatality,Expressway,66824,75,3970
+2,bicyclist,fatality,Local Road,2858963,302,3743
+3,bicyclist,fatality,Major Arterial,155865,325,3720
+4,bicyclist,fatality,Major Collector,536823,884,3161
+5,bicyclist,fatality,Minor Arterial,246193,1363,2682
+6,bicyclist,fatality,Minor Collector,275438,441,3604
+7,bicyclist,fatality,Other/Unknown,,655,3390
+8,motor vehicle,fatality,Expressway,66824,18260,113409
+9,motor vehicle,fatality,Local Road,2858963,8671,122998
+10,motor vehicle,fatality,Major Arterial,155865,11378,120291
+11,motor vehicle,fatality,Major Collector,536823,25400,106269
+12,motor vehicle,fatality,Minor Arterial,246193,34459,97210
+13,motor vehicle,fatality,Minor Collector,275438,17229,114440
+14,motor vehicle,fatality,Other/Unknown,,16272,115397
+15,other,fatality,Expressway,66824,18,168
+16,other,fatality,Local Road,2858963,18,168
+17,other,fatality,Major Arterial,155865,15,171
+18,other,fatality,Major Collector,536823,29,157
+19,other,fatality,Minor Arterial,246193,22,164
+20,other,fatality,Minor Collector,275438,34,152
+21,other,fatality,Other/Unknown,,50,136
+22,pedestrian,fatality,Expressway,66824,3330,26013
+23,pedestrian,fatality,Local Road,2858963,1478,27865
+24,pedestrian,fatality,Major Arterial,155865,2751,26592
+25,pedestrian,fatality,Major Collector,536823,5580,23763
+26,pedestrian,fatality,Minor Arterial,246193,10219,19124
+27,pedestrian,fatality,Minor Collector,275438,2174,27169
+28,pedestrian,fatality,Other/Unknown,,3811,25532
