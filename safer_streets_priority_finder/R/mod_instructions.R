@@ -14,7 +14,7 @@ mod_instructions_ui <- function(id){
 	
       h2("Instructions"),
 	  
-      # h4("Table of Contents", id="instructions-toc"),
+      
 	  
       p(
 		tags$a(href="#inst-1", "1. Tool Workflow", style = "color: #007bff;"),
@@ -33,7 +33,7 @@ mod_instructions_ui <- function(id){
 	  ),
 
 h2("1. Tool Workflow", id="inst-1"),
-#tags$a(href="#instructions-toc", "Return to top."),
+
 
 
 p("To use the SSPF, you’ll either need to prepare and upload your own local data (recommended for best results) or use the default datasets available in the tool. For users uploading their own data, the data will need to be prepared to match the specific format requirements, which are outlined below. "),
@@ -70,12 +70,12 @@ p("If you plan to upload your own data, please follow the instructions below to 
 h2("3. Data Preparation Instructions", id="inst-3"),
 
 h3("3.1 Study Area", id="inst-4"),
-#tags$a(href="#instructions-toc", "Return to top."),
+
 p("The data must be in a polygon-type shapefile format. While uploading shapefiles, the following four files associated with the shapefile must be uploaded in one .zip file: .shp, .shx, .dbf, and .prj."),
 
 
 h3("3.2 Road Data", id="inst-5"),
-#tags$a(href="#instructions-toc", "Return to top."),
+
 
 p("The data should be in line-type shapefile format. While uploading shapefiles, the following four files associated with the shapefile must be uploaded in one .zip file: .shp, .shx, .dbf, .prj."),
 
@@ -84,25 +84,25 @@ p("The data should be in line-type shapefile format. While uploading shapefiles,
 p("As you follow the tool's upload steps, you'll need to indicate which columns in your data store the unique id, functional class and road name attributes. In addition, you'll need to assign the functional class values in your data to the functional class categories listed. This step is necessary due to the variation in naming conventions used by jurisdictions."),
 
 
-p("The shapefile must have the following attributes (attribute names can be different from those given below):"), ##DUPLICATE WITHIN APP##
+p("The shapefile must have the following attributes (attribute names can be different from those given below):"), 
 tags$ul(
 	tags$li("Unique ID - a unique integer value"),
 	tags$li("Road Name - a text value"),
 	tags$li("Functional Classification - must be assigned to 'Expressway' 'Major Arterial', 'Minor Arterial', 'Major Collector', 'Minor Collector', 'Local Road'. Any limited-access highways should be considered Expressways. If you'd like to omit Expressways, you should assign them to the 'Omit from Analysis' category."),
 ),
 
-p("Properly Formatted Road Data"), ##DUPLICATE WITHIN APP##
+p("Properly Formatted Road Data"), 
 p(tags$div(img(src="https://user-images.githubusercontent.com/17485460/116926072-d780e380-ac0e-11eb-9465-4043d312676a.png", alt="properly formatted road data"), align = "left")),
 
 p("Note that dual carriageways -- divided roads that are represented by two lines in the data -- may have lower than expected results when modeled. This is because crashes are split between the two lines representing the street -- versus an undivided road where the street is represented by a single line. Users should be wary of interpreting results for dual centerlines."),
 p("The tool will guide you through the process of addressing any NULL functional class values, which will need to be omitted. Alternatively, if you have local knowledge that most or all of the null or unknown functional class values are usually related to a specific type of street (e.g., undesignated residential streets), you may assign them to the functional class that best fits local conditions."),
 
 h3("3.3 Crashes", id="inst-6"),
-#tags$a(href="#instructions-toc", "Return to top."),
+
 p("The data must be in a point-type shapefile format. While uploading shapefiles, the following four files associated with the shapefile must be uploaded in one .zip file: .shp, .shx, .dbf, and .prj."),
 
 p("The shapefile must have each of the following attributes and characteristics 
-(attribute names can be different from those given below):"), ##DUPLICATE WITHIN APP##
+(attribute names can be different from those given below):"), 
 tags$ul(
   tags$li("Report ID - A unique ID for the crash to ensure one location record per crash. If your dataset has multiple records per crash, you may be working with a 'person', 'unit', or 'vehicle' table. Please restructure your data or ask your crash data provider for help getting a dataset with one row per crash."),
   tags$li("Crash year - four digit integer format. At this time, the tool requires five years of crash data to be uploaded."),
@@ -111,7 +111,7 @@ tags$ul(
   tags$li("Crash mode - the mode in your data must be assigned to bicycle, pedestrian, or other mode. Identification of mode must occur in one column. E.g., if you have separate columns to indicate bicyclist involved or pedestrian involved, you will need to restructure your data to use a single mode column before using it with the tool. For crashes involving multiple modes, it is most common to assign the entire crash either the mode of the most severely injured person, or the mode of the most vulnerable road user (typically in this order: pedestrian, bicycle, motorcycle, motor vehicle). Note that the 'other mode' value in the tool can be used flexibly for your analysis. For example, if you want to look only at motorcyclists and not other motor vehicles, and your mode column includes this level of detail, you can assign motorcyclists to the 'other' value within the tool and omit motor vehicle crashes from the analysis."),
 ),
 
-p("Properly Formatted Crash Data"), ##DUPLICATE WITHIN APP##
+p("Properly Formatted Crash Data"), 
 p(tags$div(tags$img(src="https://user-images.githubusercontent.com/17485460/116925202-bc61a400-ac0d-11eb-98d2-9f6f94a61efe.png", alt="properly formatted crash data"), align = "left")),
 
 p("Improperly Formatted Crash Data"),
@@ -119,34 +119,13 @@ p(tags$div(tags$img(src="https://user-images.githubusercontent.com/17485460/1169
 
 p("The tool will guide you through the process of addressing any NULL values in your crash data, which will need to be omitted in most cases (except as outlined above for nulls in crash severity values."),
 
-h4("3.3.1 Crash Cost Values", id="inst-7"), ##DUPLICATE WITHIN APP##
-#tags$a(href="#instructions-toc", "Return to top."),
+h4("3.3.1 Crash Cost Values", id="inst-7"), 
+
 p("For user uploaded crash data, users can rely on default crash costs or customize crash costs. The default values reflect national 2020 crash costs that were developed for this tool. Information on how the default crash costs were developed is included in the Overview/Methodology tab."),
 
 p("Currently, the tool does not build in any functionality to localize the default costs to states. When localized data is needed, it may be preferable for the user to customize crash costs based on crash cost information published by their State DOT."),
 
 p("If you choose to customize crash costs, you'll need to specify a discount rate to reflect today’s value of costs projected over a time horizon of five years. The default discount rate is set at 3%. You can also adjust the discount rate applied to the default crash costs.")
-
-
-
-
-######SECTIONS BELOW SHOULD BE EXCLUDED FROM INSTRUCTIONS BUT ADDED WITHIN THE APP#######
-
-
-####perform checks section
-
-#p("The Perform Checks button ensures all three of the necessary datasets are uploaded, that all datasets are in the correct Coordinate Reference System (they will be automatically re-projected if this is not the case), and that all three datasets cover the same area."),
-
-#p("If all three datasets are not uploaded, you must go back to prior steps to upload them."),
-
-#p("If all three datasets do not cover the same area, you must address this outside of the tool."),
-
-
-####model execution
-#p("The model execution takes several hours, and up to a full day to run. You can close the webpage and the model will continue to process. Plan to log back in after several hours to see if your model is complete."),
-
-####data dashboard --data download
-#p("Download any of the input data used (i.e. the data you originally uploaded or the default US Census County/FARS/OSM data) or the analysis outputs. You can join these networks back to your original roads dataset in GIS using the unique ID specified earlier."),
 
   )
   )
