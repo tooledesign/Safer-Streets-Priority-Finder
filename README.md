@@ -161,7 +161,7 @@ Run the following command to spawn a new Docker container running the SSPF model
 
 ### Step 2. Set up environmental configuration.
 
-```dockerManager.py``` requires connecting to the PostgreSQL database, and so needs the connection credentials. Store these credentials in a configparser file located at ```./vulusr_model_processor/python/.sspf_config```. Do the following to set up the config file:
+```dockerManager.py``` requires connecting to the PostgreSQL database, and so needs the connection credentials. Store these credentials in a configparser file located at ```./vulusr_model_processor/python/.sspf_config```. Do the following to set up the config file (a template file should already exist there):
 
 ```nano ./vulusr_model_processor/python/.sspf_config```
 
