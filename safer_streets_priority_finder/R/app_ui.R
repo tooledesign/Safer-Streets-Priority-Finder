@@ -174,9 +174,9 @@ body = bs4Dash::bs4DashBody(
               tags$html("City of New Orleans: Daniel Jatres and Jennifer Ruley, PE"),
               tags$html("Toole Design: Jessica Schoner PhD, Daniel Patterson, Rachel Finfer, Jacob Nigro, Theja Putta PhD, and Brendan Murphy"),
               tags$html("New Orleans Regional Transit Authority: Robert Stickney"),
-              tags$html("University of New Orleans Transportation Institute: Tara Tolford AICP"),
+              tags$html("University of New Orleans Transportation Institute: Tara Tolford AICP and Maryam Izadi"),
               tags$html("Funded through USDOT's Safety Data Initiative Grant"),
-              tags$html("Additional acknowledgements to Frank Proulx, Ted Mansfield, and Maryam Izadi for their contributions.")
+              tags$html("Additional acknowledgements to Frank Proulx and Ted Mansfield  for their contributions.")
             )
           )
         )

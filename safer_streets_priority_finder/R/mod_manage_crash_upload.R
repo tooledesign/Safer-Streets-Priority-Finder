@@ -54,7 +54,7 @@ mod_manage_crash_upload_ui <- function(id){
                                                                   width = '300',
                                                                   checkIcon = list(yes = icon("dot-circle-o"), no = icon("times-circle-o"))
                                                 ),
-                                                p("Please upload a shapefile in a single zipped file. Please include the mandatory file extensions needed for a shapefile: .shp, .shx, .dbf, and .proj. The maximum allowable number of crashes is 150,000. If your data exceeds this limit, you will need to clip the data prior to uploading it. Consider excluding features prior to upload if you experience latency."),
+                                                p("Please upload a shapefile in a single zipped file. Please include the mandatory file extensions needed for a shapefile: .shp, .shx, .dbf, and .prj. The maximum allowable number of crashes is 150,000. If your data exceeds this limit, you will need to clip the data prior to uploading it. Consider excluding features prior to upload if you experience latency."),
                                                 conditionalPanel(condition = "input.crash_data == 'shp'", ns = ns, 
                                                                  fileInput(inputId = ns("crash_data_shp"), 
                                                                            multiple = FALSE, 
@@ -158,7 +158,7 @@ mod_manage_crash_upload_ui <- function(id){
                       ############ Step three, map severity and mode, and confirm crash costs
                       tags$div(id = ns("crash_slides3"), class="leaflet_none", checked=NA, 
                                bs4Card(inputId=ns('crash_upload_3'), title='Map Variables, Mode and Severity', width = 12, closable = FALSE,
-                               p("Please indicate how the severity, mode, report ID, and year attributes from your crash data correspond to standard values."),
+                               p("Please indicate how the severity and mode attributes from your crash data correspond to standard values."),
                                fluidRow(
                                  column(12,
                                         DT::dataTableOutput(ns('cr_severity_map_table'),  width = 600),
