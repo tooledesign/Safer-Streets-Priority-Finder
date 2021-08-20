@@ -101,7 +101,7 @@ downloader_function <- function (
                                    column_rename = c('Fatality (K)', 'Incapacitating Injury (A)', 'Non-Incapacitating Injury (B)', 'Possible Injury (C)', 'Property Damage Only (O)'),
                                    user_id = user_id, 
                                    run_id = run_id,
-                                   mode = 'Bicycle Crash')
+                                   mode = 'bike')
     barc_data_bike[['Estimated']] <- round(as.numeric(barc_data_bike[['Estimated']], 2))
     barc_data_ped <- get_fit_data(connection=connection,
                                   table=m_results,
@@ -109,7 +109,7 @@ downloader_function <- function (
                                   column_rename = c('Fatality (K)', 'Incapacitating Injury (A)', 'Non-Incapacitating Injury (B)', 'Possible Injury (C)', 'Property Damage Only (O)'),
                                   user_id = user_id, 
                                   run_id = run_id,
-                                  mode = 'Pedestrian Crash')
+                                  mode = 'ped')
     barc_data_ped[['Estimated']] <- round(as.numeric(barc_data_ped[['Estimated']], 2))
 
     
