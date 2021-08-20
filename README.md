@@ -91,7 +91,7 @@ This will build an image called ```sspf_model_processor```.
 
 After that's complete, you launch a container with, 
 
-```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9001:3839 sspf_model_processor``` 
+```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf_model_processor --restart=always -p 9001:3839 sspf_model_processor``` 
 
 At this time, your model processor is running in a detached Docker container listening for a user to request a model. The model will port everything to the PostgreSQL database identified in the env_variables.R file. 
 
@@ -109,7 +109,7 @@ Then build the Safer Streets Priority Finder with the following:
 
 ```docker build -t sspf .```
 
-```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9000:3838 sspf``` 
+```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf --restart=always -p 9000:3838 sspf``` 
 
 Now navigate to http://localhost:9001/, and you should see the Safer Streets Priority Finder.
 
@@ -139,7 +139,7 @@ Run the following SQL query from a SQL editor (psql, DBeaver, PGAdmin, etc.) to 
 
 Run the following command to spawn a new Docker container running the SSPF model processor.
 
-```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=ssfp --restart=always -p 9001:3839 sspf_model_processor```
+```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf_model_processor --restart=always -p 9001:3839 sspf_model_processor```
 
 ## Maintaining the model processor automatically
 
@@ -161,9 +161,9 @@ Run the following command to spawn a new Docker container running the SSPF model
 
 ### Step 2. Set up environmental configuration.
 
-```dockerManager.py``` requires connecting to the PostgreSQL database, and so needs the connection credentials. Store these credentials in a configparser file located at ```~/.sspf_config```. Do the following to set up the config file:
+```dockerManager.py``` requires connecting to the PostgreSQL database, and so needs the connection credentials. Store these credentials in a configparser file located at ```./vulusr_model_processor/python/.sspf_config```. Do the following to set up the config file:
 
-```nano ~/.sspf_config```
+```nano ./vulusr_model_processor/python/.sspf_config```
 
 Enter the following text:
 
