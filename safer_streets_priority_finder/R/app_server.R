@@ -14,7 +14,7 @@
 app_server <- function( input, output, session ) {
   
   # set local environment in docker container 
-  # setwd('/srv/shiny-server/App')
+  setwd('/srv/shiny-server/App')
 
   # load scripts 
   source(file.path(getwd(), 'env_variables.R'), local = TRUE)
