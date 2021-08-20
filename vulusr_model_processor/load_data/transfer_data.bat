@@ -1,0 +1,9 @@
+
+
+ogr2ogr -lco GEOMETRY_NAME=geom -lco precision=NO -f "PostgreSQL" PG:"host=usdot-vulusr-t3small.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" PG:"host=usdot-vulusr.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" "automated.national_fclass_priors" -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI -nln static.national_fclass_priors -overwrite -progress --config PG_USE_COPY YES
+
+ogr2ogr -lco GEOMETRY_NAME=geom -lco precision=NO -f "PostgreSQL" PG:"host=usdot-vulusr-t3small.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" PG:"host=usdot-vulusr.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" "automated.national_tracts" -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI -nln static.national_tracts -overwrite -progress --config PG_USE_COPY YES
+
+ogr2ogr -lco GEOMETRY_NAME=geom -lco precision=NO -f "PostgreSQL" PG:"host=usdot-vulusr-t3small.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" PG:"host=usdot-vulusr.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" "automated.fars_processed" -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI -nln static.fars_processed -overwrite -progress --config PG_USE_COPY YES
+
+ogr2ogr -lco GEOMETRY_NAME=geom -lco precision=NO -f "PostgreSQL" PG:"host=usdot-vulusr-t3small.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" PG:"host=usdot-vulusr.crrjyzlytxji.us-east-1.rds.amazonaws.com port=5432 dbname=a0137 user=postgres password=usdot_vulusr2021" "automated.road_line" -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI -nln static.osm_centerlines -overwrite -progress --config PG_USE_COPY YES

@@ -1,0 +1,421 @@
+<html>
+    <style>
+        .styled-h1 {
+            font-size: 1.2em;
+            font-family: sans-serif;
+            font-weight: bold;
+            color: #272727;
+            min-width: 400px;
+            max-width: 800px;
+        }
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            color: #404040;
+            min-width: 400px;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .styled-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        .styled-table a {
+            color: inherit;
+        }
+    </style>
+
+    <body>
+        <h1 class="styled-h1">
+            <center>
+                Crash Data Sources, by State
+            </center>
+        </h1>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Crash Data Portal/Site</th>
+                    <th>Geospatial Data Publicly Available</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Alabama</td>
+                    <td><a href="https://safety.aladata.com/">AL Safety Portal</a></td>
+                    <td>No</td>
+                    <td>Dashboard and summary data only; spatial data available through CARE with signed data use agreement</td>
+                </tr>
+                <tr>
+                    <td>Alaska</td>
+                    <td><a href="https://dot.alaska.gov/stwdplng/hwysafety/crash.shtml">Alaska Highway Safety Office - Motor Vehicle Crash Data</a></td>
+                    <td>No</td>
+                    <td>PDF reports only</td>
+                </tr>
+                <tr>
+                    <td>Arizona</td>
+                    <td><a href="https://azdot.gov/motor-vehicles/statistics/arizona-motor-vehicle-crash-facts">ADOT Arizona Motor Vehicle Crash Facts</a></td>
+                    <td>No</td>
+                    <td>Detailed data available through public records request</td>
+                </tr>
+                <tr>
+                    <td>Arkansas</td>
+                    <td><a href="https://ardot.maps.arcgis.com/apps/MapSeries/index.html?appid=7976060331fb4930933bf560f8a9c91b">ACAT (Arkansas Crash Analytics Tool)</a></td>
+                    <td>Limited</td>
+                    <td>Fatal and Serious Injury crashes mapped - downloadability unclear</td>
+                </tr>
+                <tr>
+                    <td>California</td>
+                    <td><a href="https://www.chp.ca.gov/programs-services/services-information/switrs-internet-statewide-integrated-traffic-records-system">SWITRS (Statewide Integrated Traffic Records System)</a></td>
+                    <td>Yes</td>
+                    <td>Comprehensive relational database files available with registration</td>
+                </tr>
+                <tr>
+                    <td>Colorado</td>
+                    <td><a href="https://www.codot.gov/safety/traffic-safety/crash-data-management/crash-data">Colorado DOT Crash Data</a></td>
+                    <td>Limited</td>
+                    <td>Custom data available upon request only; limited spatial data</td>
+                </tr>
+                <tr>
+                    <td>Denver</td>
+                    <td><a href="https://www.denvergov.org/opendata/dataset/city-and-county-of-denver-traffic-accidents">Denver Open Data Catalog</a></td>
+                    <td>Yes</td>
+                    <td>Tabular or Shapefile downloads available</td>
+                </tr>
+                <tr>
+                    <td>Connecticut</td>
+                    <td><a href="https://www.ctcrash.uconn.edu/">Connecticut Crash Data Repository</a></td>
+                    <td>Yes</td>
+                    <td>Detailed data available through query tool with registration</td>
+                </tr>
+                <tr>
+                    <td>Delaware</td>
+                    <td><a href="https://deldot.gov/dashboard/index.shtml?dc=safety">DelDOT Dashboard</a></td>
+                    <td>Limited</td>
+                    <td>Crash data available by request with notarized data release agreement; request Portal under development as of 2019</td>
+                </tr>
+                <tr>
+                    <td>Florida</td>
+                    <td><a href="https://www.fdot.gov/safety/safetyengineering/crash-data.shtm">FDOT State Safety Office</a></td>
+                    <td>Yes</td>
+                    <td>Shapefiles and tabular data available via Open Data Hub</td>
+                </tr>
+                <tr>
+                    <td>Georgia</td>
+                    <td><a href="https://gdot.numetric.net/crash-data">GDOT Crash Data Dashboard</a></td>
+                    <td>No</td>
+                    <td>Detailed data available through public records request</td>
+                </tr>
+                <tr>
+                    <td>Hawaii</td>
+                    <td><a href="https://hidot.hawaii.gov/highways/safe-communites/">Hawaii DOT Safe Communities Program</a></td>
+                    <td>No</td>
+                    <td>Limited county-level summary data only</td>
+                </tr>
+                <tr>
+                    <td>Idaho</td>
+                    <td><a href="https://itd.numetric.net/itd-safety-dashboards">Idaho Crash Data Map</a></td>
+                    <td>Yes</td>
+                    <td>Crash attributes available for download </td>
+                </tr>
+                <tr>
+                    <td>Illinois</td>
+                    <td><a href="https://idot.illinois.gov/transportation-system/safety/Illinois-Roadway-Crash-Data">Illinois Roadway Crash Data</a></td>
+                    <td>No</td>
+                    <td>Detailed data available by special request</td>
+                </tr>
+                <tr>
+                    <td>Chicago</td>
+                    <td><a href="https://catalog.data.gov/dataset/traffic-crashes-crashes">City of Chicago Data Catalog - Traffic Crashes</a></td>
+                    <td>Yes</td>
+                    <td>Detailed data downloads available - multiple format</td>
+                </tr>
+                <tr>
+                    <td>Indiana</td>
+                    <td><a href="https://hub.mph.in.gov/dataset/aries-crash-data-2007-2017">ARIES Crash Data</a></td>
+                    <td>Yes</td>
+                    <td>Tabular download available</td>
+                </tr>
+                <tr>
+                    <td>Iowa</td>
+                    <td><a href="https://icat.iowadot.gov/">ICAT (Iowa Crash Analysis Tool)</a></td>
+                    <td>Yes</td>
+                    <td>Tabular or Shapefile downloads available</td>
+                </tr>
+                <tr>
+                    <td>Kansas</td>
+                    <td><a href="https://www.ksdot.org/burTransPlan/prodinfo/accista15.asp">KDOT Crash Statistics</a></td>
+                    <td>No</td>
+                    <td>PDF reports only</td>
+                </tr>
+                <tr>
+                    <td>Kentucky</td>
+                    <td><a href="http://crashinformationky.org/AdvancedSearch">Kentucky State Police Collision Analysis for the Public</a></td>
+                    <td>Yes</td>
+                    <td>Spatial data appears to be available; query tool not functioning at time of access</td>
+                </tr>
+                <tr>
+                    <td>Louisiana</td>
+                    <td><a href="http://datareports.lsu.edu/">Louisiana Crash Data Reports</a></td>
+                    <td>No</td>
+                    <td>Spatial crash data available with formal data use agreement; limited access</td>
+                </tr>
+                <tr>
+                    <td>Maine</td>
+                    <td><a href="https://mdotapps.maine.gov/MaineCrashPublic/">Maine Public Crash Query Tool</a></td>
+                    <td>Limited</td>
+                    <td>Crashes can be mapped but not downloaded; additional capabilities with Advanced User login (with permission)</td>
+                </tr>
+                <tr>
+                    <td>Maryland</td>
+                    <td><a href="https://opendata.maryland.gov/Public-Safety/Maryland-Statewide-Vehicle-Crashes/65du-s3qu">Maryland Statewide Vehicle Crashes</a></td>
+                    <td>Yes</td>
+                    <td>Data available for download, multiple formats</td>
+                </tr>
+                <tr>
+                    <td>Massachusetts</td>
+                    <td><a href="https://apps.impact.dot.state.ma.us/cdp/home">MassDOT Open Data Portal (IMPACT)</a></td>
+                    <td>Yes</td>
+                    <td>Tabular data available for download by automated request</td>
+                </tr>
+                <tr>
+                    <td>Michigan</td>
+                    <td><a href="https://www.michigantrafficcrashfacts.org/querytool">Michigan Traffic Crash Facts Data Query Tool</a></td>
+                    <td>Limited</td>
+                    <td>Data available by query, downloads may have limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Minnesota</td>
+                    <td><a href="https://www.dot.state.mn.us/stateaid/mncmat2.html">MnCMAT2 (Minnesota Crash Mapping Analysis Tool)</a></td>
+                    <td>Limited</td>
+                    <td>Data with login approval</td>
+                </tr>
+                <tr>
+                    <td>Mississippi</td>
+                    <td><a href="https://www.ms.gov/dps/crash_reports">Mississippi Department of Public Safety</a></td>
+                    <td>No</td>
+                    <td>Individual Crash Report purchase requests only</td>
+                </tr>
+                <tr>
+                    <td>Missouri</td>
+                    <td><a href="https://www.mshp.dps.missouri.gov/MSHPWeb/SAC/stars_index.html">STARS Reporting</a></td>
+                    <td>Limited</td>
+                    <td>Data available for download, limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Montana</td>
+                    <td><a href="https://www.mdt.mt.gov/publications/datastats/crashdata.shtml">Montana Statistics and Data</a></td>
+                    <td>Limited</td>
+                    <td>Data available for download, limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Nebraska</td>
+                    <td><a href="https://dot.nebraska.gov/safety/crash/">Nebraska Self-Service Crash Data Portal</a></td>
+                    <td>Limited</td>
+                    <td>Detailed data may be mapped, but not downloaded</td>
+                </tr>
+                <tr>
+                    <td>Nevada</td>
+                    <td><a href="https://www.dot.nv.gov/safety/traffic-crash-data">Nevada Traffic Crash Data</a></td>
+                    <td>Limited</td>
+                    <td>Web map only; Downloadable data available by request</td>
+                </tr>
+                <tr>
+                    <td>New Hampshire</td>
+                    <td><a href="https://www.nhtmc.com/dashboard/safety/">New Hampshire Driving Towards Zero</a></td>
+                    <td>No</td>
+                    <td>No data portal identified</td>
+                </tr>
+                <tr>
+                    <td>New Jersey</td>
+                    <td><a href="https://www.state.nj.us/transportation/refdata/accident/rawdata01-current.shtm">NJ DOT Crash Data</a></td>
+                    <td>Limited</td>
+                    <td>Crash tables available for download by county; .txt format; limited attributes</td>
+                </tr>
+                <tr>
+                    <td>New Mexico</td>
+                    <td><a href="http://gps.unm.edu/tru">New Mexico Traffic Crash Data</a></td>
+                    <td>No</td>
+                    <td>PDF reports only; detailed data available by request</td>
+                </tr>
+                <tr>
+                    <td>New York</td>
+                    <td><a href="https://www.itsmr.org/TSSR/">New York Traffic Safety Statistical Repository (TSSR)</a></td>
+                    <td>No</td>
+                    <td>Summary statistics only; detailed data available with public records request</td>
+                </tr>
+                <tr>
+                    <td>New York City</td>
+                    <td><a href="https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95">NYC Open Data</a></td>
+                    <td>Yes</td>
+                    <td>Data available for download, multiple formats</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">North Carolina</td>
+                    <td><a href="https://www.pedbikeinfo.org/pbcat_nc/">NC Pedestrian and Bicycle Crash Data Tool</a></td>
+                    <td>Yes</td>
+                    <td>Data available for download; enhanced for bike/ped analysis</td>
+                </tr>
+                <tr>
+                    <td><a href="https://ncvisionzero.org/visualizations/crashquerytool/">North Carolina Vision Zero Crash Query Tool</a></td>
+                    <td>Yes</td>
+                    <td>Tabular data available for download</td>
+                </tr>
+                <tr>
+                    <td>North Dakota</td>
+                    <td><a href="https://www.dot.nd.gov/divisions/safety/crashdashboard.htm">NDDOT Crash Dashboard</a></td>
+                    <td>No</td>
+                    <td>Dashboard only</td>
+                </tr>
+                <tr>
+                    <td>Ohio</td>
+                    <td><a href="https://gis.dot.state.oh.us/tims/CrashAnalytics/Login">GCAT Crash Analysis Tool</a></td>
+                    <td>No</td>
+                    <td>Data available to agency personnel and approved consultants</td>
+                </tr>
+                <tr>
+                    <td>Cincinnati</td>
+                    <td><a href="https://data.cincinnati-oh.gov/Safety/Traffic-Crash-Reports-CPD-/rvmt-pkmq">City of Cincinnati Traffic Crash Reports</a></td>
+                    <td>Limited</td>
+                    <td>Data available for download; limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Oklahoma</td>
+                    <td><a href="https://ohso.ok.gov/crash-data2">Oklahoma Highway Safety Office</a></td>
+                    <td>No</td>
+                    <td>Dashboard/PDF reports only</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Oregon</td>
+                    <td><a href="https://geo.maps.arcgis.com/apps/webappviewer/index.html?id=df0b3cdb2f1149d3bd43436bc1dd4eac">Oregon Transportation Safety Data Explorer (OTSDE)</a></td>
+                    <td>Limited</td>
+                    <td>Crashes mapped; download capability limited</td>
+                </tr>
+                <tr>
+                    <td><a href="https://tvc.odot.state.or.us/tvc/">ODOT TDS Crash Reports</a></td>
+                    <td>Yes</td>
+                    <td>Tabular data may be queried and downloaded</td>
+                </tr>
+                <tr>
+                    <td>Pennsylvania</td>
+                    <td><a href="https://crashinfo.penndot.gov/PCIT/welcome.html">Pennsylvania Crash Information Tool</a></td>
+                    <td>Yes</td>
+                    <td>Relational database tables available for download</td>
+                </tr>
+                <tr>
+                    <td>Rhode Island</td>
+                    <td><a href="https://health.ri.gov/data/motorvehicleinjury/">Rhode Island Motor Vehicle Injury Data</a></td>
+                    <td>No</td>
+                    <td>Summary statistics only</td>
+                </tr>
+                <tr>
+                    <td>South Carolina</td>
+                    <td><a href="https://scdps.sc.gov/ohsjp/stat_services">Highway Safety Statistical Services</a></td>
+                    <td>No</td>
+                    <td>PDF reports only</td>
+                </tr>
+                <tr>
+                    <td>South Dakota</td>
+                    <td><a href="https://dps.sd.gov/records/accident-records/sdcat">South Dakota Crash Analysis Tool</a></td>
+                    <td>No</td>
+                    <td>Customizable dashboard only; no spatial data</td>
+                </tr>
+                <tr>
+                    <td>Tennessee</td>
+                    <td><a href="https://www.tn.gov/safety/stats/crashdata.html">TN Department of Safety and Homeland Security</a></td>
+                    <td>No</td>
+                    <td>Limited data available to map; no downloads</td>
+                </tr>
+                <tr>
+                    <td>Texas</td>
+                    <td><a href="https://cris.dot.state.tx.us/public/Query/app/home">TxDOT Crash Query Tool</a></td>
+                    <td>Limited</td>
+                    <td>Data may be queried and mapped; downloads may have limited attributes and/or require specialized software</td>
+                </tr>
+                <tr>
+                    <td>Utah</td>
+                    <td><a href="https://crashmapping.utah.gov/">Utah Vehicle Collisions</a></td>
+                    <td>Limited</td>
+                    <td>Data available for download; requires advanced analytic capability</td>
+                </tr>
+                <tr>
+                    <td>Vermont</td>
+                    <td><a href="http://apps.vtrans.vermont.gov/CrashPublicQueryTool/">Vermont Public Crash Data Query Tool</a></td>
+                    <td>Yes</td>
+                    <td>Data available for download; limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Virginia</td>
+                    <td><a href="https://app.powerbigov.us/view?r=eyJrIjoiMjhlZjFhZDAtNTljMC00MDA1LWEyOTMtYWYwM2NiMmRiMmRkIiwidCI6IjYyMGFlNWE5LTRlYzEtNGZhMC04NjQxLTVkOWYzODZjNzMwOSJ9">VDOT Crash Analysis Tool</a></td>
+                    <td>Yes</td>
+                    <td>Data available for download</td>
+                </tr>
+                <tr>
+                    <td>Richmond</td>
+                    <td><a href="https://data.richmondgov.com/browse?">Richmond Open Data Portal</a></td>
+                    <td>Yes</td>
+                    <td>Pedestrian and Bicycle crash datasets available for download</td>
+                </tr>
+                <tr>
+                    <td>Washington</td>
+                    <td><a href="https://www.wsdot.wa.gov/mapsdata/crash/crashdata.htm">Department of Transportation Crash Data</a></td>
+                    <td>No</td>
+                    <td>Data available by request</td>
+                </tr>
+                <tr>
+                    <td>West Virginia</td>
+                    <td><a href="https://data-wvdot.opendata.arcgis.com/">West Virginia DOT Open Data Portal</a></td>
+                    <td>No</td>
+                    <td>No crash information available</td>
+                </tr>
+                <tr>
+                    <td>Wisconsin</td>
+                    <td><a href="https://transportal.cee.wisc.edu/services/crash-data/">WisTransPortal System</a></td>
+                    <td>Limited</td>
+                    <td>Data available by request to general public</td>
+                </tr>
+                <tr>
+                    <td>Milwaukee</td>
+                    <td><a href="https://data.milwaukee.gov/dataset/trafficaccident">Traffic Accident Data</a></td>
+                    <td>Limited</td>
+                    <td>Tabular data available for download; limited attributes</td>
+                </tr>
+                <tr>
+                    <td>Wyoming</td>
+                    <td><a href="http://www.dot.state.wy.us/home/dot_safety/crash-data.html">Wyoming DOT Crash Data</a></td>
+                    <td>No</td>
+                    <td>Summary PDF reports only</td>
+                </tr>
+                <tr>
+                    <td>District of Columbia</td>
+                    <td><a href="https://opendata.dc.gov/datasets/70392a096a8e431381f1f692aaa06afd_24/explore?location=38.893760%2C-77.019147%2C11.34">Open Data DC</a></td>
+                    <td>Yes</td>
+                    <td>Extensive data available for download</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
