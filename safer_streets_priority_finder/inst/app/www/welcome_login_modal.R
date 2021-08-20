@@ -56,6 +56,7 @@ create_login_modal <- modalDialog(
                  )
                )
              ),
+             p(tags$i("PLEASE NOTE: This tool is currently in beta phase. Some analyses may take several minutes to run when there are concurrent users. Thank you for your patience!")),
              hr(),
              tags$div(class='login_buttons',
                       actionButton("login_start", "Let's Go!", class = 'btn btn-primary login_buttons')
