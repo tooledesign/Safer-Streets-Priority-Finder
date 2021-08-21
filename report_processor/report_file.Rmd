@@ -1,0 +1,682 @@
+---
+title:  | 
+  | \vspace{0.5cm} \LARGE Safer Streets Priority Finder Report
+output: pdf_document
+date: "Study ID: `r params$run_id` | Date Report Created: `r Sys.Date()`"
+toc: true
+number_sections: true
+params:
+  study_area: NULL
+  road_fclass_crosswalk: NULL
+  crash_cost_crosswalk: NULL
+  crash_mode_crosswalk: NULL
+  crash_sev_crosswalk: NULL
+  mode_table: NULL
+  mode_chart: NULL
+  mode_stacked: NULL
+  fclass_table: NULL
+  fclass_chart: NULL
+  severity_chart: NULL
+  severity_table: NULL
+  severity_stacked: NULL
+  year_table: NULL
+  top_10_segs_table_ped: NULL
+  top_10_segs_map_ped: NULL
+  top_10_segs_table_bike: NULL
+  top_10_segs_map_bike: NULL
+  top_10_segs_table_other: NULL
+  top_10_segs_map_other: NULL
+  crash_density: NULL
+  model_results_ped: NULL
+  model_results_bike: NULL
+  model_results_severity_ped: NULL
+  model_results_severity_bike: NULL
+  run_id: NULL 
+  crash_counts: NULL
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+pagebreak <- function() {
+  if (knitr::is_latex_output()) {
+        return("\\newpage")
+  }
+  else {
+        return('<div style="page-break-before: always;" />')
+  }
+}
+```
+
+`r pagebreak()`
+# Introduction
+This report summarizes input data (either user uploaded or based on open source defaults) and the resulting analyses driven by the Safer Streets Priority Finder tool. For more information on the tool, including methodology and FAQs, please visit www.saferstreetspriorityfinder.com.
+
+## Study Name and Location
+`r params$run_id` 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$study_area)) {
+  study_area_map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+        leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                         options = leaflet::providerTileOptions(noWrap = TRUE)
+        ) %>% 
+        leaflet::addPolygons(data=params$study_area, 
+                               fillColor = "#fcba03", 
+                               color = '#fcba03',
+                               stroke=TRUE,
+                               fillOpacity = .1
+          )  
+              
+  htmlwidgets::saveWidget(widget = study_area_map, file = "study_area_map_rm.html")
+  webshot::webshot(url = "study_area_map_rm.html", file = "study_area_map_rm.png", delay = 1, vheight = 500)
+} else {
+  print('No corridors to visualize.')
+}
+
+```
+
+`r pagebreak()`
+
+# Data Attribute Assignment
+
+This section summarizes how user uploaded data or default data variables were assigned to the standard variables used in the tool during the initial load processing. Each table below includes information on how the original/user uploaded data variables relate to the standard variables, as well as the total count and proportion of of each variable. 
+
+## Crash Variables
+
+### Crash Severity
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_sev_crosswalk)) {
+    knitr::kable(params$crash_sev_crosswalk)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+### Crash Costs 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_cost_crosswalk)) {
+    knitr::kable(params$crash_cost_crosswalk)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+### Crash Mode
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_mode_crosswalk)) {
+    knitr::kable(params$crash_mode_crosswalk)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+## Road Variables
+
+### Road Functional Classification
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+if (!is.null(params$road_fclass_crosswalk)) {
+    knitr::kable(params$road_fclass_crosswalk)
+} else {
+  print('No roads to report.')
+}
+
+```
+
+`r pagebreak()`
+
+# Descriptive Statistics of Crashes
+
+## Crash Counts 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_counts)) {
+    knitr::kable(params$crash_counts)
+} else {
+  print('No crashes to report.')
+}
+
+
+```
+
+## Crashes by Mode
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$mode_chart)) {
+  crashes_by_mode_chart <-  plotly::plot_ly(params$mode_chart) %>%
+                            plotly::add_pie(
+                              hole = 0.6,
+                              labels = ~crashes,
+                              values = ~n,
+                              customdata = ~crashes
+                            ) %>%
+                            plotly::layout(title="Crashes by Mode",
+                                           legend = list(orientation = "h",
+                                                         xanchor = "center",
+                                                         x = 0.5))
+  htmlwidgets::saveWidget(widget = crashes_by_mode_chart, file = "crashes_by_mode_chart_rm.html")
+  webshot::webshot(url = "crashes_by_mode_chart_rm.html", file = "crashes_by_mode_chart_rm.png", delay = 1, zoom = 4, vheight = 500)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$mode_table)) {
+  knitr::kable(params$mode_table)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+
+`r pagebreak()`
+
+## Crashes by Severity
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$severity_chart)) {
+  crash_by_sev_ch <-  plotly::plot_ly(params$severity_chart) %>%
+    plotly::add_pie(
+      hole = 0.6,
+      labels = unique(params$severity_chart$severity_mapped),
+      values = ~n,
+      customdata = ~severity_mapped
+    ) %>%
+    plotly::layout(title = 'Crashes by Severity',
+                   legend = list(orientation = "h",
+                                 xanchor = "center",
+                                 x = 0.5))
+  
+  htmlwidgets::saveWidget(widget = crash_by_sev_ch, file = "crash_by_sev_ch_rm.html")
+  webshot::webshot(url = "crash_by_sev_ch_rm.html", file = "crash_by_sev_ch_rm.png", delay = 1, zoom = 4, vheight = 500)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$severity_table)) {
+  knitr::kable(params$severity_table)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$severity_stacked)) {
+  cr_by_sev_stacked_bar <- plotly::plot_ly(params$severity_stacked,
+                                           x = ~Bicycle,
+                                           y = ~Severity,
+                                           type = 'bar',
+                                           orientation = 'h',
+                                           name = 'Bicycle',
+                                           marker = list(color = 'rgba(50,171, 96, 0.7)',
+                                                         line = list(color = 'rgba(50,171,96,1.0)',
+                                                                     width = 1)),
+                                           hovertemplate = paste('<b>%{x}%</b>, %{y}')) %>%
+    plotly::add_trace(x = ~Pedestrian, name = 'Pedestrian',
+                      marker = list(color = 'rgba(55,128,191,0.7)',
+                                    line = list(color = 'rgba(55,128,191,1.0)',
+                                                width = 1))) %>%
+    plotly::add_trace(x = ~Other, name = 'Other',
+                      marker = list(color = 'rgba(219, 64, 82, 0.7)',
+                                    line = list(color = 'rgba(219, 64, 82, 1.0)',
+                                                width = 1))) %>%
+    plotly::layout(barmode = 'stack',
+                   title="Crashes by Severity",
+                   xaxis = list(title = ""),
+                   yaxis = list(title =""))
+  
+  htmlwidgets::saveWidget(widget = cr_by_sev_stacked_bar, file = "cr_by_sev_stacked_bar_rm.html")
+  webshot::webshot(url = "cr_by_sev_stacked_bar_rm.html", file = "cr_by_sev_stacked_bar_rm.png", delay = 1, zoom = 4, vheight = 500)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+`r pagebreak()`
+
+## Crashes by Functional Classification
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+write.csv(params$fclass_chart, 'test2.csv')
+if (!is.null(params$fclass_chart)) {
+fclass_c <- plotly::plot_ly(params$fclass_chart, x = ~fclass_mapped, y = ~k, name = 'Fatality (K)', type = 'bar')  %>%
+  plotly::add_trace(y = ~a, name = 'Incapacitating Injury (A)')  %>%
+  plotly::add_trace(y = ~b, name = 'Non-Incapacitating Injury (B)')  %>%
+  plotly::add_trace(y = ~c, name = 'Possible Injury (C)')  %>%
+  plotly::add_trace(y = ~o, name = 'Property Damage Only (O)')  %>%
+  plotly::layout(title = 'Crashes by Functional Classification',
+                 uniformtext=list(minsize=8, mode='hide'),
+                legend = list(orientation = "h",
+                               xanchor = "center",
+                               y = -.5,
+                               x = .5),
+                 yaxis = list(
+                   title = 'Count'),
+                 xaxis = list(
+                   title = ''
+                 ))
+htmlwidgets::saveWidget(widget = fclass_c, file = "fclass_cl_rm.html")
+webshot::webshot(url = "fclass_cl_rm.html", file = "fclass_cl_rm.png", delay = 1, zoom = 4, vheight = 500)
+} else {
+  print('No crashes to report.')
+}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+write.csv(params$fclass_table, 'test3.csv')
+if (!is.null(params$fclass_table)) {
+  knitr::kable(params$fclass_table)
+} else {
+  print('No crashes to report.')
+}
+```
+
+
+
+
+`r pagebreak()`
+
+## Crashes by Year
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$year_table)){
+  crashes_by_year <-  plotly::plot_ly(params$year_table, x = ~Year, y = ~`Fatality (K)`, name = 'Fatality (K)', type = 'bar')  %>%
+    plotly::add_trace(y = ~`Incapacitating Injury (A)`, name = 'Incapacitating Injury (A)')  %>%
+    plotly::add_trace(y = ~`Non-Incapacitating Injury (B)`, name = 'Non-Incapacitating Injury (B)')  %>%
+    plotly::add_trace(y = ~`Possible Injury (C)`, name = 'Possible Injury (C)')  %>%
+    plotly::add_trace(y = ~`Property Damage Only (O)`, name = 'Property Damage Only (O)')  %>%
+    plotly::layout(title = 'Crashes by Year',
+                   legend = list(orientation = "h",
+                                 xanchor = "center",
+                                 y = -.5,
+                                 x = .5),
+                   yaxis = list(
+                     title = 'Count'),
+                   xaxis = list(
+                     title = ''
+                   ))
+  htmlwidgets::saveWidget(widget = crashes_by_year, file = "crashes_by_year_rm.html")
+  webshot::webshot(url = "crashes_by_year_rm.html", file = "crashes_by_year_rm.png", delay = 1, zoom = 4, vheight = 500)
+} else {
+  print('No crashes to report.')
+}
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$year_table)) {
+  knitr::kable(params$year_table)
+} else {
+  print('No crashes to report.')
+}
+```
+
+`r pagebreak()`
+
+# Sliding Windows Analysis Results
+
+**Method** </br>
+  
+  This analysis takes the crashes and roads data within the study area and allocates the crashes to roads, measured on 1/2- mile sliding window segments stepped in 1/10-mile increments along the network. The sliding windows score weights the most severe crashes more heavily than lower severity crashes. The Sliding Windows Score is calculated by multiplying the number of Fatal (K) and Incapacitating Injury (A) crashes by 3, and multiplying the number of Non-Incapacitating Injury (B) crashes by 1. Once the weights are established and applied to the crashes, the total number of crashes are aggregated along a corridor while incorporating the crash severity weighting. Possible Injury (C) and Property Damage Only (O) Crashes are not reflected. If you used FARS data alone, only fatal crashes will have been used and visualized.
+
+
+**Results Visualization** </br>
+  
+  This map depicts severity-weighted pedestrian/bicycle/other crashes (including severities K, A, and B) per mile. Only segments with a crash score of 1 or more are visualized (please disregard the value of zero shown in the legend). Note that road geometries are simplified in order to visualize them in the browser.
+
+
+**Top Corridors** </br>
+  
+  The table and maps below highlight the top ten crash corridors for each mode as measured by the total overall Sliding Windows Scores among the corridors for each unique road name. 
+
+
+`r pagebreak()`
+## Pedestrian Sliding Windows Analysis
+
+### Pedestrian Sliding Windows Visualization
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_density)) {
+  
+  pd_data <- params$crash_density[ which( params$crash_density$pedestrian_crash_score > 0), ] %>% arrange(pedestrian_crash_score)
+  hin_network_pal_ped <- leaflet::colorBin(
+    palette = "YlOrBr",
+    domain=pd_data$pedestrian_crash_score,
+    pretty = TRUE
+  )
+  
+  ped_crash_density <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>%
+    leaflet::addPolylines(data=pd_data,
+                          color = hin_network_pal_ped(pd_data$pedestrian_crash_score),
+                          opacity = .6,
+                          weight = 2
+    )  %>% 
+    leaflet::addLegend(position = "topleft",
+                       pal = hin_network_pal_ped, 
+                       values = pd_data$pedestrian_crash_score,  
+                       title =  "Pedestrian Sliding <br> Windows Score"
+    )
+  
+  htmlwidgets::saveWidget(widget = ped_crash_density, file = "ped_crash_density_rm.html")
+  webshot::webshot(url = "ped_crash_density_rm.html", file = "ped_crash_density_rm.png", delay = 1, vheight = 1200)
+} else {
+  print('No Sliding Windows Analysis to visualize.')
+}
+```
+
+`r pagebreak()`
+
+### Top 10 Pedestrian Crash Corridors
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_table_ped)) {
+  knitr::kable(params$top_10_segs_table_ped)
+} else {
+  print('No corridors to report.')
+}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_map_ped)) {
+  map_top_10_segs <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>% 
+    leaflet::addPolylines(data=params$top_10_segs_map_ped,
+                          color = "#d10d79",
+                          opacity = 1,
+                          weight = 3
+    )  
+  
+  htmlwidgets::saveWidget(widget = map_top_10_segs, file = "map_top_10_segs_rm.html")
+  webshot::webshot(url = "map_top_10_segs_rm.html", file = "map_top_10_segs_rm.png", delay = 1, vheight = 900)
+} else {
+  print('No corridors to visualize.')
+}
+
+```
+
+`r pagebreak()`
+
+## Bicycle Sliding Windows Analysis
+
+### Bicycle Sliding Windows Visualization
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_density)) {
+  bk_data <- params$crash_density[ which( params$crash_density$bicycle_crash_score > 0), ] %>% arrange(bicycle_crash_score)
+  hin_network_pal_bike <- leaflet::colorBin(
+    palette = "YlOrRd",
+    domain=bk_data$bicycle_crash_score,
+    pretty = TRUE
+  )
+  bike_crash_density <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>%
+    leaflet::addPolylines(data=bk_data,
+                          color = hin_network_pal_bike(bk_data$bicycle_crash_score),
+                          opacity = .6,
+                          weight = 2
+    )  %>% 
+    leaflet::addLegend(position = "topleft",
+                       pal = hin_network_pal_bike, 
+                       values = bk_data$bicycle_crash_score,  
+                       title =  "Bicycle Sliding <br> Windows Score"
+    )
+  
+  htmlwidgets::saveWidget(widget = bike_crash_density, file = "bike_crash_density_rm.html")
+  webshot::webshot(url = "bike_crash_density_rm.html", file = "bike_crash_density_rm.png", delay = 1, vheight = 1200)
+  
+} else {
+  print('No Sliding Windows Analysis to visualize.')
+}
+```
+
+`r pagebreak()`
+
+### Top 10 Bicycle Crash Corridors
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_table_bike)) {
+  knitr::kable(params$top_10_segs_table_bike)
+} else {
+  print('No corridors to report.')
+}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_map_bike)) {
+  map_top_10_segs <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>% 
+    leaflet::addPolylines(data=params$top_10_segs_map_bike,
+                          color = "#d10d79",
+                          opacity = 1,
+                          weight = 3
+    )  
+  
+  htmlwidgets::saveWidget(widget = map_top_10_segs, file = "map_top_10_segs_rm.html")
+  webshot::webshot(url = "map_top_10_segs_rm.html", file = "map_top_10_segs_rm.png", delay = 1, vheight = 900)
+} else {
+  print('No corridors to visualize.')
+}
+
+```
+
+`r pagebreak()`
+## Other Sliding Windows Analysis
+
+### Other Sliding Windows Visualization
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$crash_density)) {
+  
+  ot_data <- params$crash_density[ which( params$crash_density$other_score > 0), ] %>% arrange(other_score)
+  hin_network_pal_other <- leaflet::colorBin(
+    palette = "YlGnBu",   
+    domain=ot_data$other_score,
+    pretty = TRUE
+  )
+  other_crash_density <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>%
+    leaflet::addPolylines(data=ot_data,
+                          color = hin_network_pal_other(ot_data$other_score),
+                          opacity = .6,
+                          weight = 2
+    )  %>% 
+    leaflet::addLegend(position = "topleft",
+                       pal = hin_network_pal_other,
+                       values = ot_data$other_score,    
+                       title =  "Other Sliding <br> Windows Score"
+    )
+  
+  htmlwidgets::saveWidget(widget = other_crash_density, file = "other_crash_density_rm.html")
+  webshot::webshot(url = "other_crash_density_rm.html", file = "other_crash_density_rm.png", delay = 1, vheight = 1200)
+  
+} else {
+  print('No Sliding Windows Analysis to visualize.')
+}
+```
+
+`r pagebreak()`
+
+### Top 10 Other Crash Corridors
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_table_other)) {
+  knitr::kable(params$top_10_segs_table_other)
+} else {
+  print('No corridors to report.')
+}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$top_10_segs_map_other)) {
+  map_top_10_segs <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>% 
+    leaflet::addPolylines(data=params$top_10_segs_map_other,
+                          color = "#d10d79",
+                          opacity = 1,
+                          weight = 3
+    )  
+  
+  htmlwidgets::saveWidget(widget = map_top_10_segs, file = "map_top_10_segs_rm.html")
+  webshot::webshot(url = "map_top_10_segs_rm.html", file = "map_top_10_segs_rm.png", delay = 1, vheight = 900)
+} else {
+  print('No corridors to visualize.')
+}
+
+```
+
+
+`r pagebreak()`
+
+## Safer Streets Model
+
+This analysis uses a Bayesian modeling framework to assign risk values to segments for different severities of crashes over a one-year period. These values are then converted to crash cost estimates based on costs associated with each crash severity. 
+
+`r pagebreak()`
+
+## Pedestrian Safer Streets Model
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$model_results_ped)) {
+  ped_cost <- leaflet::colorNumeric(
+    palette = "YlGnBu", 
+    domain=as.numeric(params$model_results_ped$rt_ped_cost_1y)
+  )
+  ped_model <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>% 
+    leaflet::addPolylines(data=params$model_results_ped,
+                          color = ped_cost(as.numeric(params$model_results_ped$rt_ped_cost_1y)),
+                          opacity = .6,
+                          weight = 2
+    )  %>% 
+    leaflet::addLegend(position = "topleft",
+                       pal = ped_cost,
+                       values = params$model_results_ped$rt_ped_cost_1y, 
+                       title =  "Estimated Pedestrian </br> Rate Crash Cost",
+                       labFormat = leaflet::labelFormat(prefix='$')
+    )
+  
+  htmlwidgets::saveWidget(widget = ped_model, file = "ped_model_rm.html")
+  webshot::webshot(url = "ped_model_rm.html", file = "ped_model_rm.png", delay = 1, vheight = 1200)
+} else {
+  print('No model results to visualize.')
+}
+
+```
+
+`r pagebreak()`
+
+### Observed vs. Estimated Pedestrian Crashes by Severity
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$model_results_severity_ped)) {
+  m_re_sev <-  plotly::plot_ly(params$model_results_severity_ped, x = ~Type, y = ~Observed, name = 'Observed', type = 'bar')  %>% 
+    plotly::add_trace(y = ~Estimated, name = 'Estimated')  %>%  
+    plotly::layout(title = 'Observed vs. Estimated Pedestrian Crashes by Severity', 
+                   legend = list(orientation = "h",   
+                                 xanchor = "center",
+                                 y = -.8,
+                                 x = .8),
+                   yaxis = list(
+                     title = 'Count'),
+                   xaxis = list(
+                     title = ''
+                   )) 
+  
+  htmlwidgets::saveWidget(widget = m_re_sev, file = "m_re_sev_rm.html")
+  webshot::webshot(url = "m_re_sev_rm.html", file = "m_re_sev_rm.png", delay = 1, vheight = 500)
+} else {
+  print('No estimates to report.')
+}
+
+```
+
+`r pagebreak()`
+
+## Bicycle Safer Streets Model
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$model_results_bike)) {
+  bike_cost <- leaflet::colorNumeric(
+    palette = "YlOrRd", 
+    domain=as.numeric(params$model_results_bike$rt_bike_cost_1y)
+  )
+  
+  bike_model <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = FALSE)) %>%
+    leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
+                              options = leaflet::providerTileOptions(noWrap = TRUE)
+    ) %>% 
+    leaflet::addPolylines(data=params$model_results_ped,
+                          color = bike_cost(as.numeric(params$model_results_bike$rt_bike_cost_1y)),
+                          opacity = .6,
+                          weight = 2
+    )  %>% 
+    leaflet::addLegend(position = "topleft",
+                       pal = bike_cost,
+                       values = params$model_results_bike$rt_bike_cost_1y, 
+                       title =  "Estimated Bicycle </br> Rate Crash Cost",
+                       labFormat = leaflet::labelFormat(prefix='$')
+    ) 
+  
+  htmlwidgets::saveWidget(widget = bike_model, file = "bike_model_rm.html")
+  webshot::webshot(url = "bike_model_rm.html", file = "bike_model_rm.png", delay = 1, vheight = 1200)
+} else {
+  print('No model results to visualize.')
+}
+
+```
+
+`r pagebreak()`
+
+### Observed vs. Estimated Bicycle Crashes by Severity
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+if (!is.null(params$model_results_severity_bike)) {
+  m_re_sev <-  plotly::plot_ly(params$model_results_severity_bike, x = ~Type, y = ~Observed, name = 'Observed', type = 'bar')  %>% 
+    plotly::add_trace(y = ~Estimated, name = 'Estimated')  %>%  
+    plotly::layout(title = 'Observed vs. Estimated Bicycle Crashes by Severity', 
+                   legend = list(orientation = "h",   
+                                 xanchor = "center",
+                                 y = -.8,
+                                 x = .8),
+                   yaxis = list(
+                     title = 'Count'),
+                   xaxis = list(
+                     title = ''
+                   )) 
+  
+  htmlwidgets::saveWidget(widget = m_re_sev, file = "m_re_sev_rm.html")
+  webshot::webshot(url = "m_re_sev_rm.html", file = "m_re_sev_rm.png", delay = 1, vheight = 500)
+} else {
+  print('No estimates to report.')
+}
+
+```
+
+
