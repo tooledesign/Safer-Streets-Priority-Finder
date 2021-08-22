@@ -10,7 +10,7 @@ test_for_run <- function(connection, username, run_id){
       return('FALSE')
     } else if (exists == 1) {
       return('TRUE')
-    } else if (is.null(exists)){
+    } else {
       return('ERROR')
     }
   }, 
@@ -100,11 +100,12 @@ get_email_address <- function(connection, username){
 add_user <- function(connection, username, run_id, email, password, original_username, original_run_id) {
   tryCatch({
     username <- DBI::dbQuoteString(connection, username)
-    
-    if (length(DBI::dbGetQuery(connection, glue::glue('SELECT DISTINCT user_id FROM gen_management.accounts WHERE username = {username}'))) >= 1){
+    q <- glue::glue('SELECT (EXISTS (SELECT FROM gen_management.accounts WHERE username = {username}))::INTEGER;')
+    exists <- DBI::dbGetQuery(connection, q)[1,1] 
+    if (exists == 1){
       print('This username already exists, please choose something else.')
       return('Username already exists')
-    } else {
+    } else if (exists == 0){
       run_id <- DBI::dbQuoteString(connection, run_id)
       email <- DBI::dbQuoteString(connection, email)
       password <- DBI::dbQuoteString(connection, password)
@@ -113,14 +114,14 @@ add_user <- function(connection, username, run_id, email, password, original_use
       q <- glue::glue("INSERT INTO gen_management.accounts ( username, password, user_id, run_id, email, o_username, o_run_id) VALUES ({username}, {password}, EXTRACT(EPOCH FROM NOW()), {run_id}, {email}, {original_username}, {original_run_id});")
       DBI::dbGetQuery(connection, q)
       print(glue::glue('Added username: {username}'))
-      return(TRUE)
+      return('User added')
+    } else {
+      return('Error occured')
     }
-
-    
     }, error = function(cond){
       c <- toString(cond)
       Add_Modal(title = 'Something Went Wrong.', body=c)
-      return(FALSE)
+      return('Error occured')
       }
   )
   }

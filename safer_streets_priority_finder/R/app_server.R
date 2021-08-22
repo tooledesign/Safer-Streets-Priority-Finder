@@ -120,7 +120,10 @@ app_server <- function( input, output, session ) {
       )
         if (user_added == 'Username already exists'){
           shiny_warming_alert( title = "Oh no!", text = "That username already exists!")
-        } else {
+        } else if (user_added == 'Error occured'){
+          shiny_warming_alert( title = "Error", text = "It looks like the SSPF ran into an error. You're likely disconnected from the database. Try reloading the page." )
+          
+          } else if (user_added == 'User added') {
           # checks 1-4 have passed, create username login
        
           user_id <- get_user_id(connection=connection, username=tolower(input$chosen_username), password=tolower(input$chosen_password))
@@ -287,8 +290,7 @@ app_server <- function( input, output, session ) {
          shiny_warming_alert( title = "Whoa!", text = "That study already exists!" )
          
        }  else if (run == 'ERROR'){
-         shiny_warming_alert( title = "Error", text = "It looks like the SSPF ran into an error. This likely relates to a disconnected server. Try reloading the page." )
-         
+         shiny_warming_alert( title = "Error", text = "It looks like the SSPF ran into an error. You're likely disconnected from the database. Try reloading the page." )         
        }  else if (run == 'FALSE'){
         
         # Adds new run to user account
