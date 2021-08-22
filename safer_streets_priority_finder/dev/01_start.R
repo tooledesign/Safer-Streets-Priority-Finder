@@ -19,7 +19,7 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ## 
 golem::fill_desc(
-  pkg_name = "safer_streets_priority_finder", # The Name of the package containing the App 
+  pkg_name = "safer.streets.priority.finder", # The Name of the package containing the App 
   pkg_title = "Safer Streets Priority Finder", # The Title of the package containing the App 
   pkg_description = "PKG_DESC.", # The Description of the package containing the App 
   author_first_name = "Daniel", # Your First Name

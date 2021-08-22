@@ -5,7 +5,7 @@
 #' 
 #' @noRd
 app_sys <- function(...){
-  system.file(..., package = "safer_streets_priority_finder")
+  system.file(..., package = "safer.streets.priority.finder")
 }
 
 

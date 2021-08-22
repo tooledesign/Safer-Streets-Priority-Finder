@@ -94,7 +94,7 @@ usethis::use_test( "app" )
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("safer_streets_priority_finder")
+usethis::use_vignette("safer.streets.priority.finder")
 devtools::build_vignettes()
 
 ## Code coverage ----
