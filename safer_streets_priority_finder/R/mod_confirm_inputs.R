@@ -16,7 +16,7 @@ mod_confirm_inputs_ui <- function(id){
     fluidRow(
     col_12(
         bs4Card(inputId=ns('intro_card'), title='Review Your Data', width = 12, closable = F,
-                p("In this section, you'll have a chance to review and confirm your input data. In this section, checks are performed on your data, you can review your datasets on a map, and key information about your accounts and data are synthesized. You'll also be able to manage whether your data is saved for future research."),
+                p("In this section, you'll have a chance to review and confirm your input data. In this section, checks are performed on your data, you can review your datasets on a map, and key information about your accounts and data are synthesized. You'll also be able to manage whether your data is saved for future research.")
         ))),
     fluidRow(
       col_12(
