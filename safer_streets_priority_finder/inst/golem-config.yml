@@ -1,5 +1,5 @@
 default:
-  golem_name: safer_streets_priority_finder
+  golem_name: safer.streets.priority.finder
   golem_version: 0.0.0.9000
   app_prod: no
 production:
