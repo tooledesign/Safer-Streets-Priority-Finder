@@ -18,7 +18,7 @@ mod_confirm_inputs_ui <- function(id){
         bs4Card(inputId=ns('intro_card'), title='Review Your Data', width = 12, closable = F,
                 p("In this section, you'll have a chance to review and confirm your input data."),
                 tags$ul(
-                  tags$li("If you’ve uploaded your data, click the 'Perform Checks' button below."),
+                  tags$li("If you've made changes to your data, you can click the 'Refresh' button below."),
                   tags$li("You can display your data in the map by clicking the 'Map Data' button."),
                   tags$li("The \'Update Data Management Table\' button refreshes the table, which includes key information about the current scenario."),
                 )
@@ -28,7 +28,7 @@ mod_confirm_inputs_ui <- function(id){
       bs4Card(inputId=ns('issue_tracker'), title='Issue Tracker', width = 12, closable = F, 
               fluidRow(
                 col_12(
-                p('This card will highlight any issues in your data. Click the Perform Checks button.'),
+                p('This card will highlight any issues in your data.'),
                 tags$div( 
                 uiOutput(ns("all_data_exists_check")),
                 uiOutput(ns("same_crs_check")),
@@ -466,12 +466,12 @@ mod_confirm_inputs_server <- function(input, output, session, connection, user_i
 
   # Instructions 
   inputs_instructions_modal <- modalDialog(
-    title = "Instructions to Perform Checks",
+    title = "Issue Tracker Instructions",
     easyClose = TRUE,
     next_label = NULL,
     tagList(
       tags$div( 
-               p("The Perform Checks button ensures:"),
+               p("The issue tracker ensures:"),
                tags$ol(
                  tags$li("all three of the necessary datasets are uploaded,"),
                  tags$li("that all datasets are in the correct Coordinate Reference System (they will be automatically re-projected if this is not the case),"),
