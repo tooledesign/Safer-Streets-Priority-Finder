@@ -31,6 +31,16 @@ CHECK (
         'model_estimation_completed')
 );
 
+-- create domain for report_status
+CREATE DOMAIN gen_management.report_status_options AS TEXT
+CHECK (
+    VALUE IN (
+        'no_report_requested',
+        'report_requested',
+        'builing_report',
+        'report_ready')
+);
+
 -- create table
 CREATE TABLE gen_management.accounts 
 (
@@ -60,7 +70,7 @@ sa_bbox_west_4326         FLOAT,
 time_since_model_desired  TIMESTAMP DEFAULT NULL,
 time_mode_finished        TIMESTAMP DEFAULT NULL,
 model_process_time        INTERVAL DEFAULT NULL,             
-model_status              model_status_options DEFAULT 'no_model_desired',
+model_status              gen_management.model_status_options DEFAULT 'no_model_desired',
 sa_storage_opt_out        BOOLEAN DEFAULT FALSE,
 roads_storage_opt_out     BOOLEAN DEFAULT FALSE,
 crash_storage_opt_out     BOOLEAN DEFAULT FALSE,
@@ -82,7 +92,7 @@ o_a_cost                  DOUBLE PRECISION DEFAULT 0,
 o_b_cost                  DOUBLE PRECISION DEFAULT 0,
 o_c_cost                  DOUBLE PRECISION DEFAULT 0,
 o_o_cost                  DOUBLE PRECISION DEFAULT 0,
-report_needed             BOOLEAN DEFAULT FALSE,
+report_status             gen_management.report_status_options DEFAULT 'no_report_requested',
 report_requested_time     TIMESTAMP DEFAULT NULL,
 report_finished_time      TIMESTAMP DEFAULT NULL,
 );
