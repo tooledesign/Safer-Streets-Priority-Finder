@@ -37,7 +37,7 @@ CHECK (
     VALUE IN (
         'no_report_requested',
         'report_requested',
-        'builing_report',
+        'building_report',
         'report_ready')
 );
 
