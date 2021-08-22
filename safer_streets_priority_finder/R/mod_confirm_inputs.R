@@ -16,19 +16,14 @@ mod_confirm_inputs_ui <- function(id){
     fluidRow(
     col_12(
         bs4Card(inputId=ns('intro_card'), title='Review Your Data', width = 12, closable = F,
-                p("In this section, you'll have a chance to review and confirm your input data."),
-                tags$ul(
-                  tags$li("If you've made changes to your data, you can click the 'Refresh' button below."),
-                  tags$li("You can display your data in the map by clicking the 'Map Data' button."),
-                  tags$li("The \'Update Data Management Table\' button refreshes the table, which includes key information about the current scenario."),
-                )
+                p("In this section, you'll have a chance to review and confirm your input data. In this section, checks are performed on your data, you can review your datasets on a map, and key information about your accounts and data are synthesized. You'll also be able to manage whether your data is saved for future research."),
         ))),
     fluidRow(
       col_12(
       bs4Card(inputId=ns('issue_tracker'), title='Issue Tracker', width = 12, closable = F, 
               fluidRow(
                 col_12(
-                p('This card will highlight any issues in your data.'),
+                p('This card will highlight any issues in your data. Refreshing the data can be useful if you’ve uploaded new data.'),
                 tags$div( 
                 uiOutput(ns("all_data_exists_check")),
                 uiOutput(ns("same_crs_check")),
