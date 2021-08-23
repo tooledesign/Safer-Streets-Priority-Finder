@@ -60,8 +60,20 @@ Update all variables in that file. Here's a breakdown of what each variable refe
 4. **SSPF_AMAZON_PASSWORD** - password to PostgreSQL Relational Database
 5. **SSPF_AMAZON_USERNAME** - username for PostgreSQL Relational Database
 6. **SSPF_AMAZON_DATABASE** - the name of the database with schema structure for the tool 
+7. **AWS_ACCESS_KEY_ID** - AWS S3 access key 
+8. **AWS_SECRET_ACCESS_KEY** - AWS S3 secret access key  
+9. **AWS_DEFAULT_REGION** - AWS S3 location  
+10. **S3_BUCKET** - Name of the S3 bucket
 
-Now do the same for the model processor. 
+Now do the same for the report processor.  
+
+``` cd .. ``` 
+
+``` cd Safer-Streets-Priority-Finder/report_processor/ ```
+
+``` nano env_variables.R ```
+
+And the same for the model processor. Note, the model processor does not need variables to access the AWS S3 bucket.
 
 ``` cd .. ``` 
 
@@ -83,25 +95,67 @@ If you haven't already done so, you'll need a network to link systems together.
 
 ### Step 4. Launch model processor 
 
-From the ```Safer-Streets-Priority-Finder/vulusr_model_processor/``` directory, build a local image from the ```Dockerfile```. 
+Ensure you [the variable configuration](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/vulusr_model_processor/env_variables.R) has been updated for this process. 
 
-Then build the model processor image with the following: 
+Navigate to the ```Safer-Streets-Priority-Finder/vulusr_model_processor/``` directory. Then build the model processor image with the following: 
 
 ```docker build -t sspf_model_processor .```
 
 This will build an image called ```sspf_model_processor```. 
 
+If you plan to store this information in a [Docker Hub](https://hub.docker.com/), you'll want to namespace the image with, 
+
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
+
 After that's complete, you launch a container with, 
 
 ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf_model_processor --restart=always -p 9001:3839 sspf_model_processor``` 
 
-At this time, your model processor is running in a detached Docker container listening for a user to request a model. The model will port everything to the PostgreSQL database identified in the env_variables.R file. 
+Verify the model processor is now running:
 
-To stop the container, use the command, ```docker stop sspf_model_processor```. 
+```docker ps```
 
-Prune off unwanted containers with, ```docker container prune sspf_model_processor ```. 
+You should not see any indication the model processor is restarting. To check for any errors, use the following: 
 
-### Step 4. Locally launch the Safer Streets Priority Finder
+```docker logs sspf_model_processor```
+
+At this time, the model processor is running in a detached Docker container listening for a user to request a model. Results from the model processor are stored in the PostgreSQL database identified in the env_variables.R file. Once a container has finished building a model, the user will be notified by email. At this time, that container will be marked stale using the gen_management.docker_status table. The developers found that a single containerized model processor can't continuously build Bayesian models with [RStan](https://mc-stan.org/users/interfaces/rstan). We recommend maintaining this structure. 
+
+See the "Maintaining the model processor manually" section below to maintain the model processor manually. 
+
+OR 
+
+See the "Maintaining the model processor automatically" section below to maintain the model processor automatically. 
+
+### Step 5: Launch report processor 
+
+Ensure [the variable configuration](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/report_processor/env_variables.R) has been updated for this process. 
+
+Navigate to the ```Safer-Streets-Priority-Finder/vulusr_model_processor/``` directory, then build the model processor image with the following: 
+
+```docker build -t sspf_report_processor .```
+
+This will build an image called, ```sspf_report_processor``` on your local machine. 
+
+If you plan to store this information in a [Docker Hub](https://hub.docker.com/), you'll want to namespace the image with, 
+
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
+
+To launch a container, use the following command: 
+
+```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf_report_processor --restart=always -p 25250:25250 sspf_report_processor``` 
+
+Verify the report processor is now running:
+
+```docker ps```
+
+You should not see any indication the report processor is restarting. To check for any errors, use the following: 
+
+```docker logs sspf_report_processor```
+
+At this time, the report processor is listening for a user to request a report. Reports are processed one at a time. If multiple reports are requested at the same time, the processor will start with the study with the earliest start timestamp. A status message will appear in the SSPF UI to notify the user of the processor's step. Reports are stored in an AWS S3 bucket. The user will be notified by email when a report is ready.  
+
+### Step 6. Launch the Safer Streets Priority Finder
 
 Navigate to the safer-streets-priority-finder directory. This directory should container a Dockerfile. 
 
@@ -111,9 +165,21 @@ Then build the Safer Streets Priority Finder with the following:
 
 ```docker build -t sspf .```
 
+If you want to save your image on Docker Hub, 
+
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
+
 ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf --restart=always -p 9000:3838 sspf``` 
 
-Now navigate to http://localhost:9001/, and you should see the Safer Streets Priority Finder.
+Verify the Safer Streets Priority Finder is now running:
+
+```docker ps```
+
+You should not see any indication the Safer Streets Priority Finder is restarting. To check for any errors, use the following: 
+
+```docker logs sspf```
+
+Now navigate to http://localhost:9000/, and you should see the Safer Streets Priority Finder.
 
 ## Maintaining the model processor manually
 
