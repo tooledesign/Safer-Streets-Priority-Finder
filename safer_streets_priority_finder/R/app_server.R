@@ -21,6 +21,8 @@ app_server <- function( input, output, session ) {
   source(file.path(getwd(), 'inst', 'app', 'www', 'opener_setup.R'), local = TRUE)
   source(file.path(getwd(), 'inst', 'app', 'www', 'welcome_login_modal.R'), local = TRUE)
   
+  
+  
   # prompts user with login modal after three seconds 
   shinyjs::delay(3000, showModal(create_login_modal))
 
@@ -182,8 +184,8 @@ app_server <- function( input, output, session ) {
       user_id <- get_user_id(connection=connection, username=tolower(input$username), password=tolower(input$password))
       if ( user_id == -999 ) {
         shiny_warming_alert(title = 'Incorrect Login', text='It looks like that username and password combination doesn\'t exist.')
-      } else if (user_id == 'not connected') {
-        shiny_warming_alert(title = 'Something went wrong', text='It looks like your session disconnected from the database. Please reload the page.')
+      } else if (length(user_id) == 0) {
+        shiny_warming_alert(title = 'Something went wrong', text='It looks like you\'re session disconnected from the database. Please reload the page.')
       } else { # check for run ID 
         
         # set user_id 
