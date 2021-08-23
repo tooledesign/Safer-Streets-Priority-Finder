@@ -103,7 +103,7 @@ This will build an image called ```sspf_model_processor```.
 
 If you plan to store this information in a [Docker Hub](https://hub.docker.com/), you'll want to namespace the image with, 
 
-``` tag sspf_report_processor tooledesign/sspf_report_processor:[version_number] ``` 
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
 
 After that's complete, you launch a container with, 
 
@@ -127,7 +127,7 @@ See the "Maintaining the model processor automatically" section below to maintai
 
 ### Step 5: Launch report processor 
 
-Ensure you [the variable configuration](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/report_processor/env_variables.R) has been updated for this process. 
+Ensure [the variable configuration](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/report_processor/env_variables.R) has been updated for this process. 
 
 Navigate to the ```Safer-Streets-Priority-Finder/vulusr_model_processor/``` directory, then build the model processor image with the following: 
 
@@ -137,7 +137,7 @@ This will build an image called, ```sspf_report_processor``` on your local machi
 
 If you plan to store this information in a [Docker Hub](https://hub.docker.com/), you'll want to namespace the image with, 
 
-``` tag sspf_report_processor tooledesign/sspf_report_processor:[version_number] ``` 
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
 
 To launch a container, use the following command: 
 
@@ -165,7 +165,7 @@ Then build the Safer Streets Priority Finder with the following:
 
 If you want to save your image on Docker Hub, 
 
-``` tag sspf_report_processor tooledesign/sspf_report_processor:[version_number] ``` 
+``` tag sspf_report_processor [yourDockerAccountNameHere]/sspf_report_processor:[version_number] ``` 
 
 ```docker run -d -v /var/run/docker.sock:/var/run/docker.sock --net sp-example-net --name=sspf --restart=always -p 9000:3838 sspf``` 
 
