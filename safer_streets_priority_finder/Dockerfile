@@ -1,16 +1,5 @@
 FROM rocker/r-ver:4.0.3
 
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-  	apt-utils \
-  	ed \
-  	libnlopt-dev \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/
-
-# Install rstan
-RUN install2.r --error --deps TRUE rstan
-
 RUN apt-get update && apt-get install -y  --no-install-recommends\
    git-core \
    libcurl4-openssl-dev \
@@ -96,7 +85,7 @@ RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", vers
 RUN Rscript -e 'remotes::install_version("leafgl",upgrade="never", version = "0.1.1")'
 RUN Rscript -e 'remotes::install_version("emayili",upgrade="never", version = "0.4.15")'
 RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = "0.2.2")'
-
+RUN Rscript -e 'remotes::install_version("aws.s3",upgrade="never", version = "0.3.21")'
 
 COPY env_variables.R /srv/shiny-server/App/env_variables.R
 

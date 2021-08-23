@@ -352,3 +352,22 @@ filter: alpha(opacity=50) !important;
 #visualize_data_reporter_ui_1-abs_controls > div:nth-child(4) > div.input-group > input, #load_data_ui_1-manage_crash_upload_ui_1-crash_upload_1 > div.card-body > div:nth-child(1) > div > div:nth-child(3) > div > div.input-group > input {
   height: calc(2.025rem + 1px) !important;
 }
+
+.report_hover_override:hover {
+  border-color: #264653 !important;
+  background-color: #264653 !important;
+  color: #fff !important;
+  cursor: no-drop !important;
+}
+
+#reporter_ui_1-downloader_div {
+  display: inline !important;
+}
+
+.center_reporter {
+border: 2px solid lightgrey;
+border-radius: 5px !important;
+margin-top: 5px !important;
+padding: 8px !important;
+text-align: center !important;
+}
