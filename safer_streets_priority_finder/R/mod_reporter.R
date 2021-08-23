@@ -1167,7 +1167,7 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
       output$reporter_message <- renderUI({
          HTML(
               '<div class="center_reporter">
-                The Safer Streets Priority Finder is building your report. We\'ll notify you as soon it\'s ready.
+                The Safer Streets Priority Finder is building your report. We\'ll notify you as soon as it\'s ready.
                 </div>'
                )  
         })
