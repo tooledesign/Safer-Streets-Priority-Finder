@@ -94,7 +94,7 @@ long_job <- function(connection, user_id, run_id){
                                   to = email_access,
                                   from = Sys.getenv("SSPF_EMAIL_ADDRESS"),
                                   subject = paste0("SSPF - Report Ready for Download"),
-                                  text = paste0('This is an automated message to notify you the Safer Streets Priority Finder analysis report is ready to download for study area, ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
+                                  text = paste0('This is an automated message to notify you the Safer Streets Priority Finder analysis report is ready to download for study area ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
         )
         
         smtp_report <- emayili::server(host = "mail.hover.com",
