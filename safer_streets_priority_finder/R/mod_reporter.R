@@ -18,16 +18,19 @@ mod_reporter_ui <- function(id){
         tags$div(hr())
       )),
     fluidRow(
-      col_6(
+      col_12(
         bs4Card(inputId=ns('explore1'), title ='Dive Into Your Data',  width = 12, collapsible = T, closable = F,
-                p('Use the button below to refresh the descriptive statistics on this page. Refreshing the data can be useful if you’ve uploaded new data or performed an additional analysis.'), 
-                p('Crashes that occurred outside your study area are not included in the summaries.' ),
+                p('On this page, you can explore your data and analysis results. You can also download a PDF summary report and the shapefiles and tables associated with input data and analysis results.'),
+                p('Use the button below to refresh the descriptive statistics on this page. Refreshing the data can be useful if you’ve uploaded new data or performed an additional analysis. Crashes that occurred outside your study area are not included in the summaries.'), 
                 actionButton(ns("refresh_button"), "Refresh", class = "btn btn-primary"),
+                actionButton(ns("download_instructions"), "Instructions", class = "btn btn-primary"),
                 actionButton(ns("refresh_button_hidden"), "Fetch Data", class = "btn btn-primary leaflet_none")
-        )),
+                
+        ))),
+    fluidRow(
       col_6(
         bs4Card(inputId=ns('explore2'), 
-                title ='Data Downloader',  
+                title ='Summary Report Downloader',  
                 width = 12, 
                 collapsible = T, 
                 closable = F, 
@@ -35,10 +38,8 @@ mod_reporter_ui <- function(id){
                 dropdownIcon = 'download',
                 labelTooltip = 'Use this box to download your data.',
                 status = 'warning',
-                p('Download your input data, analysis results, or a PDF summary report of this dashboard page.'),
                 fluidRow(
                   col_12(
-                    actionButton(ns("download_instructions"), "Instructions", class = "btn btn-primary"),
                     actionButton(ns("create_report"), label = 'Build Report', class = "btn btn-primary"),
                     tags$div(id=ns("downloader_div"), 
                     downloadButton(ns('download_report'), label = "Download Report", class = 'btn btn-primary')
@@ -49,11 +50,20 @@ mod_reporter_ui <- function(id){
                   col_12(
                     uiOutput(ns("reporter_message"))
                   )
-                ),
-                hr(),
+                ))),
+      col_6(        
+        bs4Card(inputId=ns('explore3'), 
+                title ='Data Downloader',  
+                width = 12, 
+                collapsible = T, 
+                closable = F, 
+                solidHeader = T, 
+                dropdownIcon = 'download',
+                labelTooltip = 'Use this box to download your data.',
+                status = 'warning',
                 selectInput(
                   inputId = ns("data_selector_for_download"),
-                  label = "Select Data To Download",
+                  label = NULL,
                   choices = c("Study Area", "Road Network", "Crashes", "Sliding Windows Analysis", "Safer Streets Model", "Bike and Pedestrian Crashes", "Top Ten Pedestrian Crash Corridors", "Top Ten Bicycle Crash Corridors", "Top Ten Other Crash Corridors")
                 ),
                 fluidRow(
