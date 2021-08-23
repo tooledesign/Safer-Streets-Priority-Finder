@@ -11,7 +11,9 @@ The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicy
 <img width="677" alt="Screen Shot 2021-08-19 at 4 30 40 PM" src="https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/landing_page/images/nola_bike_crash_score_w_study_reduced_social_media.png">
 
 
-## How to launch the SSPF, what you'll need
+## How to launch your own instance of the SSPF and what you'll need
+
+You don't need to follow these instructions to use the tool, which is available for public use the link included above. You only need to follow these instructions if you'd like to build your own version of the SSPF software.
 
 1. **Linux** - You'll need sudo access on a Linux command line. 
 2. **A PostgreSQL Relational Database** - Access to a PostgreSQL database that follows the schema and table structure provided [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/build_psql_db.sql).
