@@ -517,8 +517,8 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
                             ')
   } 
   
-  report_status_q <- glue::glue('SELECT report_status FROM gen_management.accounts WHERE user_id = user_id AND run_id = \'{run_id}\';')
-  init_check <- DBI::dbGetQuery(connection, report_status_q)
+  report_status_q <- glue::glue('SELECT report_status FROM gen_management.accounts WHERE user_id = {user_id} AND run_id = \'{run_id}\';')
+  init_check <- DBI::dbGetQuery(connection, report_status_q)[1,1]
   data$report_status <- init_check
   if (init_check == 'building_report' || init_check == 'report_requested'){
     data$search_for_report <- TRUE
