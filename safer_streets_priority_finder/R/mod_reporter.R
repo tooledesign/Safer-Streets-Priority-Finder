@@ -521,7 +521,7 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
   init_check <- DBI::dbGetQuery(connection, report_status_q)
   data$report_status <- init_check
   if (init_check == 'building_report' || init_check == 'report_requested'){
-    data$search_for_report = TRUE
+    data$search_for_report <- TRUE
   } 
  
 
@@ -1096,8 +1096,8 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
     update_account_info(connection=connection, user_id=user_id, run_id=data$run_id_sql_formatted, column = DBI::dbQuoteIdentifier(connection, 'report_requested_time'), new_value='now()')
     update_account_info(connection=connection, user_id=user_id, run_id=data$run_id_sql_formatted, column = DBI::dbQuoteIdentifier(connection, 'report_status'), new_value=DBI::dbQuoteString(connection, glue::glue('report_requested')))
     data$report_status <- DBI::dbGetQuery(connection, report_status_q)[1,1]
-    data$search_for_report = TRUE
-    print(data$report_status )
+    data$search_for_report <- TRUE
+
   }
   
   observeEvent(input$do_not_delete_report, {
@@ -1134,7 +1134,7 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
       output$reporter_message <- renderUI({NULL})
       outputOptions(output, "reporter_message", suspendWhenHidden = FALSE)
       if (data$report_exists) {
-         data$search_for_report = FALSE
+         data$search_for_report <- FALSE
          shinyjs::runjs(code = 'document.getElementById(\'reporter_ui_1-download_report\').classList.remove("disabled");
                                 document.getElementById(\'reporter_ui_1-download_report\').classList.remove(\'report_hover_override\');
                                 document.getElementById(\'reporter_ui_1-create_report\').classList.remove("disabled");
