@@ -1088,7 +1088,7 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
   )
   
 
-  rebuild_report_mod <- mod_delete_model_ui("delete_model_ui_4", confirm_button = ns("delete_report"), cancel_button = ns("do_not_delete_report"), text="Are you sure you want to rebuild your existing Safer Streets Priority Finder Report? By rebuilding this report, you will permanently delete your current version.")
+  rebuild_report_mod <- mod_delete_model_ui("delete_model_ui_4", confirm_button = ns("delete_report"), cancel_button = ns("do_not_delete_report"), confirm_b_text="Yes, delete my report", cancel_b_text="No, do not delete my report", title="Delete Current Report?", text="Are you sure you want to rebuild your existing Safer Streets Priority Finder Report? By rebuilding this report, you will permanently delete your current version.")
   rebuild_rep <- function(){
     shiny_warming_alert(title='Request Submitted', text='Your request for a Safer Streets Priority Finder Report has been submitted! The Download Report button will be enabled when your report is ready.', showConfirmButton=TRUE, showCancelButton=FALSE, size="s", type="success")
     aws.s3::delete_object(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET"), quiet = TRUE)
