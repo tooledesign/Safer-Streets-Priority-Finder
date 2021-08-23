@@ -1388,7 +1388,7 @@ hin_run_all = function(con, inputs, user_id, run_id) {
                                     to = email_access,
                                     from = Sys.getenv("SSPF_EMAIL_ADDRESS"),
                                     subject = paste0("SSPF - Model Started"),
-                                    text = paste0('This is an automated message to notify you the Safer Streets Priority Finder is started building a model for your study area, ', run_id,'. We\'ll notify you when the model is ready. Thanks for using the Safer Streets Priority Finder!')
+                                    text = paste0('This is an automated message to notify you the Safer Streets Priority Finder is started building a model for your study area ', run_id,'. We\'ll notify you when the model is ready. Thanks for using the Safer Streets Priority Finder!')
       )
       
       smtp_start <- emayili::server(host = "mail.hover.com",
@@ -1419,7 +1419,7 @@ hin_run_all = function(con, inputs, user_id, run_id) {
         to = email_access,
         from = Sys.getenv("SSPF_EMAIL_ADDRESS"),
         subject = paste0("SSPF - Model Results Ready"),
-        text = paste0('This is an automated message to notify you the Safer Streets Priority Finder has finished the model for your study area, ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
+        text = paste0('This is an automated message to notify you the Safer Streets Priority Finder has finished the model for your study area ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
       )
       
       smtp_end <- emayili::server(host = "mail.hover.com",

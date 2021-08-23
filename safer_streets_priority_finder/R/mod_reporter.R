@@ -18,15 +18,41 @@ mod_reporter_ui <- function(id){
         tags$div(hr())
       )),
     fluidRow(
-      col_6(
+      col_12(
         bs4Card(inputId=ns('explore1'), title ='Dive Into Your Data',  width = 12, collapsible = T, closable = F,
-                p('Use the button below to refresh the descriptive statistics on this page. Refreshing the data can be useful if you’ve uploaded new data or performed an additional analysis.'), 
-                p('Crashes that occurred outside your study area are not included in the summaries.' ),
+                p('On this page, you can explore your data and analysis results. You can also download a PDF summary report and the shapefiles and tables associated with input data and analysis results.'),
+                p('Use the button below to refresh the descriptive statistics on this page. Refreshing the data can be useful if you’ve uploaded new data or performed an additional analysis. Crashes that occurred outside your study area are not included in the summaries.'), 
                 actionButton(ns("refresh_button"), "Refresh", class = "btn btn-primary"),
+                actionButton(ns("download_instructions"), "Instructions", class = "btn btn-primary"),
                 actionButton(ns("refresh_button_hidden"), "Fetch Data", class = "btn btn-primary leaflet_none")
-        )),
+                
+        ))),
+    fluidRow(
       col_6(
         bs4Card(inputId=ns('explore2'), 
+                title ='Summary Report Downloader',  
+                width = 12, 
+                collapsible = T, 
+                closable = F, 
+                solidHeader = T, 
+                dropdownIcon = 'download',
+                labelTooltip = 'Use this box to download your data.',
+                status = 'warning',
+                fluidRow(
+                  col_12(
+                    actionButton(ns("create_report"), label = 'Build Report', class = "btn btn-primary"),
+                    tags$div(id=ns("downloader_div"), 
+                    downloadButton(ns('download_report'), label = "Download Report", class = 'btn btn-primary')
+                    )
+                  )
+                ),
+                fluidRow(
+                  col_12(
+                    uiOutput(ns("reporter_message"))
+                  )
+                ))),
+      col_6(        
+        bs4Card(inputId=ns('explore3'), 
                 title ='Data Downloader',  
                 width = 12, 
                 collapsible = T, 
@@ -35,17 +61,9 @@ mod_reporter_ui <- function(id){
                 dropdownIcon = 'download',
                 labelTooltip = 'Use this box to download your data.',
                 status = 'warning',
-                p('Download your input data, analysis results, or a PDF summary report of this dashboard page.'),
-                fluidRow(
-                  col_12(
-                    actionButton(ns("download_instructions"), "Instructions", class = "btn btn-primary"),
-                    downloadButton(ns('download_report'), label = "Download Report", class = 'btn btn-primary')
-                  )
-                ),
-                hr(),
                 selectInput(
                   inputId = ns("data_selector_for_download"),
-                  label = "Select Data To Download",
+                  label = NULL,
                   choices = c("Study Area", "Road Network", "Crashes", "Sliding Windows Analysis", "Safer Streets Model", "Bike and Pedestrian Crashes", "Top Ten Pedestrian Crash Corridors", "Top Ten Bicycle Crash Corridors", "Top Ten Other Crash Corridors")
                 ),
                 fluidRow(
@@ -412,6 +430,7 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
     sql_identifier_roads=DBI::dbQuoteIdentifier(connection, return_table_name('roads', user_id, run_id)),
     sql_identifier_crashes=DBI::dbQuoteIdentifier(connection, return_table_name('crashes', user_id, run_id)),
     sql_identifier_local_user_data_schema=DBI::dbQuoteIdentifier(connection, 'local_user_data'),
+    run_id_sql_formatted=DBI::dbQuoteLiteral(connection, run_id),
     sa_exists = F,
     rd_exists = F,
     ec_exists = F,
@@ -476,14 +495,47 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
     t10bike_exists=F,
     t10other_exists=F,
     init = 0,
-    entries = 1
- 
+    entries = 1,
+    report_exists = F,
+    search_for_report = F,
+    report_exists_init=F,
+    report_status = 'no_report_requested'
+
   )
-  
+
   # render map 
   render_map(output, 'dang_cor_map')
   outputOptions(output, "dang_cor_map", suspendWhenHidden = FALSE)
   
+  #disable downloader until report exists 
+ 
+   shinyjs::runjs(code = '
+           document.getElementById(\'reporter_ui_1-download_report\').classList.add("disabled");
+                                  document.getElementById(\'reporter_ui_1-download_report\').classList.add(\'report_hover_override\');
+                                  document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: no-drop !important;");
+         ')
+              
+
+    
+  # test to see if report exists 
+  data$report_exists_init <- suppressMessages(aws.s3::object_exists(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET")))
+  print(data$report_exists_init )
+  if (data$report_exists_init) {
+    shinyjs::runjs(code = 'document.getElementById(\'reporter_ui_1-download_report\').classList.remove("disabled");
+                           document.getElementById(\'reporter_ui_1-download_report\').classList.remove(\'report_hover_override\');
+                           document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: pointer !important;");
+                            ')
+  } 
+  
+  report_status_q <- glue::glue('SELECT report_status FROM gen_management.accounts WHERE user_id = {user_id} AND run_id = \'{run_id}\';')
+  init_check <- DBI::dbGetQuery(connection, report_status_q)[1,1]
+  data$report_status <- init_check
+  if (init_check == 'building_report' || init_check == 'report_requested'){
+    data$search_for_report <- TRUE
+  } 
+ 
+
+ 
   # add event listerns 
   shinyjs::runjs(code = paste0('$("#fun_class_map_table").click(function(){$("#', session$ns('dang_cor_map'), '").trigger("shown");})'))
   shinyjs::runjs(code = paste0('$("#tab-manage_data").click(function(){$("#', session$ns('refresh_button_hidden'), '").click();})'))
@@ -1038,42 +1090,117 @@ mod_reporter_server <- function(input, output, session, connection, user_id, run
       content = 
         function(file)
         {
-          sss <- Sys.time()
-          waiter::waiter_show(
-            color='rgba(175, 175, 175, 0.85)',
-            html = tagList(
-              tags$div(waiter::spin_1()),
-              tags$br(),
-              tags$div(HTML("Building Report..."))
-            )
-          )
-          
-          # heave lifting starts here 
-          downloader_function(connection=connection,
-                              user_id=user_id, 
-                              run_id=run_id
-          )
-          readBin(con = file.path(getwd(),'built_report_rm.pdf'),
-                  what = "raw",
-                  n = file.info(file.path(getwd(), 'built_report_rm.pdf'))[, "size"]) %>%
-          writeBin(con = file)
-
-          # remove unwanted files 
-          files <- list(list.files(pattern = "\\_rm.html$"))
-          do.call(file.remove, files)
-          
-          files <- list(list.files(pattern = "\\_rm.png$"))
-          do.call(file.remove, files)
-  
-          files <- list(list.files(pattern = "\\_rm.pdf$"))
-          do.call(file.remove, files)
-          
-        waiter::waiter_hide()
+          fetch_report_from_s3(bucket=Sys.getenv("S3_BUCKET"), user_id=user_id, run_id=run_id)
+          file.copy(glue::glue('{user_id}_{run_id}_report.pdf'), file)
+          file.remove(glue::glue('{user_id}_{run_id}_report.pdf'))
+          data$report_status <- 'no_report_requested'
       }
   )
+  
+
+  rebuild_report_mod <- mod_delete_model_ui("delete_model_ui_4", confirm_button = ns("delete_report"), cancel_button = ns("do_not_delete_report"), confirm_b_text="Yes, delete my report", cancel_b_text="No, do not delete my report", title="Delete Current Report?", text="Are you sure you want to rebuild your existing Safer Streets Priority Finder Report? By rebuilding this report, you will permanently delete your current version.")
+  rebuild_rep <- function(){
+    shiny_warming_alert(title='Request Submitted', text='Your request for a Safer Streets Priority Finder Report has been submitted! The Download Report button will be enabled when your report is ready.', showConfirmButton=TRUE, showCancelButton=FALSE, size="s", type="success")
+    aws.s3::delete_object(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET"), quiet = TRUE)
+    data$report_exists <- suppressMessages(aws.s3::object_exists(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET")))
+    update_account_info(connection=connection, user_id=user_id, run_id=data$run_id_sql_formatted, column = DBI::dbQuoteIdentifier(connection, 'report_requested_time'), new_value='now()')
+    update_account_info(connection=connection, user_id=user_id, run_id=data$run_id_sql_formatted, column = DBI::dbQuoteIdentifier(connection, 'report_status'), new_value=DBI::dbQuoteString(connection, glue::glue('report_requested')))
+    data$report_status <- DBI::dbGetQuery(connection, report_status_q)[1,1]
+    data$search_for_report <- TRUE
+
   }
+  
+  observeEvent(input$do_not_delete_report, {
+    removeModal()
+  })
+  
+  observeEvent(input$delete_report, {
+    removeModal()
+    rebuild_rep()
+  })
+  
+  observeEvent(input$create_report, {
+    if (data$report_status == 'report_ready' || data$report_status == 'no_report_requested') {
+      if(suppressMessages(aws.s3::object_exists(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET")))){
+        showModal(rebuild_report_mod)
+      } else {
+        rebuild_rep()
+      }
+    }
+  })
 
+  observe({
+    if(data$search_for_report){
+      invalidateLater(10000)
+        data$report_exists <- suppressMessages(aws.s3::object_exists(glue::glue('{user_id}_{run_id}_report.pdf'), Sys.getenv("S3_BUCKET")))
+        data$report_status <- DBI::dbGetQuery(connection, report_status_q)[1,1]
+        print(data$report_status )
+    }
+  })
 
+  observe({
+    print(data$report_status )
+    if (data$report_status == 'no_report_requested') {
+      output$reporter_message <- renderUI({NULL})
+      outputOptions(output, "reporter_message", suspendWhenHidden = FALSE)
+      if (data$report_exists) {
+         data$search_for_report <- FALSE
+         shinyjs::runjs(code = 'document.getElementById(\'reporter_ui_1-download_report\').classList.remove("disabled");
+                                document.getElementById(\'reporter_ui_1-download_report\').classList.remove(\'report_hover_override\');
+                                document.getElementById(\'reporter_ui_1-create_report\').classList.remove("disabled");
+                                document.getElementById(\'reporter_ui_1-create_report\').classList.remove(\'report_hover_override\');
+                                document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: pointer !important;");
+                               ')
+      }
+    } else if (data$report_status == 'report_requested') {
+      shinyjs::runjs(code = '
+                            document.getElementById(\'reporter_ui_1-create_report\').classList.add("disabled");
+                            document.getElementById(\'reporter_ui_1-create_report\').classList.add(\'report_hover_override\');
+                            document.getElementById(\'reporter_ui_1-download_report\').classList.add("disabled");
+                            document.getElementById(\'reporter_ui_1-download_report\').classList.add(\'report_hover_override\');
+                            document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: no-drop !important;");
+                           ')
+      output$reporter_message <- renderUI({
+        HTML(
+          '<div class="center_reporter">
+                Report request submitted.
+                </div>'
+        )  
+        })
+    } else if (data$report_status == 'building_report') {
+      shinyjs::runjs(code =  'document.getElementById(\'reporter_ui_1-create_report\').classList.add("disabled");
+                              document.getElementById(\'reporter_ui_1-create_report\').classList.add(\'report_hover_override\');
+                              document.getElementById(\'reporter_ui_1-download_report\').classList.add("disabled");
+                              document.getElementById(\'reporter_ui_1-download_report\').classList.add(\'report_hover_override\');
+                              document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: no-drop !important;");
+                             ') 
+      output$reporter_message <- renderUI({
+         HTML(
+              '<div class="center_reporter">
+                The Safer Streets Priority Finder is building your report. We\'ll notify you as soon as it\'s ready.
+                </div>'
+               )  
+        })
+    } else if (data$report_status == 'report_ready') {
+
+      shinyjs::runjs(code = 'document.getElementById(\'reporter_ui_1-download_report\').classList.remove("disabled");
+                             document.getElementById(\'reporter_ui_1-download_report\').classList.remove(\'report_hover_override\');
+                             document.getElementById(\'reporter_ui_1-create_report\').classList.remove("disabled");
+                             document.getElementById(\'reporter_ui_1-create_report\').classList.remove(\'report_hover_override\');
+                             document.getElementById(\'reporter_ui_1-downloader_div\').setAttribute("style", "cursor: pointer !important;");
+                            ') 
+      output$reporter_message <- renderUI({
+         HTML(
+          '<div class="center_reporter">
+                Your report is ready! Click the \'Download Report\' button to get your Safer Streets Priority Finder Report.
+                </div>'
+        )  
+      })
+    }
+  })
+
+  }
+  
 ## To be copied in the UI
 # mod_reporter_ui("reporter_ui_1")
 

@@ -62,7 +62,7 @@ mod_overview_ui <- function(id){
 p("The SSPF also develops a Sliding Windows Analysis, which provides the information used in a typical High Injury Network (based on historical crash data alone). 
    The Sliding Windows Analysis does NOT use data from the Pilot Tool or statistical modeling to estimate risk in places where crashes haven't happened yet."),
 
-p("For more detailed information on model development and calibration beyond what is included below please see the technical report documenting development of the SSPF: (link forthcoming)."),
+p("For more detailed information on model development and calibration beyond what is included below please see the technical report documenting development of the SSPF:", HTML("<a href=\"./final_report\" target=\"_blank\"style=\"color: #007bff;\">technical report</a>.")),
 p("Please note that the Safer Streets Model is still in Beta phase. We have documented known limitations."),
 
 h1("Methodology", id="overview-2"),

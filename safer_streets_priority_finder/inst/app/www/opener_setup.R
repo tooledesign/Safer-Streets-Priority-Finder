@@ -13,6 +13,7 @@ data <- reactiveValues(
 # This framework is beneficial for an app that may experience spikes in use because the number of connections within a pool will grow according to the demand
  
 shinybusy::show_spinner()
+print(paste0('Creating pool connection at: ', Sys.time()))
 connection <- create_postgresql_connection(
     dbname = Sys.getenv("SSPF_AMAZON_DATABASE"),
     host = Sys.getenv("SSPF_AMAZON_HOST_ADDRESS"),
@@ -22,20 +23,41 @@ connection <- create_postgresql_connection(
  
 shinyjs::delay(500, shinybusy::hide_spinner())
 
+print_time <- reactiveValues(v=TRUE)
 observe({
-  invalidateLater(500)
-   if(!dbGetInfo(connection)$valid){
-     removeModal()
-     print('disconnected from psql database, disconnecting from server')
-     session$close()
+  invalidateLater(1000)
+   if(!connection$valid){
+     if (print_time$v) {
+       print(paste0('Pool connection is not valid at: ', Sys.time()))
+     }
+     shinyjs::runjs(code = paste0('$("#shiny-modal").removeClass("show");'))
+     shinyalert(
+       title = 'Disconnected',
+       text = 'Database has been disconnected. Please reload the page.',
+       size = "s", 
+       closeOnEsc = TRUE,
+       closeOnClickOutside = FALSE,
+       html = FALSE,
+       type = "warning",
+       showConfirmButton = T,
+       showCancelButton = F,
+       confirmButtonText = "OK",
+       confirmButtonCol = "#AEDEF4",
+       timer = 0,
+       callbackJS = "function(x) { location.reload(); }"
+     )
+     print_time$v <- FALSE
+     #session$close()
    }
 })
 
 # close the local pool connection when the session ends 
 session$onSessionEnded(function(){
-  removeModal()
-  print(paste0('Returned pool connection at: ', Sys.time()))
-  pool::poolClose(connection)
+  print(paste0('Disconnected from server at: ', Sys.time()))
+  if (connection$valid){
+    print(paste0('Returned pool connection at: ', Sys.time()))
+    pool::poolClose(connection)
+  }
 })
 
 

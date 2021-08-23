@@ -7,10 +7,10 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_delete_model_ui <- function(id, confirm_button, cancel_button, text){
+mod_delete_model_ui <- function(id, confirm_button, cancel_button, title="Warning, About to Delete Analysis Results", confirm_b_text="Yes, delete my data", cancel_b_text="No, do not delete my data", text){
   ns <- NS(id)
   modalDialog(
-    title = "Warning, About to Delete Analysis Results",
+    title = title,
     easyClose = FALSE,
     footer = NULL,
     next_label = NULL,
@@ -21,8 +21,8 @@ mod_delete_model_ui <- function(id, confirm_button, cancel_button, text){
       ),
       tags$div(
         id = ns("modal_center_buttons"), class = 'login_buttons leaflet_block',
-        actionButton(confirm_button, "Yes, delete my data.", class = 'btn btn-primary'),
-        actionButton(cancel_button, "No, do not delete my data.", class = 'btn btn-primary')
+        actionButton(confirm_button, confirm_b_text, class = 'btn btn-primary'),
+        actionButton(cancel_button, cancel_b_text, class = 'btn btn-primary')
       )
     )
   )
