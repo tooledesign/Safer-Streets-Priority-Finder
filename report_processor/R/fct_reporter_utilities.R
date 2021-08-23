@@ -47,7 +47,7 @@ get_desired_report_info <- function(
 ) {
   check_for_psql()
 
-  report_needed <- DBI::dbGetQuery(pool, glue::glue('SELECT user_id, run_id, report_requested_time FROM gen_management.accounts WHERE report_needed = TRUE ORDER BY report_requested_time ASC LIMIT 1;'))
+  report_needed <- DBI::dbGetQuery(pool, glue::glue('SELECT user_id, run_id, report_requested_time FROM gen_management.accounts WHERE report_status = \'report_requested\' ORDER BY report_requested_time ASC LIMIT 1;'))
   report_needed <- as.data.frame(report_needed)
 
   if ( length(report_needed) == 0 ) {
@@ -78,6 +78,8 @@ long_job <- function(connection, user_id, run_id){
       # generate report and saver it to aws s3
       downloader_function(connection, user_id, run_id)
       
+      Sys.sleep(3) # give application a second to catch up 
+      
       # send an email to user saying report is ready for download
       runid <- DBI::dbQuoteLiteral(connection, run_id)
       login_names_q <- glue::glue('SELECT o_username FROM gen_management.accounts WHERE user_id = {user_id} AND run_id = {runid};')
@@ -89,18 +91,18 @@ long_job <- function(connection, user_id, run_id){
       tryCatch({
         print(paste0('Sending notification to, ', email_access, '.'))
         email <- emayili::envelope(
-                                      to = email_access,
-                                      from = Sys.getenv("SSPF_EMAIL_ADDRESS"),
-                                      subject = paste0("SSPF - Report Ready for Download"),
-                                      text = paste0('This is an automated message to notify you the Safer Streets Priority Finder analysis report is ready to download for study area, ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
+                                  to = email_access,
+                                  from = Sys.getenv("SSPF_EMAIL_ADDRESS"),
+                                  subject = paste0("SSPF - Report Ready for Download"),
+                                  text = paste0('This is an automated message to notify you the Safer Streets Priority Finder analysis report is ready to download for study area, ', run_id,'. Thanks for using the Safer Streets Priority Finder!')
         )
         
-        smtp <- emayili::server(host = "mail.hover.com",
-                                      port = 465,
-                                      username = Sys.getenv("SSPF_EMAIL_ADDRESS"),
-                                      password = Sys.getenv("SSPF_EMAIL_PASSWORD"),
-                                      reuse=F)
-        smtp(email, verbose = FALSE)
+        smtp_report <- emayili::server(host = "mail.hover.com",
+                                port = 465,
+                                username = Sys.getenv("SSPF_EMAIL_ADDRESS"),
+                                password = Sys.getenv("SSPF_EMAIL_PASSWORD"),
+                                reuse=F)
+        smtp_report(email, verbose = FALSE)
       }, error = function(cond){
         print(cond)
       })
@@ -110,7 +112,7 @@ long_job <- function(connection, user_id, run_id){
         "
         UPDATE gen_management.accounts
         SET
-          report_needed = FALSE,
+          report_status = 'report_ready',
           report_finished_time = NOW()
         WHERE
           user_id = {user_id} AND run_id = {runid}
@@ -133,6 +135,7 @@ do_work <- function (
   if (!is.null(df)) {
     list <- get_data_for_processing(df, 'report_requested_time', c('user_id', 'run_id'))
     check_for_psql()
+    update_account_info(connection=pool, user_id=list$user_id, run_id=DBI::dbQuoteLiteral(pool, list$run_id), column = DBI::dbQuoteIdentifier(pool, 'report_status'), new_value=DBI::dbQuoteString(pool, glue::glue('building_report')))
     long_job(connection=pool, user_id=list$user_id, run_id=list$run_id)
     } else {
     print(paste0('No reports requested at, ', Sys.time()))

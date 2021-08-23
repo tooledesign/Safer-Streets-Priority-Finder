@@ -363,7 +363,8 @@ downloader_function <- function (
   
   # send file to S3 here, then uncomment blocks below
   save_report_to_s3(file=file.path(getwd(), "built_report_rm.pdf"), bucket="a0137-vulusr-reports", user_id=user_id, run_id=run_id)
-
+  update_account_info(connection=connection, user_id=user_id, run_id=DBI::dbQuoteLiteral(connection, run_id), column = DBI::dbQuoteIdentifier(connection, 'report_status'), new_value=DBI::dbQuoteString(connection, glue::glue('report_ready')))
+  
   
   files1 <- list(list.files(pattern = "\\_rm.html$"))
   do.call(file.remove, files1)
