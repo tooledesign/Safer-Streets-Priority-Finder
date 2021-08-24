@@ -27,7 +27,7 @@ page <- function(user_id, run_id) {
         navbar = bs4Dash::bs4DashNavbar(
         skin = "dark",
         status = "primary",
-        leftUi = h5("Safer Streets Priority Finder, Beta V 0.47", style="color:#f8f9fa; align-self: flex-end;"),
+        leftUi = h5("Safer Streets Priority Finder, Beta V 1.0", style="color:#f8f9fa; align-self: flex-end;"),
         rightUi =
             uiOutput('logout_header_area')
 
