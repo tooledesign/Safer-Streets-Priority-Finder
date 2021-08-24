@@ -6,7 +6,7 @@ The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicy
 2. Develop a Sliding Windows Analysis using historical crash data to inform a High Injury Network
 3. Develop a Safer Streets Model to estimate risk along your road network, even in areas that haven't had any reported crashes recently
 
-[Checkout the Safer Streets Priority Finder Tool here.](https://www.saferstreetspriorityfinder.com/)
+[Check out the Safer Streets Priority Finder Tool here.](https://www.saferstreetspriorityfinder.com/)
 
 <img width="677" alt="Screen Shot 2021-08-19 at 4 30 40 PM" src="https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/landing_page/images/nola_bike_crash_score_w_study_reduced_social_media.png">
 
