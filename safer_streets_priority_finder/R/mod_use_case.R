@@ -197,7 +197,7 @@ p("The results of preliminary use of this tool are being used to inform a health
 
 h2("Disclaimers", id="disclaimers"),
 
-p("This document and the information contained herein is prepared solely for the purpose of identifying, evaluating and planning safety improvements on public roads which may be implemented utilizing federal aid highway funds; and is therefore exempt from discovery or admission into evidence pursuant to 23 U.S.C. 409.  Contact the Louisiana Department of Transportation and Development’s Traffic Safety Office at (225) 379-1871 before releasing any information."), 
+p("This document and the information contained herein is prepared solely for the purpose of identifying, evaluating and planning safety improvements on public roads which may be implemented utilizing federal aid highway funds; and is therefore exempt from discovery or admission into evidence pursuant to 23 U.S.C. 409.  Contact the Louisiana Department of Transportation and Development’s Traffic Safety Office at (225) 379-1214 before releasing any information."), 
 
 
 )
