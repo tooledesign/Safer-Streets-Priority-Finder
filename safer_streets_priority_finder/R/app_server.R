@@ -57,7 +57,8 @@ app_server <- function( input, output, session ) {
                                     href = "https://twitter.com/intent/tweet?text=Check%20out%20this%20great%20web%20application!%20The%20Safer%20Streets%20Priority%20Finder%20enables%20you%20to%20analyze%20the%20risk%20to%20vulnerable%20road%20users%20(bicyclists%20and%20pedestrians)%20on%20your%20community%E2%80%99s%20roads.%20https%3A//www.saferstreetspriorityfinder.com/", target="_blank"),
                            shiny::a(shiny::actionButton(inputId="linkedin_share", icon = icon("linkedin"), label="", class="share_communication_top"),
                                     href = "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//www.saferstreetspriorityfinder.com/&title=Safer%20Streets%20Priority%20Finder&summary=The%20Safer%20Streets%20Priority%20Finder%20enables%20you%20to%20analyze%20the%20risk%20to%20vulnerable%20road%20users%20(bicyclists%20and%20pedestrians)%20on%20your%20community%E2%80%99s%20roads.%20&source=https%3A//www.saferstreetspriorityfinder.com/", target="_blank"),
-                           
+                           shiny::a(shiny::actionButton(inputId="github_link", icon = icon("github"), label="", class="share_communication_top"),
+                                    href = "https://github.com/tooledesign/Safer-Streets-Priority-Finder/", target="_blank"),
                            # logout button 
                            shiny::actionButton("logout_model_drop", icon = icon("sign-out"), label="", class="share_communication_top")
                            )
