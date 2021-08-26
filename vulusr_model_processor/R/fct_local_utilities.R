@@ -105,10 +105,10 @@ check_for_psql <- function(){
   if (!exists("pool") || !DBI::dbIsValid(pool)) {
     .GlobalEnv$pool <- pool::dbPool(
       drv =  RPostgreSQL::PostgreSQL(),
-      dbname = "a0137",
-      host = "usdot-vulusr-t3small.crrjyzlytxji.us-east-1.rds.amazonaws.com",
-      user = "postgres",
-      password = "usdot_vulusr2021"
+      dbname = Sys.getenv("SSPF_AMAZON_DATABASE"),
+      host = Sys.getenv("SSPF_AMAZON_HOST_ADDRESS"),
+      user = Sys.getenv("SSPF_AMAZON_USERNAME"),
+      password = Sys.getenv("SSPF_AMAZON_PASSWORD")
     )
   }
 }
