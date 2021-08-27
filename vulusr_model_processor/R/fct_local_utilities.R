@@ -117,7 +117,7 @@ get_any_needed_model_info <- function(
 ) {
   check_for_psql()
 
-  models_needed <- DBI::dbGetQuery(pool, glue::glue('SELECT user_id, run_id, time_since_model_desired FROM gen_management.accounts WHERE model_status = \'model_needed\' ORDER BY time_since_model_desired DESC LIMIT 1;'))
+  models_needed <- DBI::dbGetQuery(pool, glue::glue('SELECT user_id, run_id, time_since_model_desired FROM gen_management.accounts WHERE model_status = \'model_needed\' ORDER BY time_since_model_desired ASC LIMIT 1;'))
   models_needed <- as.data.frame(models_needed)
 
   if ( length(models_needed) == 0 ) {
