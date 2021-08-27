@@ -8,8 +8,8 @@
 #
 
 library(shiny)
-#setwd('/srv/shiny-server/App')
-#source(file.path(getwd(), 'env_variables.R'), local = TRUE)
+setwd('/srv/shiny-server/App')
+source(file.path(getwd(), 'env_variables.R'), local = TRUE)
 source(file.path(getwd(), 'R', 'fct_local_utilities.R'), local = FALSE)
 source(file.path(getwd(), 'R', 'fct_hin_tool.R'), local = FALSE)
 #  
