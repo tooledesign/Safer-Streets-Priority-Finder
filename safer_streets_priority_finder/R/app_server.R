@@ -129,11 +129,10 @@ app_server <- function( input, output, session ) {
           } else if (user_added == 'User added') {
           # checks 1-4 have passed, create username login
        
-          user_id <- get_user_id(connection=connection, username=tolower(input$chosen_username), password=tolower(input$chosen_password))
-          run_id <- get_run_id(connection=connection, username=tolower(input$chosen_username), run_id=tolower(input$chosen_run_id)) 
+            data$user_id <- get_user_id(connection=connection, username=tolower(input$chosen_username), password=tolower(input$chosen_password))
+            data$run_id <- get_run_id(connection=connection, username=tolower(input$chosen_username), run_id=tolower(input$chosen_run_id)) 
             removeModal()
-            data$user_id <- user_id
-            data$run_id <- run_id
+ 
             waiter::waiter_show(
               color='rgba(175, 175, 175, 0.85)',
               html = tagList(
@@ -144,14 +143,14 @@ app_server <- function( input, output, session ) {
             )
             
             # call the servers for each module 
-            callModule(mod_load_data_server, "load_data_ui_1", connection=connection, user_id=user_id, run_id=run_id)
-            callModule(mod_reporter_server, "reporter_ui_1", connection=connection, user_id=user_id, run_id=run_id)
-            callModule(mod_build_sliding_windows_server, "build_sliding_windows_ui_1", connection=connection, user_id=user_id, run_id=run_id)
-            callModule(mod_build_model_server, "build_model_ui_1", connection=connection, user_id=user_id, run_id=run_id)
-            callModule(mod_visualize_data_reporter_server, "visualize_data_reporter_ui_1", connection=connection, user_id=user_id, run_id=run_id)
+            callModule(mod_load_data_server, "load_data_ui_1", connection=connection, user_id=data$user_id, run_id=data$run_id)
+            callModule(mod_reporter_server, "reporter_ui_1", connection=connection, user_id=data$user_id, run_id=data$run_id)
+            callModule(mod_build_sliding_windows_server, "build_sliding_windows_ui_1", connection=connection, user_id=data$user_id, run_id=data$run_id)
+            callModule(mod_build_model_server, "build_model_ui_1", connection=connection, user_id=data$user_id, run_id=data$run_id)
+            callModule(mod_visualize_data_reporter_server, "visualize_data_reporter_ui_1", connection=connection, user_id=data$user_id, run_id=data$run_id)
          
             # update time the user last logged in 
-            DBI::dbGetQuery(connection, glue::glue(" UPDATE gen_management.accounts SET last_login = NOW() WHERE user_id = {user_id} AND run_id = \'{run_id}\'; "))
+            DBI::dbGetQuery(connection, glue::glue(" UPDATE gen_management.accounts SET last_login = NOW() WHERE user_id = {data$user_id} AND run_id = \'{data$run_id}\'; "))
 
             
             login_configs <- callModule(mod_login_config_server, "login_config_ui_1", 

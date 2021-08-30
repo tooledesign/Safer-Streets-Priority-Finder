@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
    libnode-dev \
    bzip2 \
    libfontconfig \
+   libsodium-dev \
    && apt-get clean \
    && rm -rf /var/lib/apt/lists/*
 

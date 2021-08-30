@@ -24,18 +24,23 @@ test_for_run <- function(connection, username, run_id){
 get_user_id <- function(connection, username, password){
   tryCatch({
         username <-  DBI::dbQuoteString(connection, username)
-        password <-  DBI::dbQuoteString(connection, password)
-        user_id <- 'not connected'
+        
+        # get salt 
+        salt <- DBI::dbGetQuery(connection, glue::glue('SELECT salt FROM gen_management.salt WHERE username = {username};'))[1,1] 
+        
+        # hash pw 
+        hashed_pw <- sodium::bin2hex(sodium::sha256(charToRaw(password)))
+        password <- DBI::dbQuoteString(connection, paste0(hashed_pw, salt,  Sys.getenv("PEPPER")))
+
         user_id <- DBI::dbGetQuery(connection, glue::glue('SELECT DISTINCT user_id 
                                                           FROM gen_management.accounts 
                                                           WHERE username = {username} 
                                                           AND password = {password};'))
+                                                          
 
         if (is.null(toString(user_id)) || is.na(toString(user_id)) || toString(user_id) == ""){
           return(-999)
-        } else if (user_id == 'not connected') {
-          return('not connected')
-        } else {
+        }  else {
           return(toString(user_id)) 
       }
     }, error = function(cond){
@@ -106,11 +111,25 @@ add_user <- function(connection, username, run_id, email, password, original_use
       print('This username already exists, please choose something else.')
       return('Username already exists')
     } else if (exists == 0){
+
+      # salt
+      salt <- sodium::bin2hex(sodium::random(8))
+      sterilized_salt <- DBI::dbQuoteString(connection, salt)
+
+      # add salt for future use 
+      q <- glue::glue("INSERT INTO gen_management.salt ( username, salt ) VALUES ({username}, {sterilized_salt});")
+      DBI::dbGetQuery(connection, q)
+      
+      # bind password and salt 
+      password <- DBI::dbQuoteString(connection, paste0(sodium::bin2hex(sodium::sha256(charToRaw(password))), salt, Sys.getenv("PEPPER")))
+
+
+      # sterilize values
       run_id <- DBI::dbQuoteString(connection, run_id)
       email <- DBI::dbQuoteString(connection, email)
-      password <- DBI::dbQuoteString(connection, password)
       original_username <- DBI::dbQuoteString(connection, original_username)
       original_run_id <- DBI::dbQuoteString(connection, original_run_id)
+
       q <- glue::glue("INSERT INTO gen_management.accounts ( username, password, user_id, run_id, email, o_username, o_run_id) VALUES ({username}, {password}, EXTRACT(EPOCH FROM NOW()), {run_id}, {email}, {original_username}, {original_run_id});")
       DBI::dbGetQuery(connection, q)
       print(glue::glue('Added username: {username}'))
