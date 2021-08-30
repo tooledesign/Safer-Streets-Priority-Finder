@@ -53,6 +53,7 @@ RUN Rscript -e 'remotes::install_version("shiny",upgrade="never", version = "1.6
 RUN Rscript -e 'remotes::install_version("config",upgrade="never", version = "0.3")'
 RUN Rscript -e 'remotes::install_github("Thinkr-open/golem@aaae5c8788802a7b4aef4df23691902a286dd964")'
 
+RUN Rscript -e 'remotes::install_version("sodium",upgrade="never", version = "1.1")'
 RUN Rscript -e 'remotes::install_version("shinydashboardPlus",upgrade="never", version = "2.0.0")'
 RUN Rscript -e 'remotes::install_version("shinydashboard",upgrade="never", version = "0.7.1")'
 RUN Rscript -e 'remotes::install_version("tidyverse",upgrade="never", version = "1.3.0")'
