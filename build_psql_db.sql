@@ -189,3 +189,10 @@ CREATE INDEX us_county_2018_geom_geom_idx
     ON static.us_county_2018 USING gist
     (geom)
     TABLESPACE pg_default;
+
+CREATE TABLE gen_management.salt
+(
+    username TEXT,
+    salt  TEXT,
+    time_created TIMESTAMP DEFAULT NOW()
+)
