@@ -6,6 +6,9 @@ CREATE DATABASE sspf;
 -- add postgis 
 CREATE EXTENSION postgis;
 
+-- add pgcrypto
+CREATE EXTENSION pgcrypto;
+
 -- create schema in sspf database
 CREATE SCHEMA gen_management;
 CREATE SCHEMA local_user_data;
