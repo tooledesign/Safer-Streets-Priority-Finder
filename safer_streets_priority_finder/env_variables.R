@@ -20,3 +20,5 @@ Sys.setenv(AWS_DEFAULT_REGION="")
 Sys.setenv(S3_BUCKET="")
 
 Sys.setenv(PEPPER="")
+
+Sys.setenv(USER_DATA_KEY="")
