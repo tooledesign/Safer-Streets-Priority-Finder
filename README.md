@@ -16,17 +16,17 @@ The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicy
 You don't need to follow these instructions to use the tool, which is available for public use at the link included above. You only need to follow these instructions if you'd like to build your own version of the SSPF software.
 
 1. **Linux** - You'll need sudo access on a Linux command line. 
-2. **A PostgreSQL Relational Database** - Access to a PostgreSQL database that follows the schema and table structure provided [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/build_psql_db.sql).
+2. **A PostgreSQL Relational Database** - Access to a PostgreSQL database that follows the schema and table structure provided [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/build_psql_db.sql).
 3. **Static tables** - Upload the following table into the 'static' schema on the PostgreSQL datatable. 
     1. [Fatality Analysis Reporting System (FARS) 2015 - 2019](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) - as, static.national_fclass_priors
-    2. [USDOT-OST / Pedestrian-Fatality-Risk-Project](https://github.com/USDOT-OST/Pedestrian-Fatality-Risk-Project) - as, static.fars_processed
+    2. [USDOT-OST / Pedestrian-Fatality-Risk-Project](https://github.com/USDOT-OST/Pedestrian-Fatality-Risk-Project) - as, static.national_tracts
     3. [US Census Counties](https://www.census.gov/data.html) - as, static.us_county_2018
     4. [National Open Street Map Roads Dataset, Available from GeoFabrik](https://www.geofabrik.de/data/download.html) - as, static.osm_centerlines
-    5. [Functional Classification Priors](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/national_fclass_priors.csv) - as, static.osm_centerlines
+    5. [Functional Classification Priors](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/national_fclass_priors.csv) - as, static.national_fclass_priors
       
         Datasets 1-4 need a state and county [Federal Information Processing Standards (FIPS)](https://www.nist.gov/standardsgov/compliance-faqs-federal-information-processing-standards-fips#:~:text=FIPS%20are%20standards%20and%20guidelines,by%20the%20Secretary%20of%20Commerce) code, where the state FIPS code is always two digits in length, and county codes are three digits, including leading zeros as needed. FIPS codes on each dataset should be stored in TEXT or VARCHAR format.
       
-        See [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/build_psql_db.sql) for more infomration on the data structure for each table listed above. 
+        See [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/build_psql_db.sql) for more infomration on the data structure for each table listed above. 
       
 4. **Complete system variables** - Fill out your system variables, so the Docker container can link the user information with the data. You'll need to do this [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/env_variables.R) and [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/vulusr_model_processor/env_variables.R). Do not relocate this file. 
 5. **Docker** - If you don't already have Docker installed on your machine, you can get started [here](https://docs.docker.com/get-docker/).
@@ -64,6 +64,8 @@ Update all variables in that file. Here's a breakdown of what each variable refe
 8. **AWS_SECRET_ACCESS_KEY** - AWS S3 secret access key  
 9. **AWS_DEFAULT_REGION** - AWS S3 location  
 10. **S3_BUCKET** - Name of the S3 bucket
+11. **PEPPER** - random string of character, used in encyption 
+12. **USER_DATA_KEY** - key to decipher encrypted messages
 
 Now do the same for the report processor.  
 
