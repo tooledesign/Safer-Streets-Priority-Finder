@@ -83,11 +83,11 @@ RUN Rscript -e 'remotes::install_version("shinycssloaders",upgrade="never", vers
 RUN Rscript -e 'remotes::install_version("webshot",upgrade="never", version = "0.5.2")'
 RUN Rscript -e 'remotes::install_version("tinytex",upgrade="never", version = "0.32")'
 RUN Rscript -e 'tinytex::install_tinytex()'
-RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 RUN Rscript -e 'remotes::install_version("leafgl",upgrade="never", version = "0.1.1")'
 RUN Rscript -e 'remotes::install_version("emayili",upgrade="never", version = "0.4.15")'
 RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = "0.2.2")'
 RUN Rscript -e 'remotes::install_version("aws.s3",upgrade="never", version = "0.3.21")'
+RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 
 COPY env_variables.R /srv/shiny-server/App/env_variables.R
 
