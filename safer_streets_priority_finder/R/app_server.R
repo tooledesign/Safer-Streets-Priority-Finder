@@ -184,7 +184,7 @@ app_server <- function( input, output, session ) {
       user_id <- get_user_id(connection=connection, username=tolower(input$username), password=tolower(input$password))
       if ( user_id == -999 ) {
         shiny_warming_alert(title = 'Incorrect Login', text='It looks like that username and password combination doesn\'t exist.')
-      } else if (length(user_id) == 0) {
+      } else if (length(user_id) == 0 || (is.integer(user_id) && length(user_id) == 0L) ) {
         shiny_warming_alert(title = 'Something went wrong', text='It looks like you\'re session disconnected from the database. Please reload the page.')
       } else { # check for run ID 
         
