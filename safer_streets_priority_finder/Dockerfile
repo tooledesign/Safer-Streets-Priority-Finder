@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
    libnode-dev \
    bzip2 \
    libfontconfig \
+   libsodium-dev \
    && apt-get clean \
    && rm -rf /var/lib/apt/lists/*
 
@@ -52,6 +53,7 @@ RUN Rscript -e 'remotes::install_version("shiny",upgrade="never", version = "1.6
 RUN Rscript -e 'remotes::install_version("config",upgrade="never", version = "0.3")'
 RUN Rscript -e 'remotes::install_github("Thinkr-open/golem@aaae5c8788802a7b4aef4df23691902a286dd964")'
 
+RUN Rscript -e 'remotes::install_version("sodium",upgrade="never", version = "1.1")'
 RUN Rscript -e 'remotes::install_version("shinydashboardPlus",upgrade="never", version = "2.0.0")'
 RUN Rscript -e 'remotes::install_version("shinydashboard",upgrade="never", version = "0.7.1")'
 RUN Rscript -e 'remotes::install_version("tidyverse",upgrade="never", version = "1.3.0")'
@@ -81,11 +83,11 @@ RUN Rscript -e 'remotes::install_version("shinycssloaders",upgrade="never", vers
 RUN Rscript -e 'remotes::install_version("webshot",upgrade="never", version = "0.5.2")'
 RUN Rscript -e 'remotes::install_version("tinytex",upgrade="never", version = "0.32")'
 RUN Rscript -e 'tinytex::install_tinytex()'
-RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 RUN Rscript -e 'remotes::install_version("leafgl",upgrade="never", version = "0.1.1")'
 RUN Rscript -e 'remotes::install_version("emayili",upgrade="never", version = "0.4.15")'
 RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = "0.2.2")'
 RUN Rscript -e 'remotes::install_version("aws.s3",upgrade="never", version = "0.3.21")'
+RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 
 COPY env_variables.R /srv/shiny-server/App/env_variables.R
 
