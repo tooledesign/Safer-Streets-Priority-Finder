@@ -1,3 +1,6 @@
+![MIT](https://img.shields.io/github/license/tooledesign/safer-streets-priority-finder)
+![Last Commit](https://img.shields.io/github/last-commit/tooledesign/safer-streets-priority-finder)
+
 # Safer-Streets-Priority-Finder
 
 The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicyclists and pedestrians on your community’s roads. You can use your local road, crash, and study area data or select from nationally available datasets to:
