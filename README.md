@@ -29,7 +29,7 @@ You don't need to follow these instructions to use the tool, which is available 
       
         Datasets 1-4 need a state and county [Federal Information Processing Standards (FIPS)](https://www.nist.gov/standardsgov/compliance-faqs-federal-information-processing-standards-fips#:~:text=FIPS%20are%20standards%20and%20guidelines,by%20the%20Secretary%20of%20Commerce) code, where the state FIPS code is always two digits in length, and county codes are three digits, including leading zeros as needed. FIPS codes on each dataset should be stored in TEXT or VARCHAR format.
       
-        See [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/build_psql_db.sql) for more infomration on the data structure for each table listed above. 
+        See [this file](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/build_psql_db.sql) for more information on the data structure for each table listed above. 
       
 4. **Complete system variables** - Fill out your system variables, so the Docker container can link the user information with the data. You'll need to do this [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/env_variables.R) and [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/vulusr_model_processor/env_variables.R). Do not relocate this file. 
 5. **Docker** - If you don't already have Docker installed on your machine, you can get started [here](https://docs.docker.com/get-docker/).
