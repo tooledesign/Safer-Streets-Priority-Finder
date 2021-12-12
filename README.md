@@ -21,7 +21,7 @@ You don't need to follow these instructions to use the tool, which is available 
 1. **Linux** - You'll need sudo access on a Linux command line. 
 2. **A PostgreSQL Relational Database** - Access to a PostgreSQL database that follows the schema and table structure provided [here](https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/general/build_psql_db.sql).
 3. **Static tables** - Upload the following table into the 'static' schema on the PostgreSQL datatable. 
-    1. [Fatality Analysis Reporting System (FARS) 2015 - 2019](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) - as, static.national_fclass_priors
+    1. [Fatality Analysis Reporting System (FARS) 2015 - 2019](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) - as, static.fars_processed
     2. [USDOT-OST / Pedestrian-Fatality-Risk-Project](https://github.com/USDOT-OST/Pedestrian-Fatality-Risk-Project) - as, static.national_tracts
     3. [US Census Counties](https://www.census.gov/data.html) - as, static.us_county_2018
     4. [National Open Street Map Roads Dataset, Available from GeoFabrik](https://www.geofabrik.de/data/download.html) - as, static.osm_centerlines
