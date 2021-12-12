@@ -306,7 +306,7 @@ create_geom_from_wkt <- function(connection,
                    ADD COLUMN geom geometry ({geom_type}, {srid});
                   
                    UPDATE {schema}.{table} 
-                   SET geom = ST_GeometryFromText(geometry, {srid});
+                   SET geom = ST_Force2D(ST_GeometryFromText(geometry, {srid}));
                    ')
 
   DBI::dbGetQuery(connection, q)
