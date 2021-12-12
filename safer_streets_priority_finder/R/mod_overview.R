@@ -57,7 +57,7 @@ mod_overview_ui <- function(id){
      segments for different crash severities. These values are converted to crash cost estimates based on
      costs associated with each crash severity. The model reflects conditions over a five-year time period. 
      The diagram below shows how the different data and model components work together to estimate risk."),
-  tags$div(tags$img(src="https://tooledesign.egnyte.com/dd/C4tZnM7Kjx/?thumbNail=1&w=1200&h=1200&type=proportional&preview=true", alt="Methodology Flow Chart", width = '100%'), style='max-width:816px;', align = "left"),
+  tags$div(tags$img(src="https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/img/HRSF%20Infographic_20210721_rev2_crop.png?raw=true", alt="Methodology Flow Chart", width = '100%'), style='max-width:816px;', align = "left"),
 
 p("The SSPF also develops a Sliding Windows Analysis, which provides the information used in a typical High Injury Network (based on historical crash data alone). 
    The Sliding Windows Analysis does NOT use data from the Pilot Tool or statistical modeling to estimate risk in places where crashes haven't happened yet."),
@@ -73,7 +73,7 @@ p("This analysis creates crash density estimates along street corridors througho
    Crash density corridors are identified by applying a 1/2-mile moving window aggregation to the street network in the study area. The 1/2-mile moving windows are created to form corridors using the roadway street name. 
    In this approach, a virtual 'window' is moved along each street in 1/10 mile increments, counting the number of crashes by severity and mode that occurred within each successive 1/2-mile segment."),
 
-tags$div(img(src="https://tooledesign.egnyte.com/dd/QMwVK9HLRS/?thumbNail=1&w=1200&h=1200&type=proportional&preview=true", alt="sliding windows visual", width = '100%'), style='max-width:855px;'),
+tags$div(img(src='https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/img/Sliding%20Windows-01-20211212.png?raw=true', alt="sliding windows visual", width = '100%'), style='max-width:855px;'),
 p("The Sliding Windows score weights the most severe crashes more heavily than lower severity crashes. The Sliding Windows score is calculated by multiplying the number of Fatal (K) and Incapacitating Injury (A) crashes by 3, and multiplying the number of Non-Incapacitating Injury (B) crashes by 1. Once the weights are established and applied to the crashes, the total number of crashes are aggregated along a corridor while incorporating the crash severity weighting. Possible Injury
 (C) crashes and Property Damage Only (O) crashes are not reflected. The output from the Sliding Windows analysis can be used as a standalone output separate from the Safe Streets Model output described below. This output can be used as the basis of a typical High Injury Network that reflects crash history (once a threshold for the highest tier of streets is set).
   For more information about High Injury Networks, see the Vision Zero Network's",
@@ -117,7 +117,8 @@ p("Standard crash cost rates are built into the tool as a default.
 
 p("The default crash costs reflect a discount rate of 3% to reflect today's value of costs projected over a five year time horizon, which users can adjust. The table below shows the default crash cost values in the tool, as well as the original values derived based on the process above, without a discount rate applied."),
 
-tags$div(img(src="https://tooledesign.egnyte.com/dd/ilpAneHsKZ/?thumbNail=1&w=1200&h=1200&type=proportional&preview=true", alt="sliding windows visual", width = '100%'), style='max-width:391px;'),
+tags$div(img(src='https://github.com/tooledesign/Safer-Streets-Priority-Finder/blob/main/safer_streets_priority_finder/img/default-crash-costs-20211212.png?raw=true', alt="crash costs", width = '100%'), style='max-width:391px;'),
+
 
 p("Alternatively, users who have access to local crash cost rates or data (e.g., published by their state department of transportation) can customize the crash cost values according to each KABCO severity level. Users may also adjust the discount rate applied to user-input crash cost values so that costs can be projected over five year time periods."),
 
