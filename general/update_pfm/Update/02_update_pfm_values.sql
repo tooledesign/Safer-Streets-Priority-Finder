@@ -44,4 +44,4 @@ AND
 -- updated 72734
 
 -- Confirmed that 931 nulls existed in the original pbm values that were not solved by this update. 
--- This update fixed 848 pbm values that were incorrectly filled with 0 expected fatalities. Two still remain.
+-- This update fixed 848 pbm values that were incorrectly filled with 0 estimated fatalities. Two still remain.
