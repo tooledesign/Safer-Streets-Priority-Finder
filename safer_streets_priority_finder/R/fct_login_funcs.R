@@ -31,7 +31,7 @@ get_user_id <- function(connection, username, password){
         password <-  DBI::dbQuoteString(connection, password)
         
         # get salt 
-        salt <- as.character(DBI::dbGetQuery(connection, glue::glue("SELECT salt FROM gen_management.salt WHERE pgp_sym_decrypt(decode(username, 'hex'), {key}) = {username};"))[1,1]) 
+        salt <- as.character(DBI::dbGetQuery(connection, glue::glue("SELECT salt FROM gen_management.salt WHERE pgp_sym_decrypt(decode(username, 'hex'), {key}) = {username} ORDER BY time_created DESC LIMIT 1;"))[1,1]) 
         sterilized_salt <-  DBI::dbQuoteString(connection, salt)
         
         q <- glue::glue("SELECT DISTINCT user_id 
