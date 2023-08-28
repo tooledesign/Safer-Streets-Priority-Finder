@@ -37,3 +37,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# python venv
+venv/
+env/
+
+# Environment variables
+*.env
