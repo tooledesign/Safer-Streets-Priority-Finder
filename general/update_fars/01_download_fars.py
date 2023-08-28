@@ -7,7 +7,7 @@ data_folder = "/mnt/c/Users/tputta/OneDrive - Toole Design/Desktop/SSPF/FARS"
 start_yr = 2015
 end_yr = 2021
 
-for yr in range(start_yr, end_yr):
+for yr in range(start_yr, end_yr+1):
     print(f"Downloading {yr} FARS data")
     if not os.path.exists(f"{data_folder}/{yr}"):
         os.mkdir(f"{data_folder}/{yr}")
