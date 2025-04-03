@@ -1,9 +1,9 @@
+-- DROP DATABASE IF EXISTS sspf;
 
-
--- create database 
+-- create database
 CREATE DATABASE sspf;
 
--- add postgis 
+-- add postgis
 CREATE EXTENSION postgis;
 
 -- add pgcrypto
@@ -11,98 +11,87 @@ CREATE EXTENSION pgcrypto;
 
 -- create schema in sspf database
 CREATE SCHEMA gen_management;
+
 CREATE SCHEMA local_user_data;
+
 CREATE SCHEMA model_output_scratch;
+
 CREATE SCHEMA model_outputs;
+
 CREATE SCHEMA scratch;
+
 CREATE SCHEMA sliding_windows_outputs;
+
 CREATE SCHEMA static;
 
--- crete docker check table 
-CREATE TABLE gen_management.docker_status
-(
-    is_fresh BOOLEAN DEFAULT TRUE
+-- crete docker check table
+CREATE TABLE gen_management.docker_status(
+    is_fresh boolean DEFAULT TRUE
 );
 
--- create domain for model_status 
-CREATE DOMAIN gen_management.model_status_options AS TEXT
-CHECK (
-    VALUE IN (
-        'no_model_desired',
-        'model_needed',
-        'model_currently_running',
-        'model_estimation_completed')
-);
+-- create domain for model_status
+CREATE DOMAIN gen_management.model_status_options AS TEXT CHECK (VALUE IN ('no_model_desired', 'model_needed', 'model_currently_running', 'model_estimation_completed'));
 
 -- create domain for report_status
-CREATE DOMAIN gen_management.report_status_options AS TEXT
-CHECK (
-    VALUE IN (
-        'no_report_requested',
-        'report_requested',
-        'building_report',
-        'report_ready')
-);
+CREATE DOMAIN gen_management.report_status_options AS TEXT CHECK (VALUE IN ('no_report_requested', 'report_requested', 'building_report', 'report_ready'));
 
 -- create table
-CREATE TABLE gen_management.accounts 
-(
-tdg_id                    BIGSERIAL PRIMARY KEY,
-user_id                   INTEGER NOT NULL,
-username                  TEXT NOT NULL,
-email                     TEXT NOT NULL,
-run_id                    TEXT NOT NULL,
-crs                       INTEGER NULL,
-crash_o_year_col          TEXT NULL, 
-crash_o_serv_col          TEXT NULL, 
-crash_o_rep_id_col        TEXT NULL,
-crash_o_mode_col          TEXT NULL,
-roads_o_fun_c_col         TEXT NULL, 
-road_o_name               TEXT NULL,
-road_o_source             TEXT NULL,
-road_o_id                 TEXT NULL,
-roads_fun_c_col           TEXT NULL,
-crash_o_source            TEXT NULL,
-sa_o_source               TEXT NULL,
-move_windows_long_comp    BOOLEAN DEFAULT FALSE,	
-model_comp                BOOLEAN DEFAULT FALSE,
-sa_bbox_north_4326        FLOAT,
-sa_bbox_south_4326        FLOAT,
-sa_bbox_east_4326         FLOAT,
-sa_bbox_west_4326         FLOAT,
-time_since_model_desired  TIMESTAMP DEFAULT NULL,
-time_mode_finished        TIMESTAMP DEFAULT NULL,
-model_process_time        INTERVAL DEFAULT NULL,             
-model_status              gen_management.model_status_options DEFAULT 'no_model_desired',
-sa_storage_opt_out        BOOLEAN DEFAULT FALSE,
-roads_storage_opt_out     BOOLEAN DEFAULT FALSE,
-crash_storage_opt_out     BOOLEAN DEFAULT FALSE,
-sa_data_last_added        TIMESTAMP DEFAULT NULL,
-roads_data_last_added     TIMESTAMP DEFAULT NULL,
-crash_data_last_added     TIMESTAMP DEFAULT NULL,
-last_login TIMESTAMP      DEFAULT NOW(),
-account_created           TIMESTAMP DEFAULT NOW(),
-total_logins              INTEGER DEFAULT 1,
-password                  TEXT NULL,
-o_username                TEXT NULL,
-o_run_id                  TEXT NULL,
-date_crash_deleted        TIMESTAMP DEFAULT NULL,
-date_roads_deleted        TIMESTAMP DEFAULT NULL, 
-date_sa_deleted           TIMESTAMP DEFAULT NULL,
-discount_rate             DOUBLE PRECISION DEFAULT 0,
-o_k_cost                  DOUBLE PRECISION DEFAULT 0,
-o_a_cost                  DOUBLE PRECISION DEFAULT 0,
-o_b_cost                  DOUBLE PRECISION DEFAULT 0,
-o_c_cost                  DOUBLE PRECISION DEFAULT 0,
-o_o_cost                  DOUBLE PRECISION DEFAULT 0,
-report_status             gen_management.report_status_options DEFAULT 'no_report_requested',
-report_requested_time     TIMESTAMP DEFAULT NULL,
-report_finished_time      TIMESTAMP DEFAULT NULL
+CREATE TABLE gen_management.accounts(
+    tdg_id bigserial PRIMARY KEY,
+    user_id integer NOT NULL,
+    username text NOT NULL,
+    email text NOT NULL,
+    run_id text NOT NULL,
+    crs integer NULL,
+    crash_o_year_col text NULL,
+    crash_o_serv_col text NULL,
+    crash_o_rep_id_col text NULL,
+    crash_o_mode_col text NULL,
+    roads_o_fun_c_col text NULL,
+    road_o_name text NULL,
+    road_o_source text NULL,
+    road_o_id text NULL,
+    roads_fun_c_col text NULL,
+    crash_o_source text NULL,
+    sa_o_source text NULL,
+    move_windows_long_comp boolean DEFAULT FALSE,
+    model_comp boolean DEFAULT FALSE,
+    sa_bbox_north_4326 float,
+    sa_bbox_south_4326 float,
+    sa_bbox_east_4326 float,
+    sa_bbox_west_4326 float,
+    time_since_model_desired timestamp DEFAULT NULL,
+    time_mode_finished timestamp DEFAULT NULL,
+    model_process_time interval DEFAULT NULL,
+    model_status gen_management.model_status_options DEFAULT 'no_model_desired',
+    sa_storage_opt_out boolean DEFAULT FALSE,
+    roads_storage_opt_out boolean DEFAULT FALSE,
+    crash_storage_opt_out boolean DEFAULT FALSE,
+    sa_data_last_added timestamp DEFAULT NULL,
+    roads_data_last_added timestamp DEFAULT NULL,
+    crash_data_last_added timestamp DEFAULT NULL,
+    last_login timestamp DEFAULT NOW(),
+    account_created timestamp DEFAULT NOW(),
+    total_logins integer DEFAULT 1,
+    password TEXT NULL,
+    o_username text NULL,
+    o_run_id text NULL,
+    date_crash_deleted timestamp DEFAULT NULL,
+    date_roads_deleted timestamp DEFAULT NULL,
+    date_sa_deleted timestamp DEFAULT NULL,
+    discount_rate double precision DEFAULT 0,
+    o_k_cost double precision DEFAULT 0,
+    o_a_cost double precision DEFAULT 0,
+    o_b_cost double precision DEFAULT 0,
+    o_c_cost double precision DEFAULT 0,
+    o_o_cost double precision DEFAULT 0,
+    report_status gen_management.report_status_options DEFAULT 'no_report_requested',
+    report_requested_time timestamp DEFAULT NULL,
+    report_finished_time timestamp DEFAULT NULL
 );
 
--- fclass prior structure 
-CREATE TABLE static.national_fclass_priors
-(
+-- fclass prior structure
+CREATE TABLE static.national_fclass_priors(
     ogc_fid integer NOT NULL DEFAULT nextval('static.national_fclass_priors_ogc_fid_seq'::regclass),
     mode character varying COLLATE pg_catalog."default",
     severity character varying COLLATE pg_catalog."default",
@@ -113,9 +102,8 @@ CREATE TABLE static.national_fclass_priors
     CONSTRAINT national_fclass_priors_pkey PRIMARY KEY (ogc_fid)
 );
 
--- far_processed data structure 
-CREATE TABLE static.fars_processed
-(
+-- far_processed data structure
+CREATE TABLE static.fars_processed(
     pkey integer NOT NULL DEFAULT nextval('static.fars_processed_pkey_seq'::regclass),
     st_case bigint,
     crash_mode character varying COLLATE pg_catalog."default",
@@ -125,18 +113,14 @@ CREATE TABLE static.fars_processed
     county_fp character varying COLLATE pg_catalog."default",
     place_fp character varying COLLATE pg_catalog."default",
     functional_class bigint,
-    geom geometry(Geometry,4326),
+    geom geometry(Geometry, 4326),
     CONSTRAINT fars_processed_pkey PRIMARY KEY (pkey)
 );
 
-CREATE INDEX fars_processed_geom_geom_idx
-    ON static.fars_processed USING gist
-    (geom)
-    TABLESPACE pg_default;
+CREATE INDEX fars_processed_geom_geom_idx ON static.fars_processed USING gist(geom) TABLESPACE pg_default;
 
 -- osm_centerlines data structure
-CREATE TABLE static.osm_centerlines
-(
+CREATE TABLE static.osm_centerlines(
     way_id bigint NOT NULL DEFAULT nextval('static.osm_centerlines_way_id_seq'::regclass),
     osm_type character varying COLLATE pg_catalog."default" NOT NULL,
     name character varying COLLATE pg_catalog."default",
@@ -146,19 +130,14 @@ CREATE TABLE static.osm_centerlines
     state_fp character varying COLLATE pg_catalog."default",
     county_fp character varying COLLATE pg_catalog."default",
     state_county_fp_array character varying[] COLLATE pg_catalog."default",
-    geom geometry(MultiLineString,4326),
+    geom geometry(MultiLineString, 4326),
     CONSTRAINT osm_centerlines_pkey PRIMARY KEY (way_id)
 );
 
-CREATE INDEX osm_centerlines_geom_geom_idx
-    ON static.osm_centerlines USING gist
-    (geom)
-    TABLESPACE pg_default;
-    
---  static.us_county_2018 data structure 
+CREATE INDEX osm_centerlines_geom_geom_idx ON static.osm_centerlines USING gist(geom) TABLESPACE pg_default;
 
-CREATE TABLE static.us_county_2018
-(
+--  static.us_county_2018 data structure
+CREATE TABLE static.us_county_2018(
     id integer NOT NULL DEFAULT nextval('static.us_county_2018_id_seq'::regclass),
     ogc_fid integer,
     gisjoin character varying COLLATE pg_catalog."default",
@@ -181,18 +160,15 @@ CREATE TABLE static.us_county_2018
     intptlon character varying COLLATE pg_catalog."default",
     shape_leng double precision,
     shape_area double precision,
-    geom geometry(MultiPolygon,4326),
+    geom geometry(MultiPolygon, 4326),
     CONSTRAINT us_county_2018_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX us_county_2018_geom_geom_idx
-    ON static.us_county_2018 USING gist
-    (geom)
-    TABLESPACE pg_default;
+CREATE INDEX us_county_2018_geom_geom_idx ON static.us_county_2018 USING gist(geom) TABLESPACE pg_default;
 
-CREATE TABLE gen_management.salt
-(
-    username TEXT,
-    salt  TEXT,
-    time_created TIMESTAMP DEFAULT NOW()
+CREATE TABLE gen_management.salt(
+    username text,
+    salt text,
+    time_created timestamp DEFAULT NOW()
 );
+
