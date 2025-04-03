@@ -97,7 +97,7 @@ o_c_cost                  DOUBLE PRECISION DEFAULT 0,
 o_o_cost                  DOUBLE PRECISION DEFAULT 0,
 report_status             gen_management.report_status_options DEFAULT 'no_report_requested',
 report_requested_time     TIMESTAMP DEFAULT NULL,
-report_finished_time      TIMESTAMP DEFAULT NULL,
+report_finished_time      TIMESTAMP DEFAULT NULL
 );
 
 -- fclass prior structure 
