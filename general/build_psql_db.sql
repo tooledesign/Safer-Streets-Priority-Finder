@@ -111,7 +111,7 @@ CREATE TABLE static.national_fclass_priors
     n_crashes double precision,
     beta_crashes integer,
     CONSTRAINT national_fclass_priors_pkey PRIMARY KEY (ogc_fid)
-)
+);
 
 -- far_processed data structure 
 CREATE TABLE static.fars_processed
@@ -127,7 +127,7 @@ CREATE TABLE static.fars_processed
     functional_class bigint,
     geom geometry(Geometry,4326),
     CONSTRAINT fars_processed_pkey PRIMARY KEY (pkey)
-)
+);
 
 CREATE INDEX fars_processed_geom_geom_idx
     ON static.fars_processed USING gist
@@ -148,7 +148,7 @@ CREATE TABLE static.osm_centerlines
     state_county_fp_array character varying[] COLLATE pg_catalog."default",
     geom geometry(MultiLineString,4326),
     CONSTRAINT osm_centerlines_pkey PRIMARY KEY (way_id)
-)
+);
 
 CREATE INDEX osm_centerlines_geom_geom_idx
     ON static.osm_centerlines USING gist
@@ -183,7 +183,7 @@ CREATE TABLE static.us_county_2018
     shape_area double precision,
     geom geometry(MultiPolygon,4326),
     CONSTRAINT us_county_2018_pkey PRIMARY KEY (id)
-)
+);
 
 CREATE INDEX us_county_2018_geom_geom_idx
     ON static.us_county_2018 USING gist
@@ -195,4 +195,4 @@ CREATE TABLE gen_management.salt
     username TEXT,
     salt  TEXT,
     time_created TIMESTAMP DEFAULT NOW()
-)
+);
