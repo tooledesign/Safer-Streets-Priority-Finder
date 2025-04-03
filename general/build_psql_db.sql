@@ -1,7 +1,12 @@
 -- DROP DATABASE IF EXISTS sspf;
 
+-- the create database command needs to be run from the postgres database 
+-- the rest of this needs to be run within the sspf database once created
+
 -- create database
-CREATE DATABASE sspf;
+-- CREATE DATABASE sspf;
+
+-- create extension plpgsql;
 
 -- add postgis
 CREATE EXTENSION postgis;
