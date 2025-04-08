@@ -10,6 +10,7 @@ CREATE EXTENSION postgis;
 
 -- add pgcrypto
 CREATE EXTENSION pgcrypto;
+------------------------------------------------------------------------------------------------------------------------
 
 -- create schema in sspf database
 CREATE SCHEMA gen_management;
@@ -26,7 +27,9 @@ CREATE SCHEMA sliding_windows_outputs;
 
 CREATE SCHEMA static;
 
--- crete docker check table
+------------------------------------------------------------------------------------------------------------------------
+
+-- create docker check table
 CREATE TABLE gen_management.docker_status(
     is_fresh boolean DEFAULT TRUE
 );
@@ -92,85 +95,92 @@ CREATE TABLE gen_management.accounts(
     report_finished_time timestamp DEFAULT NULL
 );
 
--- fclass prior structure
-CREATE TABLE static.national_fclass_priors(
-    ogc_fid integer NOT NULL DEFAULT nextval('static.national_fclass_priors_ogc_fid_seq'::regclass),
-    mode character varying COLLATE pg_catalog."default",
-    severity character varying COLLATE pg_catalog."default",
-    road_fclass character varying COLLATE pg_catalog."default",
-    mileage integer,
-    n_crashes double precision,
-    beta_crashes integer,
-    CONSTRAINT national_fclass_priors_pkey PRIMARY KEY (ogc_fid)
-);
-
--- far_processed data structure
-CREATE TABLE static.fars_processed(
-    pkey integer NOT NULL DEFAULT nextval('static.fars_processed_pkey_seq'::regclass),
-    st_case bigint,
-    crash_mode character varying COLLATE pg_catalog."default",
-    crash_severity character varying COLLATE pg_catalog."default",
-    crash_year bigint,
-    state_fp character varying COLLATE pg_catalog."default",
-    county_fp character varying COLLATE pg_catalog."default",
-    place_fp character varying COLLATE pg_catalog."default",
-    functional_class bigint,
-    geom geometry(Geometry, 4326),
-    CONSTRAINT fars_processed_pkey PRIMARY KEY (pkey)
-);
-
-CREATE INDEX fars_processed_geom_geom_idx ON static.fars_processed USING gist(geom) TABLESPACE pg_default;
-
--- osm_centerlines data structure
-CREATE TABLE static.osm_centerlines(
-    way_id bigint NOT NULL DEFAULT nextval('static.osm_centerlines_way_id_seq'::regclass),
-    osm_type character varying COLLATE pg_catalog."default" NOT NULL,
-    name character varying COLLATE pg_catalog."default",
-    ref character varying COLLATE pg_catalog."default",
-    oneway smallint,
-    tags json,
-    state_fp character varying COLLATE pg_catalog."default",
-    county_fp character varying COLLATE pg_catalog."default",
-    state_county_fp_array character varying[] COLLATE pg_catalog."default",
-    geom geometry(MultiLineString, 4326),
-    CONSTRAINT osm_centerlines_pkey PRIMARY KEY (way_id)
-);
-
-CREATE INDEX osm_centerlines_geom_geom_idx ON static.osm_centerlines USING gist(geom) TABLESPACE pg_default;
-
---  static.us_county_2018 data structure
-CREATE TABLE static.us_county_2018(
-    id integer NOT NULL DEFAULT nextval('static.us_county_2018_id_seq'::regclass),
-    ogc_fid integer,
-    gisjoin character varying COLLATE pg_catalog."default",
-    statefp character varying COLLATE pg_catalog."default",
-    countyfp character varying COLLATE pg_catalog."default",
-    countyns character varying COLLATE pg_catalog."default",
-    geoid character varying COLLATE pg_catalog."default",
-    name character varying COLLATE pg_catalog."default",
-    namelsad character varying COLLATE pg_catalog."default",
-    lsad character varying COLLATE pg_catalog."default",
-    classfp character varying COLLATE pg_catalog."default",
-    mtfcc character varying COLLATE pg_catalog."default",
-    csafp character varying COLLATE pg_catalog."default",
-    cbsafp character varying COLLATE pg_catalog."default",
-    metdivfp character varying COLLATE pg_catalog."default",
-    funcstat character varying COLLATE pg_catalog."default",
-    aland double precision,
-    awater double precision,
-    intptlat character varying COLLATE pg_catalog."default",
-    intptlon character varying COLLATE pg_catalog."default",
-    shape_leng double precision,
-    shape_area double precision,
-    geom geometry(MultiPolygon, 4326),
-    CONSTRAINT us_county_2018_pkey PRIMARY KEY (id)
-);
-
-CREATE INDEX us_county_2018_geom_geom_idx ON static.us_county_2018 USING gist(geom) TABLESPACE pg_default;
-
 CREATE TABLE gen_management.salt(
     username text,
     salt text,
     time_created timestamp DEFAULT NOW()
 );
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+-- These queries show the structure of the tables in static, but aren't used to create the tables.
+
+
+-- fclass prior structure
+-- CREATE TABLE static.national_fclass_priors(
+--     ogc_fid integer NOT NULL DEFAULT nextval('static.national_fclass_priors_ogc_fid_seq'::regclass),
+--     mode character varying COLLATE pg_catalog."default",
+--     severity character varying COLLATE pg_catalog."default",
+--     road_fclass character varying COLLATE pg_catalog."default",
+--     mileage integer,
+--     n_crashes double precision,
+--     beta_crashes integer,
+--     CONSTRAINT national_fclass_priors_pkey PRIMARY KEY (ogc_fid)
+-- );
+
+-- far_processed data structure
+-- CREATE TABLE static.fars_processed(
+--     pkey integer NOT NULL DEFAULT nextval('static.fars_processed_pkey_seq'::regclass),
+--     st_case bigint,
+--     crash_mode character varying COLLATE pg_catalog."default",
+--     crash_severity character varying COLLATE pg_catalog."default",
+--     crash_year bigint,
+--     state_fp character varying COLLATE pg_catalog."default",
+--     county_fp character varying COLLATE pg_catalog."default",
+--     place_fp character varying COLLATE pg_catalog."default",
+--     functional_class bigint,
+--     geom geometry(Geometry, 4326),
+--     CONSTRAINT fars_processed_pkey PRIMARY KEY (pkey)
+-- );
+
+-- CREATE INDEX fars_processed_geom_geom_idx ON static.fars_processed USING gist(geom) TABLESPACE pg_default;
+
+-- osm_centerlines data structure
+-- CREATE TABLE static.osm_centerlines(
+--     way_id bigint NOT NULL DEFAULT nextval('static.osm_centerlines_way_id_seq'::regclass),
+--     osm_type character varying COLLATE pg_catalog."default" NOT NULL,
+--     name character varying COLLATE pg_catalog."default",
+--     ref character varying COLLATE pg_catalog."default",
+--     oneway smallint,
+--     tags json,
+--     state_fp character varying COLLATE pg_catalog."default",
+--     county_fp character varying COLLATE pg_catalog."default",
+--     state_county_fp_array character varying[] COLLATE pg_catalog."default",
+--     geom geometry(MultiLineString, 4326),
+--     CONSTRAINT osm_centerlines_pkey PRIMARY KEY (way_id)
+-- );
+
+-- CREATE INDEX osm_centerlines_geom_geom_idx ON static.osm_centerlines USING gist(geom) TABLESPACE pg_default;
+
+--  static.us_county_2018 data structure
+-- CREATE TABLE static.us_county_2018(
+--     id integer NOT NULL DEFAULT nextval('static.us_county_2018_id_seq'::regclass),
+--     ogc_fid integer,
+--     gisjoin character varying COLLATE pg_catalog."default",
+--     statefp character varying COLLATE pg_catalog."default",
+--     countyfp character varying COLLATE pg_catalog."default",
+--     countyns character varying COLLATE pg_catalog."default",
+--     geoid character varying COLLATE pg_catalog."default",
+--     name character varying COLLATE pg_catalog."default",
+--     namelsad character varying COLLATE pg_catalog."default",
+--     lsad character varying COLLATE pg_catalog."default",
+--     classfp character varying COLLATE pg_catalog."default",
+--     mtfcc character varying COLLATE pg_catalog."default",
+--     csafp character varying COLLATE pg_catalog."default",
+--     cbsafp character varying COLLATE pg_catalog."default",
+--     metdivfp character varying COLLATE pg_catalog."default",
+--     funcstat character varying COLLATE pg_catalog."default",
+--     aland double precision,
+--     awater double precision,
+--     intptlat character varying COLLATE pg_catalog."default",
+--     intptlon character varying COLLATE pg_catalog."default",
+--     shape_leng double precision,
+--     shape_area double precision,
+--     geom geometry(MultiPolygon, 4326),
+--     CONSTRAINT us_county_2018_pkey PRIMARY KEY (id)
+-- );
+
+-- CREATE INDEX us_county_2018_geom_geom_idx ON static.us_county_2018 USING gist(geom) TABLESPACE pg_default;
+
 
