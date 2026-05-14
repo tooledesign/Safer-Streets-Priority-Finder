@@ -633,7 +633,7 @@ if (!is.null(params$model_results_bike)) {
     leaflet::addProviderTiles(leaflet::providers$CartoDB.DarkMatter,
                               options = leaflet::providerTileOptions(noWrap = TRUE)
     ) %>% 
-    leaflet::addPolylines(data=params$model_results_ped,
+    leaflet::addPolylines(data=params$model_results_bike,
                           color = bike_cost(as.numeric(params$model_results_bike$rt_bike_cost_1y)),
                           opacity = .6,
                           weight = 2
