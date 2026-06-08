@@ -1,5 +1,6 @@
 # tdg specific things
 sspf_py/staging/*
+!sspf_py/staging/empty.txt
 sspf_py/sspf_venv
 /.quarto/
 **/*.quarto_ipynb
