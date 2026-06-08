@@ -1,0 +1,28 @@
+# Introduction
+This report summarizes input data (either user uploaded or based on open source defaults) and the resulting
+analyses driven by the Safer Streets Priority Finder tool. For more information on the tool, including
+methodology and FAQs, please visit https://sspf.tooledesign.com.
+
+## Study Area Overview
+```{python}
+# | echo: false
+import matplotlib.pyplot as plt
+from report_utils import map_utils
+from report_utils.render_guard import render_guard
+from src.global_vars import BoundaryStyle
+import contextily as cx
+
+
+MAP_FIG_SIZE = (16, 12)
+
+with render_guard("Study area map could not be rendered."):
+    STUDY_AREA_GDF = map_utils.get_study_area_gdf(study_id)
+    fig, ax = plt.subplots(figsize=MAP_FIG_SIZE)
+    style = BoundaryStyle()
+    map_utils._plot_study_area(ax, STUDY_AREA_GDF.to_crs("EPSG:3857"), style)
+    map_utils.pad_axes_to_ratio(ax, target_ratio=4 / 3, pad_fraction=0.05)
+    cx.add_basemap(ax, source=cx.providers.CartoDB.DarkMatter, attribution=False)
+    ax.set_axis_off()
+
+    plt.show()
+```

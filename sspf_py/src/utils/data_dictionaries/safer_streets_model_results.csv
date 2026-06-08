@@ -1,0 +1,73 @@
+Column Name,Column Type,Description
+dissolved_pkey,Integer,Primary key for the dissolved corridors this segment belongs to
+functional_class,Text,Functional classification of the road segment
+segment_sequence,Integer,Sequence of the short window segment along the dissolved corridor
+start_distance_m,Numeric,Starting distance of the short window segment along the dissolved corridor in meters
+end_distance_m,Numeric,Ending distance of the short window segment along the dissolved corridor in meters
+short_window_id,Integer,Unique Identifier for the short window (unit of analysis)
+ped_cv,Numeric,Coefficient of variation for estimated pedestrian crashes
+bike_cv,Numeric,Coefficient of variation for estimated bicycle crashes
+mv_cv,Numeric,Coefficient of variation for estimated motor vehicle crashes
+est_ped_k,Numeric,Estimated 5-year fatal pedestrian crashes
+est_ped_a,Numeric,Estimated 5-year serious injury pedestrian crashes
+est_ped_b,Numeric,Estimated 5-year minor injury pedestrian crashes
+est_ped_c,Numeric,Estimated 5-year possible injury pedestrian crashes
+est_ped_o,Numeric,Estimated 5-year property damage only pedestrian crashes
+est_bike_k,Numeric,Estimated 5-year fatal bicycle crashes
+est_bike_a,Numeric,Estimated 5-year serious injury bicycle crashes
+est_bike_b,Numeric,Estimated 5-year minor injury bicycle crashes
+est_bike_c,Numeric,Estimated 5-year possible injury bicycle crashes
+est_bike_o,Numeric,Estimated 5-year property damage only bicycle crashes
+est_mv_k,Numeric,Estimated 5-year fatal motor vehicle crashes
+est_mv_a,Numeric,Estimated 5-year serious injury motor vehicle crashes
+est_mv_b,Numeric,Estimated 5-year minor injury motor vehicle crashes
+est_mv_c,Numeric,Estimated 5-year possible injury motor vehicle crashes
+est_mv_o,Numeric,Estimated 5-year property damage only motor vehicle crashes
+ped_k_obs,Numeric,Observed 5-year fatal pedestrian crashes
+ped_a_obs,Numeric,Observed 5-year serious injury pedestrian crashes
+ped_b_obs,Numeric,Observed 5-year minor injury pedestrian crashes
+ped_c_obs,Numeric,Observed 5-year possible injury pedestrian crashes
+ped_o_obs,Numeric,Observed 5-year property damage only pedestrian crashes
+bike_k_obs,Numeric,Observed 5-year fatal bicycle crashes
+bike_a_obs,Numeric,Observed 5-year serious injury bicycle crashes
+bike_b_obs,Numeric,Observed 5-year minor injury bicycle crashes
+bike_c_obs,Numeric,Observed 5-year possible injury bicycle crashes
+bike_o_obs,Numeric,Observed 5-year property damage only bicycle crashes
+mv_k_obs,Numeric,Observed 5-year fatal motor vehicle crashes
+mv_a_obs,Numeric,Observed 5-year serious injury motor vehicle crashes
+mv_b_obs,Numeric,Observed 5-year minor injury motor vehicle crashes
+mv_c_obs,Numeric,Observed 5-year possible injury motor vehicle crashes
+mv_o_obs,Numeric,Observed 5-year property damage only motor vehicle crashes
+w_ped_k,Numeric,Weight of estimated fatal pedestrian crashes in Bayesian updating
+w_ped_a,Numeric,Weight of estimated serious injury pedestrian crashes in Bayesian updating
+w_ped_b,Numeric,Weight of estimated minor injury pedestrian crashes in Bayesian updating
+w_ped_c,Numeric,Weight of estimated possible injury pedestrian crashes in Bayesian updating
+w_ped_o,Numeric,Weight of estimated property damage only pedestrian crashes in Bayesian updating
+w_bike_k,Numeric,Weight of estimated fatal bicycle crashes in Bayesian updating
+w_bike_a,Numeric,Weight of estimated serious injury bicycle crashes in Bayesian updating
+w_bike_b,Numeric,Weight of estimated minor injury bicycle crashes in Bayesian updating
+w_bike_c,Numeric,Weight of estimated possible injury bicycle crashes in Bayesian updating
+w_bike_o,Numeric,Weight of estimated property damage only bicycle crashes in Bayesian updating
+w_mv_k,Numeric,Weight of estimated fatal motor vehicle crashes in Bayesian updating
+w_mv_a,Numeric,Weight of estimated serious injury motor vehicle crashes in Bayesian updating
+w_mv_b,Numeric,Weight of estimated minor injury motor vehicle crashes in Bayesian updating
+w_mv_c,Numeric,Weight of estimated possible injury motor vehicle crashes in Bayesian updating
+w_mv_o,Numeric,Weight of estimated property damage only motor vehicle crashes in Bayesian updating
+adj_ped_k,Numeric,Adjusted 5-year fatal pedestrian crashes after Bayesian updating
+adj_ped_a,Numeric,Adjusted 5-year serious injury pedestrian crashes after Bayesian updating
+adj_ped_b,Numeric,Adjusted 5-year minor injury pedestrian crashes after Bayesian updating
+adj_ped_c,Numeric,Adjusted 5-year possible injury pedestrian crashes after Bayesian updating
+adj_ped_o,Numeric,Adjusted 5-year property damage only pedestrian crashes after Bayesian updating
+adj_bike_k,Numeric,Adjusted 5-year fatal bicycle crashes after Bayesian updating
+adj_bike_a,Numeric,Adjusted 5-year serious injury bicycle crashes after Bayesian updating
+adj_bike_b,Numeric,Adjusted 5-year minor injury bicycle crashes after Bayesian updating
+adj_bike_c,Numeric,Adjusted 5-year possible injury bicycle crashes after Bayesian updating
+adj_bike_o,Numeric,Adjusted 5-year property damage only bicycle crashes after Bayesian updating
+adj_mv_k,Numeric,Adjusted 5-year fatal motor vehicle crashes after Bayesian updating
+adj_mv_a,Numeric,Adjusted 5-year serious injury motor vehicle crashes after Bayesian updating
+adj_mv_b,Numeric,Adjusted 5-year minor injury motor vehicle crashes after Bayesian updating
+adj_mv_c,Numeric,Adjusted 5-year possible injury motor vehicle crashes after Bayesian updating
+adj_mv_o,Numeric,Adjusted 5-year property damage only motor vehicle crashes after Bayesian updating
+total_bike_cost,Numeric,Total 5-year cost of bicycle crashes
+total_ped_cost,Numeric,Total 5-year cost of pedestrian crashes
+total_mv_cost,Numeric,Total 5-year cost of motor vehicle crashes

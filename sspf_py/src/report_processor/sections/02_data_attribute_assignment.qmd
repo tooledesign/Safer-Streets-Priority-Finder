@@ -1,0 +1,81 @@
+# Data Attribute Assignment
+This section summarizes how user uploaded data or default data variables were assigned to the standard
+variables used in the tool during the initial load processing. Each table below includes information on how
+the original/user uploaded data variables relate to the standard variables, as well as the total count and
+proportion of of each variable.
+
+```{python}
+from report_utils import stats_utils
+from report_utils.render_guard import render_guard
+from report_utils.table_utils import (
+    format_count,
+    format_currency,
+    format_percent,
+    format_miles,
+    render_latex_table,
+)
+
+```
+
+## Crash Variables
+### Crash Severity
+The table below consolidates every raw severity label that maps to the same
+standardized severity class and reports the observed counts and proportions for
+the study.
+
+```{python}
+# | output: asis
+with render_guard("Crash severity data not available for this study."):
+    severity_df = stats_utils.get_crash_severity_dataframe(study_id)
+    render_latex_table(
+        severity_df,
+        {
+            "Total Count": format_count,
+            "Proportion": format_percent,
+        },
+    )
+```
+
+### Crash Costs
+```{python}
+# | output: asis
+with render_guard("Crash cost data not available for this study."):
+    crash_cost_df = stats_utils.get_crash_cost_dataframe(study_id)
+    render_latex_table(
+        crash_cost_df,
+        {
+            "Crash Cost": format_currency,
+            "Total Count": format_count,
+            "Proportion": format_percent,
+        },
+    )
+```
+
+### Crash Mode
+```{python}
+# | output: asis
+with render_guard("Crash mode data not available for this study."):
+    mode_df = stats_utils.get_crash_mode_dataframe(study_id)
+    render_latex_table(
+        mode_df,
+        {
+            "Total Count": format_count,
+            "Proportion": format_percent,
+        },
+    )
+```
+
+## Road Variables
+### Road Functional Classification
+```{python}
+# | output: asis
+with render_guard("Road functional classification data not available for this study."):
+    fclass_df = stats_utils.get_functional_class_dataframe(study_id)
+    render_latex_table(
+        fclass_df,
+        {
+            "Total Miles": format_miles,
+            "Proportion": format_percent,
+        },
+    )
+```

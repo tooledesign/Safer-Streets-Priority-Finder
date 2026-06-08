@@ -1,0 +1,44 @@
+---
+title:  "Safer Streets Priority Finder Report"
+subtitle: "Study Name: {{< meta params.study_name >}} | Date Report Created: {{< meta params.report_date >}}"
+format: 
+    pdf:
+        keep-tex: true # for debugging
+        highlight-style: tango
+        include-in-header: preamble.tex # for custom latex packages (print python error messages properly)
+        toc: true
+        toc-title: Contents
+engine: jupyter
+jupyter: "sspf_venv"
+execute:
+    echo: false
+    warning: false
+    error: false
+
+# ideally, we should set default parameters here for toggling report sections
+# such as:
+# params:
+#   show_intro: true
+#   show_data_attributes: true
+#   show_descriptive_stats: true
+#   show_sliding_windows: true
+#   show_models: true
+# then when invoking the report generation, we can override them in the cli command
+# but for some reason params defined in the qmd would take precedence, it seems like a bug of quarto, 
+# for now, the workaround is to explicitly set them in the cli command, which is currently constructed by python
+---
+```{python}
+#| tags: [parameters]
+# parameters for python code
+host = None
+port = None
+user = None
+password = None
+db_name = None
+schema = None
+study_name = None
+study_id = None
+```
+
+<!-- AUTO-SECTIONS:START -->
+<!-- AUTO-SECTIONS:END -->

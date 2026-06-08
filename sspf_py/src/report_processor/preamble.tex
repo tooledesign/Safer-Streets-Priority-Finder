@@ -1,0 +1,21 @@
+\usepackage{fvextra}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{makecell}
+\usepackage{textcomp} % ensure \textasciicircum/\textasciicaret always exist
+\providecommand{\textasciicaret}{\^{}} % LuaLaTeX lacks this macro by default
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+
+% Customize Table of Contents spacing
+% Adjust these values to control the spacing between entries of the same level
+\usepackage{tocloft}
+\setlength{\cftbeforesecskip}{1em}         % Spacing between section (level 1) entries
+\setlength{\cftbeforesubsecskip}{0.5em}    % Spacing between subsection (level 2) entries
+\setlength{\cftbeforesubsubsecskip}{0.3em} % Spacing between sub-subsection (level 3) entries
+
+% Force a new page for each top-level section
+\let\stdsection\section
+\renewcommand\section{\clearpage\stdsection}
+

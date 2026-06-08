@@ -1,0 +1,4 @@
+Column Name,Column Type,Description
+road_id,,ID field from user input data
+road_name,Text,Name of the road segment
+functional_class,Text,Functional classification in (one of the standard values)

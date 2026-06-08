@@ -1,0 +1,139 @@
+# Analysis Parameters Overview
+This section summarizes the current analysis configuration used by the Sliding Windows and Safer Streets Model workflows. Values mirror the inputs available on the dashboard's Analysis Settings page so reviewers can confirm the study configuration directly within this report.
+
+```{python}
+# | echo: false
+# | output: true
+
+import pandas as pd
+import numpy as np
+from IPython.display import Markdown
+from report_utils.table_utils import render_markdown_table
+from src.utils import analysis
+from src import global_vars as gv
+
+analysis_data = analysis.get_analysis_params(study_id)
+
+if not analysis_data:
+    display(Markdown(
+        "> Analysis parameters are not available for this study. Run the analysis setup in the dashboard and regenerate the report."
+    ))
+else:
+    defaults = analysis_data["default"]
+    currents = analysis_data["current"]
+
+    def _is_empty(val):
+        if val is None:
+            return True
+        if isinstance(val, (dict, list, tuple, set)):
+            return len(val) == 0
+        if isinstance(val, pd.Series):
+            return val.empty
+        if isinstance(val, np.ndarray):
+            return val.size == 0
+        return False
+
+    def _value(key):
+        val = currents.get(key)
+        return defaults.get(key) if _is_empty(val) else val
+
+    def _formatted_number(value, decimals=None, suffix=""):
+        if value is None:
+            return "—"
+        if isinstance(value, (int, float)):
+            if decimals is None:
+                text = f"{value:,}" if isinstance(value, int) else f"{value:,.2f}"
+            else:
+                text = f"{value:,.{decimals}f}"
+        else:
+            text = str(value)
+        return f"{text} {suffix}".strip() if suffix else text
+
+    def _dict_value(container_name, key):
+        current_dict = currents.get(container_name) or {}
+        default_dict = defaults.get(container_name) or {}
+        current_val = current_dict.get(key)
+        if current_val is None:
+            return default_dict.get(key)
+        return current_val
+
+    def _short_window_value():
+        stored_value = currents.get("short_window_length")
+        if stored_value is not None:
+            return stored_value
+        sliding = _value("sliding_window_length")
+        ratio = _value("window_length_ratio")
+        try:
+            return sliding / ratio if sliding is not None and ratio else defaults["short_window_length"]
+        except ZeroDivisionError:
+            return defaults["short_window_length"]
+
+    # --- Severity Weights ---
+    weight_rows = []
+    for code in gv.SEVERITY_ORDER:
+        if code == "Omit From Analysis":
+            continue
+        label = gv.CRASH_SEVERITIES[code]
+        default_val = defaults["crash_weights"].get(code)
+        study_val = _dict_value("crash_weights", code)
+        weight_rows.append(
+            {
+                "Severity": label,
+                "Default Weight": _formatted_number(default_val),
+                "Study Weight": _formatted_number(study_val),
+            }
+        )
+    render_markdown_table(pd.DataFrame(weight_rows))
+
+    # --- Window Lengths ---
+    window_rows = [
+        {
+            "Parameter": "Sliding Window Length",
+            "Default": _formatted_number(defaults.get("sliding_window_length"), decimals=2, suffix="mi"),
+            "Study Value": _formatted_number(_value("sliding_window_length"), decimals=2, suffix="mi"),
+        },
+        {
+            "Parameter": "Sliding-to-Short Window Ratio",
+            "Default": _formatted_number(defaults.get("window_length_ratio")),
+            "Study Value": _formatted_number(_value("window_length_ratio")),
+        },
+        {
+            "Parameter": "Short Window Length",
+            "Default": _formatted_number(defaults.get("short_window_length"), decimals=2, suffix="mi"),
+            "Study Value": _formatted_number(_short_window_value(), decimals=2, suffix="mi"),
+        },
+    ]
+    render_markdown_table(pd.DataFrame(window_rows))
+
+    # --- Spatial + Reporting Parameters ---
+    spatial_rows = [
+        {
+            "Parameter": "Crash Join Distance",
+            "Default": _formatted_number(defaults.get("crash_join_distance"), suffix="ft"),
+            "Study Value": _formatted_number(_value("crash_join_distance"), suffix="ft"),
+        },
+        {
+            "Parameter": "Top Streets in Report",
+            "Default": _formatted_number(defaults.get("top_streets_threshold")),
+            "Study Value": _formatted_number(_value("top_streets_threshold")),
+        },
+    ]
+    render_markdown_table(pd.DataFrame(spatial_rows))
+
+    # --- Crash Costs ---
+    cost_rows = []
+    for code in gv.SEVERITY_ORDER:
+        if code == "Omit From Analysis":
+            continue
+        label = gv.CRASH_SEVERITIES[code]
+        default_val = defaults["crash_costs"].get(code)
+        study_val = _dict_value("crash_costs", code)
+        cost_rows.append(
+            {
+                "Severity": label,
+                "Default Cost": _formatted_number(default_val, decimals=0, suffix="USD"),
+                "Study Cost": _formatted_number(study_val, decimals=0, suffix="USD"),
+            }
+        )
+    render_markdown_table(pd.DataFrame(cost_rows))
+```
