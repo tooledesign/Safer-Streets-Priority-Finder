@@ -260,5 +260,5 @@ SWA_MAP_CONFIG = MappingConfig(
 ##########################################################################################################
 CONTACT_EMAIL = "saferstreetspriorityfinder@tooledesign.com"
 
-GIT_REPO_URL = "https://github.com/tooledesign/Safer-Streets-Priority-Finder/sspf_py"
+GIT_REPO_URL = "https://github.com/tooledesign/Safer-Streets-Priority-Finder/tree/main/sspf_py"
 CANONICAL_URL = "https://sspf.tooledesign.com"
