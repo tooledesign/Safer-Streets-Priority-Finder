@@ -1,0 +1,165 @@
+# Sliding Windows Analysis Results
+```{python}
+# | echo: false
+# | output: true
+
+import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
+from src.utils import dashboard_func
+from src.utils import analysis as analysis_utils
+from src.utils import db
+import report_utils.map_utils as map_utils
+from report_utils.render_guard import render_guard
+
+MAP_FIG_SIZE = (16, 12)
+STUDY_AREA_GDF = None
+TOP_CORRIDOR_DICT = {}
+SLIDING_WINDOW_RESULTS = None
+_SWA_RAN = False
+
+with render_guard("Sliding window results are not available for this study."):
+    STUDY_AREA_GDF = map_utils.get_study_area_gdf(study_id)
+    _un, _sn = db.get_user_and_study_names(study_id)
+    if not db.table_exists(f"swa_short_windows_{_un}_{_sn}", "outputs"):
+        display(
+            Markdown(
+                "_The Sliding Windows Analysis has not been run for this study. "
+                "Run the analysis from the Run Analysis tab to include this section._"
+            )
+        )
+    else:
+        for mode in ["ped", "bike", "mv"]:
+            TOP_CORRIDOR_DICT[mode] = dashboard_func.get_top_corridors_gdf(
+                study_id, mode
+            )
+
+        analysis_params = analysis_utils.get_analysis_params(study_id)
+        top_corridor_limit = analysis_params["current"].get("top_streets_threshold")
+        if top_corridor_limit in (None, 0):
+            top_corridor_limit = analysis_params["default"].get(
+                "top_streets_threshold", 10
+            )
+        top_corridor_limit = int(top_corridor_limit)
+
+        sliding_window_length = analysis_params["current"].get("sliding_window_length")
+        if sliding_window_length is None:
+            sliding_window_length = analysis_params["default"].get(
+                "sliding_window_length", 0.5
+            )
+
+        window_length_ratio = analysis_params["current"].get("window_length_ratio")
+        if window_length_ratio in (None, 0):
+            window_length_ratio = analysis_params["default"].get(
+                "window_length_ratio", 5
+            )
+
+        short_window_length = sliding_window_length / window_length_ratio
+        step_length = short_window_length  # step matches short window length
+
+        k_weight = analysis_params["current"].get("crash_weights")["K"]
+        if k_weight in (None, 0):
+            k_weight = analysis_params["default"].get("crash_weights")["K"]
+        a_weight = analysis_params["current"].get("crash_weights")["A"]
+        if a_weight in (None, 0):
+            a_weight = analysis_params["default"].get("crash_weights")["A"]
+        b_weight = analysis_params["current"].get("crash_weights")["B"]
+        if b_weight in (None, 0):
+            b_weight = analysis_params["default"].get("crash_weights")["B"]
+        c_weight = analysis_params["current"].get("crash_weights")["C"]
+        if c_weight in (None, 0):
+            c_weight = analysis_params["default"].get("crash_weights")["C"]
+        o_weight = analysis_params["current"].get("crash_weights")["O"]
+        if o_weight in (None, 0):
+            o_weight = analysis_params["default"].get("crash_weights")["O"]
+
+        SLIDING_WINDOW_RESULTS = analysis_utils.get_sliding_window_results(study_id)
+        _SWA_RAN = True
+
+
+def plot_top_corridors_map(mode):
+    if not _SWA_RAN:
+        return  # section-level message already displayed in setup cell
+    gdf = TOP_CORRIDOR_DICT.get(mode)
+    if gdf is None or gdf.empty:
+        display(Markdown("_No map data available for this mode._"))
+        return
+    fig, ax = plt.subplots(figsize=MAP_FIG_SIZE)
+    map_utils.plot_top_corridor_map(
+        ax=ax,
+        corridors_gdf=gdf,
+        study_area_gdf=STUDY_AREA_GDF,
+    )
+    plt.show()
+
+
+def plot_sliding_windows_map(mode):
+    if not _SWA_RAN:
+        return  # section-level message already displayed in setup cell
+    gdf = SLIDING_WINDOW_RESULTS
+    show_col = f"show_{mode}"
+    if gdf is None or gdf.empty or not gdf[show_col].any():
+        display(Markdown("_No map data available for this mode._"))
+        return
+    gdf = gdf[gdf[show_col]]
+    fig, ax = plt.subplots(figsize=MAP_FIG_SIZE)
+    map_utils.plot_sliding_window_map(
+        ax=ax,
+        mode=mode,
+        segments_gdf=gdf,
+        study_area_gdf=STUDY_AREA_GDF,
+    )
+    plt.show()
+
+
+def plot_top_corridors_table(mode):
+    if not _SWA_RAN:
+        return  # section-level message already displayed in setup cell
+    gdf = TOP_CORRIDOR_DICT.get(mode)
+    if gdf is None or gdf.empty:
+        print("No data available.")
+        return
+    table_df = gdf[["road_name", "functional_class", "crash_score"]].copy()
+    table_df.columns = ["Corridor Name", "Functional Class", "Crash Score"]
+    table_df["Crash Score"] = table_df["Crash Score"].round(2)
+    display(Markdown(table_df.to_markdown(index=False)))
+```
+
+```{python}
+#| echo: false
+#| output: true
+if _SWA_RAN:
+    display(Markdown(
+        f"## Method\n\n"
+        f"This analysis takes the crashes and roads data within the study area and allocates the crashes to roads, "
+        f"measured on {sliding_window_length}- mile sliding window segments stepped in {short_window_length}-mile increments along the network. "
+        f"The sliding windows score weights the most severe crashes more heavily than lower severity crashes. "
+        f"The Sliding Windows Score is calculated by multiplying the number of Fatal (K) crashes by {k_weight}, "
+        f"Incapacitating Injury (A) crashes by {a_weight}, Non-Incapacitating Injury (B) crashes by {b_weight}, "
+        f"Possible Injury (C) crashes by {c_weight}, and Property Damage Only (O) crashes by {o_weight}. "
+        f"Once the weights are established and applied to the crashes, the total number of crashes are aggregated "
+        f"along a corridor while incorporating the crash severity weighting. "
+        f"If you used FARS data alone, only fatal crashes will have been used."
+    ))
+```
+
+```{python}
+#| echo: false
+#| output: true
+if _SWA_RAN:
+    display(Markdown(
+        f"## Results Visualization\n\n"
+        f"The table and maps below highlight the top {top_corridor_limit} crash corridors for each mode "
+        f"as measured by the total overall Sliding Windows Scores for each sliding window segment."
+    ))
+
+    _MODE_LABELS = {"ped": "Pedestrian", "bike": "Bicycle", "mv": "Motor Vehicle"}
+
+    for mode, display_name in _MODE_LABELS.items():
+        display(Markdown("{{< pagebreak >}}"))
+        display(Markdown(f"### {display_name} Sliding Windows Analysis\n\n"))
+        plot_sliding_windows_map(mode)
+        display(Markdown("{{< pagebreak >}}"))
+        display(Markdown(f"#### Top {top_corridor_limit} {display_name} Crash Corridors"))
+        plot_top_corridors_map(mode)
+        plot_top_corridors_table(mode)
+```

@@ -1,5 +1,0 @@
-[postgres]
-host=hostname
-dbname=databasename
-user=username
-password=password

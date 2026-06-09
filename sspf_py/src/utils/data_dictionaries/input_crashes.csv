@@ -1,0 +1,5 @@
+Column Name,Column Type,Description
+crash_id,,Unique identifier for each crash record (from user input data)
+crash_year,Integer,Year when the crash occurred
+crash_mode,Text,"Crash mode (one of 'ped', 'bicycle', 'motorcycle', 'vehicle')"
+crash_severity,Text,"Severity of the crash (one of 'K', 'A', 'B', 'C', 'O')"

@@ -1,0 +1,152 @@
+# Descriptive Statistics of Crashes
+This section provides an overview of the crashes included in the analysis dataset. It highlights the distribution of crashes by mode,
+severity, functional classification, and year.
+
+```{python}
+# | echo: false
+# | output: true
+
+import pandas as pd
+from report_utils.table_utils import (
+    format_count,
+    format_currency,
+    format_percent,
+    format_miles,
+    render_markdown_table,
+    split_count_percent_tables,
+)
+from report_utils.graph_utils import render_plotly_figure
+from report_utils.render_guard import render_guard
+from src.utils import dashboard_func
+from IPython.display import Markdown, display
+
+modes_and_display_names = {
+    "All Crashes": "All Crashes",
+    "ped": "Pedestrian",
+    "bike": "Bicycle",
+    "mv": "Motor Vehicle",
+}
+
+# load dashboard data
+dashboard_data = None
+y0 = y1 = None
+_DASHBOARD_DATA_LOADED = False
+with render_guard("Dashboard data could not be loaded for this study."):
+    dashboard_data = dashboard_func.get_dashboard_data(study_id)
+    y0, y1 = dashboard_func.get_year_range(dashboard_data)
+    _DASHBOARD_DATA_LOADED = True
+```
+
+```{python}
+# | echo: false
+# | output: true
+
+if _DASHBOARD_DATA_LOADED:
+    display(Markdown("## Crashes by Mode and Severity"))
+    with render_guard("Mode by severity breakdown could not be rendered."):
+        table, fig = dashboard_func.mode_by_severity_stacked_components(
+            dashboard_data, y0=y0, y1=y1
+        )
+
+        if not table.data:
+            display(Markdown("_No crash data available for mode by severity breakdown._"))
+        else:
+            cols = [c["id"] for c in table.columns]
+            table_df = pd.DataFrame.from_records(table.data, columns=cols)
+
+            render_plotly_figure(fig)
+            render_markdown_table(table_df)
+```
+
+```{python}
+# | echo: false
+# | output: true
+
+if _DASHBOARD_DATA_LOADED:
+    display(Markdown("## Crashes by Severity"))
+    for mode, display_name in modes_and_display_names.items():
+        display(Markdown(f"### Crashes by Severity - {display_name}\n"))
+
+        with render_guard(f"No data available for {display_name} Crashes."):
+            table, fig = dashboard_func.create_donut_fig_table(
+                df=dashboard_data,
+                group_col="crash_severity",
+                y0=None,
+                y1=None,
+                filter=mode,
+            )
+
+            if not table.data:
+                display(Markdown(f"_No data available for {display_name}._"))
+                continue
+
+            cols = [c["id"] for c in table.columns]
+            table_df = pd.DataFrame.from_records(table.data, columns=cols)
+
+            render_plotly_figure(fig, height=450)
+            render_markdown_table(table_df, smaller=True)
+```
+
+```{python}
+# | echo: false
+# | output: true
+
+if _DASHBOARD_DATA_LOADED:
+    display(Markdown("## Crashes by Functional Classification"))
+    for mode, display_name in modes_and_display_names.items():
+        display(Markdown(f"### Crashes by Functional Classification - {display_name}\n"))
+
+        with render_guard(f"No data available for {display_name} Crashes."):
+            table, fig = dashboard_func.funclass_stacked_components(
+                df=dashboard_data,
+                y0=None,
+                y1=None,
+                filtered_mode=mode,
+            )
+
+            if not table.data:
+                display(Markdown(f"_No data available for {display_name}._"))
+                continue
+
+            cols = [c["id"] for c in table.columns]
+            table_df = pd.DataFrame.from_records(table.data, columns=cols)
+            count_df, percent_df = split_count_percent_tables(table_df)
+
+            render_plotly_figure(fig)
+            render_markdown_table(count_df, smaller=True)
+            render_markdown_table(percent_df, smaller=True)
+```
+
+```{python}
+# | echo: false
+# | output: true
+def _coerce_col_id(col_id: str):
+    try:
+        return int(col_id)
+    except ValueError:
+        return col_id
+
+if _DASHBOARD_DATA_LOADED:
+    display(Markdown("## Crashes by Year"))
+    for mode, display_name in modes_and_display_names.items():
+        display(Markdown(f"### Crashes by Year - {display_name}\n"))
+
+        with render_guard(f"No data available for {display_name} Crashes."):
+            table, fig = dashboard_func.severity_year_grouped_components(
+                df=dashboard_data,
+                y0=None,
+                y1=None,
+                filtered_mode=mode,
+            )
+
+            if not table.data:
+                display(Markdown(f"_No data available for {display_name}._"))
+                continue
+
+            cols = [_coerce_col_id(c["id"]) for c in table.columns]
+            table_df = pd.DataFrame.from_records(table.data, columns=cols)
+            table_df.rename(columns=lambda c: str(c), inplace=True)  # optional, keeps them strings afterwards
+
+            render_plotly_figure(fig, height=600)
+            render_markdown_table(table_df)
+```

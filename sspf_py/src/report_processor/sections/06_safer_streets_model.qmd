@@ -1,0 +1,130 @@
+# Safer Streets Model
+This Bayesian analysis blends observed crash history with modeled expectations to
+estimate mode-specific crash costs for each corridor. Results below highlight
+the highest-cost segments as well as how modeled expectations compare with recent
+observations.
+
+```{python}
+# | echo: false
+import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
+from src.global_vars import MODE_LABELS
+from src.utils import analysis as analysis_utils
+from src.utils import db, dashboard_func
+from report_utils import map_utils
+from report_utils.graph_utils import render_plotly_figure
+from report_utils.render_guard import render_guard
+
+MAP_FIG_SIZE = (16, 12)
+MODE_SEQUENCE = ["ped", "bike", "mv"]
+
+SAFER_STREETS_RESULTS = None
+OBS_VS_EST = {}
+_SETUP_OK = False
+
+if study_id is None:
+    display(Markdown("_Study context is missing; Safer Streets model outputs are unavailable._"))
+else:
+    _un, _sn = db.get_user_and_study_names(study_id)
+    if not db.table_exists(f"bayesian_estimates_{_un}_{_sn}", "outputs"):
+        display(Markdown(
+            "_The Safer Streets Model has not been run for this study. "
+            "Run the model from the Run Analysis tab to include this section._"
+        ))
+    else:
+        with render_guard("Safer Streets Model results could not be loaded."):
+            try:
+                STUDY_AREA_GDF
+            except NameError:
+                STUDY_AREA_GDF = map_utils.get_study_area_gdf(study_id)
+
+            SAFER_STREETS_RESULTS = analysis_utils.get_safer_streets_model_results(study_id)
+            OBS_VS_EST = {
+                mode: analysis_utils.get_observed_vs_estimated_by_mode(study_id, mode)
+                for mode in MODE_SEQUENCE
+            }
+            _SETUP_OK = True
+
+
+def _format_currency(value):
+    return "$0" if value is None else f"${value:,.0f}"
+
+
+def plot_safer_streets_map(mode):
+    if not _SETUP_OK:
+        return  # section-level message already displayed in setup cell
+    gdf = SAFER_STREETS_RESULTS
+    show_col = f"show_{mode}"
+    if gdf is None or gdf.empty or not gdf[show_col].any():
+        return
+    gdf = gdf[gdf[show_col]]
+    fig, ax = plt.subplots(figsize=MAP_FIG_SIZE)
+    map_utils.plot_safer_streets_map(
+        ax=ax,
+        mode=mode,
+        segments_gdf=gdf,
+        study_area_gdf=STUDY_AREA_GDF,
+    )
+    plt.show()
+
+
+def render_safer_streets_table(mode, limit=10):
+    if not _SETUP_OK:
+        return
+    df = SAFER_STREETS_RESULTS
+    show_col = f"show_{mode}"
+    if df is None or df.empty or not df[show_col].any():
+        return
+    table_df = (
+        df.loc[df[show_col], ["road_name", "functional_class", f"{mode}_cost"]]
+        .sort_values(by=f"{mode}_cost", ascending=False)
+        .head(limit)
+        .rename(
+            columns={
+                "road_name": "Corridor Name",
+                "functional_class": "Functional Class",
+                f"{mode}_cost": "Crash Cost",
+            }
+        )
+    )
+    table_df["Crash Cost"] = table_df["Crash Cost"].map(_format_currency)
+    display(Markdown(table_df.to_markdown(index=False)))
+
+
+def render_observed_vs_estimated(mode):
+    if not _SETUP_OK:
+        return  # section-level message already displayed in setup cell
+    df = OBS_VS_EST.get(mode)
+    if df is None or df.empty:
+        print("Observed vs. modeled summaries are unavailable.")
+        return
+    fig = dashboard_func.observed_vs_estimated_bar(df)
+    render_plotly_figure(fig, height=fig.layout.height or 400)
+    formatted = df.copy()
+    formatted["Observed Crashes"] = formatted["Observed Crashes"].map(
+        lambda v: f"{v:,.0f}"
+    )
+    formatted["Modeled Adjusted Crashes"] = formatted["Modeled Adjusted Crashes"].map(
+        lambda v: f"{v:,.1f}"
+    )
+    display(Markdown(formatted.to_markdown(index=False)))
+```
+
+```{python}
+#| echo: false
+#| output: true
+if _SETUP_OK:
+    _MODE_LABELS = {"ped": "Pedestrian", "bike": "Bicycle", "mv": "Motor Vehicle"}
+
+    for mode, display_name in _MODE_LABELS.items():
+        # start a new page for each mode except the first one
+        if mode != "ped": 
+            display(Markdown("{{< pagebreak >}}"))
+        display(Markdown(f"## {display_name} Safer Streets Model"))
+        with render_guard(f"{display_name} Safer Streets map could not be rendered."):
+            plot_safer_streets_map(mode)
+            display(Markdown("{{< pagebreak >}}"))
+        display(Markdown(f"### Observed vs. Modeled {display_name} Crashes by Severity"))
+        with render_guard(f"{display_name} observed vs. modeled data not available."):
+            render_observed_vs_estimated(mode)
+```

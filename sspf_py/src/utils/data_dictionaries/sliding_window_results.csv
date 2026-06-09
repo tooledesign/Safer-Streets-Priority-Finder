@@ -1,0 +1,11 @@
+Column Name,Column Type,Description
+dissolved_pkey,Integer,Primary key for the dissolved corridors this segment belongs to
+road_name,Text,Name of the road segment
+functional_class,Text,Functional classification of the road segment
+segment_sequence,Integer,Sequence of the short window segment along the dissolved corridor
+start_distance_m,Numeric,Starting distance of the short window segment along the dissolved corridor in meters
+end_distance_m,Numeric,Ending distance of the short window segment along the dissolved corridor in meters
+short_window_id,Integer,Unique Identifier for the short window (unit of analysis)
+bike_crash_score,Numeric,Bike crash density score over 5 years
+ped_crash_score,Numeric,Pedestrian crash density score over 5 years
+mv_crash_score,Numeric,Motor vehicle crash density score over 5 years

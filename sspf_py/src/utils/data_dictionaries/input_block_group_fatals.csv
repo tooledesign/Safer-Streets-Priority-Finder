@@ -1,0 +1,19 @@
+Column Name,Column Type,Description
+geoid,Text,"Block group GEOID, 2020 edition"
+sld_natwalkind_ord,Text,"Block group walkability category, derived from EPA SmartLocationDatabase"
+census_region,Text,Census Region
+census_division,Text,Census Division
+assumed_csa_name,Text,CSA name (if any)
+state_abbr_fac,Text,State abbreviation
+state_fac,Text,State code
+final_pred_type,Text,"Indicator of whether the model output is a direct estimate or an imputation due to missing or incomplete data, and if so, what the imputation is based on"
+n_ped_fatal_int,Integer,"Observed number of fatal pedestrian crashes in this CBG, 2018-2022"
+final_pred_ped,Numeric,Estimated number of fatal pedestrian crashes over 5 years
+final_se_ped,Numeric,Standard error on the estimated number of fatal pedestrian crashes
+n_bike_fatal_int,Integer,"Observed number of fatal bicyclist crashes in this CBG, 2018-2022"
+final_pred_bike,Numeric,Estimated number of fatal bicyclist crashes over 5 years
+final_se_bike,Numeric,Standard error on the estimated number of fatal bicyclist crashes
+n_mv_fatal_int,Integer,"Observed number of fatal motor vehicle only (non-ped/bike) crashes in this CBG, 2018-2022"
+final_pred_mv,Numeric,Estimated number of fatal motor vehicle only crashes over 5 years
+final_se_mv,Numeric,Standard error on the estimated number of fatal motor vehicle only crashes
+area_sq_m,Numeric,Area of the block group in square meters
