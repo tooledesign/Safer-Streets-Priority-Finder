@@ -673,8 +673,7 @@ def upload_crashes_formatted(username, study_name, store, id_col, year_col, mode
     if source == "builtin":
         source_table = "static.fars_crashes"
         source_crs = 4326
-        # TODO need to set the correct columns if FARS data is updated
-        id_col = "fid"
+        id_col = "year_st_case"
         year_col = "year"
         mode_col = "crash_mode"
         mode_recode = f"{recode_case_stmt(col=mode_col, recode_dict=FARS_CRASH_MODE_MAP, else_value='unknown mode')} AS crash_mode"

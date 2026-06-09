@@ -25,7 +25,7 @@ fi
 
 # FARS Crashes (update path if it changes)
 ogr2ogr -f "PostgreSQL" PG:"host=$DB_HOST port=$DB_PORT dbname=$DB_NAME user=$DB_USER password=$DB_PASSWORD" \
-    "$MYPATH/../staging/fars_crashes.gpkg" \
+    "$MYPATH/../staging/fars_crashes_2020_2024.gpkg" \
    -nln static.fars_crashes \
    -lco GEOMETRY_NAME=geom -lco precision=NO -lco OVERWRITE=YES -progress --config PG_USE_COPY YES -t_srs EPSG:4326
 
@@ -38,16 +38,10 @@ PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -U "$DB_U
     WHERE year < (SELECT year - 4 FROM max_year);
 "
 
-# delete existing pkey and add new surrogate pkey as year_st_case (should be unique for each crash and is a combination of year and case number)
+# delete existing pkey and add new pkey
 PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -U "$DB_USER" -c "
     ALTER TABLE static.fars_crashes
     DROP CONSTRAINT IF EXISTS fars_crashes_pkey;
-
-    ALTER TABLE static.fars_crashes
-    ADD COLUMN IF NOT EXISTS year_st_case TEXT;
-
-    UPDATE static.fars_crashes
-    SET year_st_case = year::TEXT || '_' || LPAD(st_case::TEXT, 6, '0');
 
     ALTER TABLE static.fars_crashes
     ADD PRIMARY KEY (year_st_case);
