@@ -3,7 +3,7 @@
 
 # Safer-Streets-Priority-Finder
 
-The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicyclists and pedestrians on your community’s roads. You can use your local road, crash, and study area data or select from nationally available datasets to:
+The Safer Streets Priority Finder (SSPF) enables you to analyze the risk to bicyclists, pedestrians, and motor vehicles on your community’s roads. You can use your local road, crash, and study area data or select from nationally available datasets to:
 
 1. Explore descriptive statistics related to your crash data
 2. Develop a Sliding Windows Analysis using historical crash data to inform a High Injury Network
@@ -88,7 +88,7 @@ bash 00_prep/09_load_bg_model_results.sh
 bash 00_prep/10_load_fatal_rate_and_severity_ratio.sh
 ```
 
-Required local staging files (available via download links on the Resources page of the website) before running the loaders:
+Required local staging files (available via download links on the [Resources page](https://sspf.tooledesign.com/resources) of the website) before running the loaders:
 
 - `staging/fars_crashes.gpkg`
 - `staging/block_group_fatals_model_results.gpkg`

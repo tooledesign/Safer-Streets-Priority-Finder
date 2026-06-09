@@ -139,7 +139,7 @@ def layout():
                                     html.Li(
                                         html.A(
                                             "Block Group Fatal Crash Estimates (GPKG)",
-                                            href="https://sspf-static-files.s3.us-east-1.amazonaws.com/block_group_fatal_crash_estimates.zip",
+                                            href="https://sspf-static-files.s3.us-east-1.amazonaws.com/block_group_fatals_model_results.zip",
                                             target="_blank",
                                             rel="noopener noreferrer",
                                             style={"color": "#0267FD"},
