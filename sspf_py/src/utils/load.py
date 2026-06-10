@@ -415,6 +415,7 @@ def upload_study_area(store, username, study_name, state_abbr, schema="inputs"):
                 ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON(:geom), 4326), {utm_epsg}) AS geom
         ;
 
+        ALTER TABLE {schema}.{table_name} ADD COLUMN pkey SERIAL PRIMARY KEY;
         CREATE INDEX ON {schema}.{table_name} USING GIST(geom);
         ANALYZE {schema}.{table_name};
     """
@@ -467,6 +468,8 @@ def upload_study_area(store, username, study_name, state_abbr, schema="inputs"):
             WHERE
                 ST_Intersects(bg.geom, sa.geom)
         );
+
+        ALTER TABLE {block_group_clip_table} ADD COLUMN pkey SERIAL PRIMARY KEY;
 
         -- for anything that is a geometry collection, extract the polygon parts
         UPDATE {block_group_clip_table}

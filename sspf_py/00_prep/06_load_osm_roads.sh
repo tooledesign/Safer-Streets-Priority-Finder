@@ -71,6 +71,11 @@ PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
 ;
 "
 
+# create primary key for osm_centerlines
+PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
+    ALTER TABLE static.osm_centerlines ADD PRIMARY KEY (osm_id);
+"
+
 # create a materialized view for quick highway lookups
 PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
     DROP MATERIALIZED VIEW IF EXISTS static.osm_highway_values;
