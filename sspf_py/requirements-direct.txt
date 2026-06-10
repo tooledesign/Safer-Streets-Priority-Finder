@@ -30,9 +30,10 @@ utm==0.8.1
 duckdb==1.5.2
 numpy==2.4.1
 pandas==2.3.3
+xlsxwriter==3.2.9  # not directly imported; used as engine in pd.ExcelWriter(..., engine="xlsxwriter")
 
 # --- Visualization ---
-kaleido==1.2.0  # not directly imported; needed by plotly.io.to_image() in .qmd report cells
+kaleido==1.2.0      # not directly imported; needed by plotly.io.to_image() in .qmd report cells
 matplotlib==3.10.8
 plotly==6.5.2
 

@@ -165,5 +165,6 @@ webencodings==0.5.1
 websocket-client==1.9.0
 Werkzeug==3.1.8
 widgetsnbextension==4.0.15
+xlsxwriter==3.2.9
 xyzservices==2026.3.0
 zipp==4.1.0
