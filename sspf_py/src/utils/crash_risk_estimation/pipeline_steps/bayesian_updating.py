@@ -6,6 +6,7 @@ import duckdb
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import sqlalchemy
 
 
 def _build_kernel(blur_size: int, blur_style: str) -> np.ndarray:
@@ -385,6 +386,13 @@ def upload_updated_crash_estimates(
             schema=datastore.config.output_schema,
             chunksize=5000,
         )
+        conn.execute(
+            sqlalchemy.text(
+                f"ALTER TABLE {datastore.config.output_schema}.{datastore.config.bayesian_estimates_table} "
+                f"ADD PRIMARY KEY ({datastore.config.short_window_pk})"
+            )
+        )
+        conn.commit()
     with datastore.config.db_engine.connect() as conn:
         datastore.local_crash_counts.to_postgis(
             name=datastore.config.output_observed_crash_counts_table,
