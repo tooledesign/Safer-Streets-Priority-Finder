@@ -30,6 +30,7 @@ utm==0.8.1
 duckdb==1.5.2
 numpy==2.4.1
 pandas==2.3.3
+tabulate==0.9.0    # not directly imported; required by pandas df.to_markdown() in report table rendering
 xlsxwriter==3.2.9  # not directly imported; used as engine in pd.ExcelWriter(..., engine="xlsxwriter")
 
 # --- Visualization ---
@@ -52,8 +53,10 @@ PyYAML==6.0.3
 passlib==1.7.4
 
 # --- Report generation (Quarto render path) ---
+quarto-cli==1.8.27     # provides the quarto command used by set_up_env.sh and report_processor.py
 ipykernel==7.1.0       # execution kernel for quarto render
 jupyter==1.1.1         # meta-package; brings in nbconvert/nbclient/nbformat used by Quarto
+papermill==2.6.0       # required by Quarto to inject --execute-params into the parameters cell
 
 # --- Dev / Jupyter web UI (not needed for quarto render or the Dash app) ---
 ipywidgets==8.1.8
