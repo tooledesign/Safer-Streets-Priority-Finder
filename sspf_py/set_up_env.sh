@@ -10,6 +10,8 @@ python3 -m venv "$MYPATH/sspf_venv"
 
 source "$MYPATH/sspf_venv/bin/activate"
 
+# Installs from the full frozen snapshot. To update deps, edit requirements-direct.txt
+# then run: pip install -r requirements-direct.txt && pip freeze > requirements.txt
 pip install -r "$MYPATH/requirements.txt"
 
 # Install a headless Chrome binary for Kaleido/Plotly image export
