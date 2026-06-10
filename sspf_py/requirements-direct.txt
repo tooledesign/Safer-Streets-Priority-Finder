@@ -1,0 +1,64 @@
+# Direct dependencies — human-maintained source of truth.
+# To re-freeze: pip install -r requirements-direct.txt && pip freeze > requirements.txt
+
+# --- Web framework & serving ---
+Flask==3.1.3
+Flask-Caching==2.3.1
+Flask-Login==0.6.3
+gunicorn==25.1.0
+
+# --- Dash UI ---
+dash==3.3.0
+dash-bootstrap-components==2.0.4
+dash-extensions==2.0.4
+dash-leaflet==1.1.3
+dash-svg==0.0.12
+dash_ag_grid==32.3.4
+
+# --- Geospatial ---
+contextily==1.7.0
+GeoAlchemy2==0.18.1
+geopandas==1.1.2
+jenkspy==0.4.1
+pyogrio==0.12.1
+pyproj==3.7.2
+rasterio==1.5.0
+shapely==2.1.2
+utm==0.8.1
+
+# --- Data processing ---
+duckdb==1.5.2
+numpy==2.4.1
+pandas==2.3.3
+
+# --- Visualization ---
+kaleido==1.2.0  # not directly imported; needed by plotly.io.to_image() in .qmd report cells
+matplotlib==3.10.8
+plotly==6.5.2
+
+# --- Database ---
+psycopg2-binary==2.9.11
+SQLAlchemy==2.0.45
+
+# --- HTTP & networking ---
+requests==2.33.0
+
+# --- Config & environment ---
+python-dotenv==1.2.2
+PyYAML==6.0.3
+
+# --- Auth ---
+passlib==1.7.4
+
+# --- Report generation (Quarto render path) ---
+ipykernel==7.1.0       # execution kernel for quarto render
+jupyter==1.1.1         # meta-package; brings in nbconvert/nbclient/nbformat used by Quarto
+
+# --- Dev / Jupyter web UI (not needed for quarto render or the Dash app) ---
+ipywidgets==8.1.8
+jupyterlab==4.5.7
+notebook==7.5.6
+
+# --- Dev / testing ---
+pytest==9.0.3
+pytest-timeout==2.4.0
