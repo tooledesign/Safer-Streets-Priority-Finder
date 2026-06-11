@@ -490,6 +490,8 @@ def upload_study_area(store, username, study_name, state_abbr, schema="inputs"):
 
         CREATE INDEX ON {block_group_clip_table} USING GIST(geom);
         ANALYZE {block_group_clip_table};
+
+        DROP TABLE IF EXISTS _tmp_sa_{username}_{study_name};
     """
     with eng.begin() as conn:
         conn.execute(sqlalchemy.text(q))
