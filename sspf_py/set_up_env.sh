@@ -10,6 +10,8 @@ python3 -m venv "$MYPATH/sspf_venv"
 
 source "$MYPATH/sspf_venv/bin/activate"
 
+# Installs from the full frozen snapshot. To update deps, edit requirements-direct.txt
+# then run: pip install -r requirements-direct.txt && pip freeze > requirements.txt
 pip install -r "$MYPATH/requirements.txt"
 
 # Install a headless Chrome binary for Kaleido/Plotly image export
@@ -28,5 +30,5 @@ quarto install tinytex
 if [[ ! -f "$MYPATH/.env" ]] && [[ -f "$MYPATH/.env.example" ]]; then
     echo "Creating .env from .env.example template..."
     cp "$MYPATH/.env.example" "$MYPATH/.env"
-    echo "⚠️  Please edit .env with your actual credentials before running the app."
+    echo "⚠️  Please edit .env (or wherever you saved the environment file) with your actual credentials before running the app."
 fi

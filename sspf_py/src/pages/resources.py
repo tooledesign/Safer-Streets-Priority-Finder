@@ -225,16 +225,22 @@ def layout():
                             html.Ul(
                                 [
                                     html.Li(
-                                        html.Span(
-                                            "SSPF v2.0 Report [PLACEHOLDER - link will be updated shortly]",
-                                            style={"color": "#6c757d"},
+                                        html.A(
+                                            "SSPF Version 2.0 - Report",
+                                            href="/assets/documents/SSPF_v2_Report.pdf",
+                                            target="_blank",
+                                            rel="noopener noreferrer",
+                                            style={"color": "#0267FD"},
                                         ),
                                         className="mb-2",
                                     ),
                                     html.Li(
-                                        html.Span(
-                                            "Block Group Fatality Model Report [PLACEHOLDER - link will be updated shortly]",
-                                            style={"color": "#6c757d"},
+                                        html.A(
+                                            "Block Group Fatality Model Report",
+                                            href="/assets/documents/SSPF_v2_Block_Group_Model_Report.pdf",
+                                            target="_blank",
+                                            rel="noopener noreferrer",
+                                            style={"color": "#0267FD"},
                                         ),
                                         className="mb-2",
                                     ),

@@ -47,7 +47,7 @@ rm /tmp/us-latest.osm.pbf
 # delete the flatnodes file to save space
 rm /tmp/flatnodes-us.bin
 
-# add index to highway column
+# add index to highway column and add a pkey
 PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
     ALTER TABLE static.osm_centerlines ADD PRIMARY KEY (osm_id);
     CREATE INDEX IF NOT EXISTS idx_osm_centerlines_highway ON static.osm_centerlines USING BTREE(highway);
@@ -69,11 +69,6 @@ PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
     DROP COLUMN IF EXISTS tunnel,
     DROP COLUMN IF EXISTS lanes
 ;
-"
-
-# create primary key for osm_centerlines
-PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "
-    ALTER TABLE static.osm_centerlines ADD PRIMARY KEY (osm_id);
 "
 
 # create a materialized view for quick highway lookups
