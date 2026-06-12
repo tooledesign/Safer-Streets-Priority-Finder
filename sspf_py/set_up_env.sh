@@ -30,5 +30,5 @@ quarto install tinytex
 if [[ ! -f "$MYPATH/.env" ]] && [[ -f "$MYPATH/.env.example" ]]; then
     echo "Creating .env from .env.example template..."
     cp "$MYPATH/.env.example" "$MYPATH/.env"
-    echo "⚠️  Please edit .env with your actual credentials before running the app."
+    echo "⚠️  Please edit .env (or wherever you saved the environment file) with your actual credentials before running the app."
 fi
