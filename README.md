@@ -70,7 +70,7 @@ bash set_up_env.sh
 
 This script:
 
-1. Creates (or repalces existing) `sspf_venv` virtual environment.
+1. Creates (or replaces existing) `sspf_venv` virtual environment.
 2. Installs Python dependencies from `requirements.txt`
 3. Installs a Chrome binary for Plotly/Kaleido
 4. Registers the kernel and installs TinyTeX for Quarto-based reporting
