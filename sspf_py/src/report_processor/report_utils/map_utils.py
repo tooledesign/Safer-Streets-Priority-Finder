@@ -12,9 +12,23 @@ from src.utils.mapping import build_color_scheme
 from src.global_vars import (
     TOP_CORRIDOR_CONFIG,
     SWA_MAP_CONFIG,
+    carto_tile_url,
 )
 
 DEFAULT_MAP_ASPECT_RATIO = 4/3
+
+
+def carto_basemap_provider(style="dark_all"):
+    """CARTO tile provider for contextily, carrying the API key when one is set.
+
+    xyzservices has no key field for the CartoDB providers, so the key rides on
+    the URL. Built from carto_tile_url so the report basemaps and the web map
+    basemaps stay on one URL shape, and so the key is read at call time.
+    """
+    provider = cx.providers.CartoDB.DarkMatter.copy()
+    provider["url"] = carto_tile_url(style)
+    provider["variant"] = style
+    return provider
 
 
 def get_study_area_gdf(study_id):
@@ -158,7 +172,7 @@ def plot_top_corridor_map(
     pad_fraction=0.05,
     basemap_source=None,
 ):
-    basemap_source = basemap_source or cx.providers.CartoDB.DarkMatter
+    basemap_source = basemap_source or carto_basemap_provider()
 
     corridors_wm = _project_to_web_mercator(corridors_gdf)
     study_wm = _project_to_web_mercator(study_area_gdf)
@@ -271,7 +285,7 @@ def _plot_mode_segments_map(
         legend.get_frame().set_boxstyle("round,pad=0.4,rounding_size=1")
 
     # add basemap
-    cx.add_basemap(ax, source=cx.providers.CartoDB.DarkMatter, attribution=False)
+    cx.add_basemap(ax, source=carto_basemap_provider(), attribution=False)
     ax.set_axis_off()
 
 def plot_sliding_window_map(

@@ -3,6 +3,7 @@ import os
 from dash import html
 import dash_leaflet as dl
 import dash_bootstrap_components as dbc
+from ..global_vars import DEFAULT_BASEMAPS
 
 # check if connection to a database can be established
 def check_db_connection():
@@ -27,6 +28,23 @@ def check_db_connection():
     except Exception as e:
         print(f"Database connection error: {e}")
         return False
+
+def build_base_layers(basemaps=None):
+    """Build dash-leaflet BaseLayer controls from BasemapConfig entries.
+
+    Tile URLs resolve here rather than at import time so that CARTO_API_KEY is
+    read after the environment has been loaded.
+    """
+    basemaps = DEFAULT_BASEMAPS if basemaps is None else basemaps
+    defaults_present = any(bm.default for bm in basemaps)
+    return [
+        dl.BaseLayer(
+            dl.TileLayer(url=bm.resolve_url(), attribution=bm.attribution),
+            name=bm.name,
+            checked=bm.default or (not defaults_present and idx == 0),
+        )
+        for idx, bm in enumerate(basemaps)
+    ]
 
 def leaflet_map_card(
             layer_params=[], 
@@ -80,25 +98,7 @@ def leaflet_map_card(
     map_children = [
         dl.Pane(name="popup_pane", style={"zIndex": 1000}),
         dl.LayersControl(
-            [
-                dl.BaseLayer(dl.TileLayer(), name="OpenStreetMap", checked=False),
-                dl.BaseLayer(
-                    dl.TileLayer(
-                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-                        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/'>CARTO</a>",
-                    ),
-                    name="Positron",
-                    checked=True,
-                ),
-                dl.BaseLayer(
-                    dl.TileLayer(
-                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-                        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/'>CARTO</a>",
-                    ),
-                    name="Dark Matter",
-                ),
-                *layer_groups,
-            ]
+            build_base_layers() + [*layer_groups]
         )
     ]
     if legend_overlay:

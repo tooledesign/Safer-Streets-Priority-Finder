@@ -850,17 +850,7 @@ def placeholder_analysis_results_map(analysis_type: str):
     analysis_type_readable = "Sliding Windows Analysis" if analysis_type == "sliding-windows" else "Safer Streets Model"
     header = f"{analysis_type_readable} Results Map"
 
-    basemap_config = SWA_MAP_CONFIG
-    defaults_present = any(b.default for b in basemap_config.basemaps)
-    base_layers = []
-    for idx, bm in enumerate(basemap_config.basemaps):
-        base_layers.append(
-            dl.BaseLayer(
-                dl.TileLayer(url=bm.tile_url, attribution=bm.attribution),
-                name=bm.name,
-                checked=bm.default or (not defaults_present and idx == 0),
-            )
-        )
+    base_layers = gen.build_base_layers(SWA_MAP_CONFIG.basemaps)
 
     map_children = [
         dl.Pane(name="pop_pane", style={"zIndex": 1000}),
