@@ -52,23 +52,7 @@ def register_map_vis_callbacks(app):
             has_ssm = utils.db.table_exists(table_name=study_table_names["output_model_results"])
 
             study_layer = utils.map_vis_func.get_study_area_dl_layer(username=un, study_name=sn)
-            layer_control_children = [
-                dl.BaseLayer(dl.TileLayer(), name="OpenStreetMap", checked=False),
-                dl.BaseLayer(
-                    dl.TileLayer(
-                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-                        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/'>CARTO</a>",
-                    ),
-                    name="Positron",
-                    checked=True,
-                ),
-                dl.BaseLayer(
-                    dl.TileLayer(
-                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-                        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/'>CARTO</a>",
-                    ),
-                    name="Dark Matter",
-                ),
+            layer_control_children = utils.gen.build_base_layers() + [
                 dl.Overlay(dl.LayerGroup(children=[study_layer]), name="Study Area", checked=True),
             ]
             layer_control_div = [dl.LayersControl(collapsed=True, position="topleft", children=layer_control_children)]

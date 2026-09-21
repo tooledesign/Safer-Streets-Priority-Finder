@@ -267,19 +267,7 @@ def _top_corridors_map_card():
     # setup base map tiles
     map_children = [
         dl.Pane(name="pop_pane", style={"zIndex": 1000}),
-        dl.LayersControl(
-            [
-                dl.BaseLayer(
-                    dl.TileLayer(
-                        url=bm.tile_url,
-                        attribution=bm.attribution,
-                    ),
-                    name=bm.name,
-                    checked=bm.default,
-                )
-                for bm in TOP_CORRIDOR_CONFIG.basemaps
-            ]
-        )
+        dl.LayersControl(utils.gen.build_base_layers(TOP_CORRIDOR_CONFIG.basemaps))
     ]
 
     map_children.append(dl.GeoJSON(id="top-corridors-layer"))

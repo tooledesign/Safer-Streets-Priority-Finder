@@ -12,9 +12,39 @@ from src.utils.mapping import build_color_scheme
 from src.global_vars import (
     TOP_CORRIDOR_CONFIG,
     SWA_MAP_CONFIG,
+    carto_tile_url,
+    CANONICAL_URL,
 )
 
 DEFAULT_MAP_ASPECT_RATIO = 4/3
+
+
+def carto_basemap_provider(style="dark_all"):
+    """CARTO tile provider for contextily, carrying the API key when one is set.
+
+    xyzservices has no key field for the CartoDB providers, so the key rides on
+    the URL. Built from carto_tile_url so the report basemaps and the web map
+    basemaps stay on one URL shape, and so the key is read at call time.
+    """
+    provider = cx.providers.CartoDB.DarkMatter.copy()
+    provider["url"] = carto_tile_url(style)
+    provider["variant"] = style
+    return provider
+
+
+def add_carto_basemap(ax, source=None, **kwargs):
+    """cx.add_basemap with the CARTO provider and the Referer its key requires.
+
+    Report maps are fetched by this server rather than by a browser, so nothing
+    sets a Referer on its own and CARTO rejects a key that is restricted by
+    website. CANONICAL_URL names the application the key belongs to.
+    """
+    return cx.add_basemap(
+        ax,
+        source=source if source is not None else carto_basemap_provider(),
+        headers={"Referer": CANONICAL_URL},
+        **kwargs,
+    )
 
 
 def get_study_area_gdf(study_id):
@@ -158,8 +188,6 @@ def plot_top_corridor_map(
     pad_fraction=0.05,
     basemap_source=None,
 ):
-    basemap_source = basemap_source or cx.providers.CartoDB.DarkMatter
-
     corridors_wm = _project_to_web_mercator(corridors_gdf)
     study_wm = _project_to_web_mercator(study_area_gdf)
 
@@ -179,7 +207,7 @@ def plot_top_corridor_map(
 
     ax.autoscale(enable=True)
     pad_axes_to_ratio(ax, target_ratio=target_ratio, pad_fraction=pad_fraction)
-    cx.add_basemap(ax, source=basemap_source, attribution=False)
+    add_carto_basemap(ax, source=basemap_source, attribution=False)
     ax.set_axis_off()
 
 
@@ -271,7 +299,7 @@ def _plot_mode_segments_map(
         legend.get_frame().set_boxstyle("round,pad=0.4,rounding_size=1")
 
     # add basemap
-    cx.add_basemap(ax, source=cx.providers.CartoDB.DarkMatter, attribution=False)
+    add_carto_basemap(ax, attribution=False)
     ax.set_axis_off()
 
 def plot_sliding_window_map(

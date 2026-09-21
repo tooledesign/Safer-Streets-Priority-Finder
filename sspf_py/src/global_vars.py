@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
@@ -159,9 +160,16 @@ class BoundaryStyle(FeatureStyle):
 @dataclass
 class BasemapConfig:
     name: str
-    tile_url: str
     attribution: str
+    tile_url: str = None
+    carto_style: str = None
     default: bool = False
+
+    def resolve_url(self):
+        """Tile URL for this basemap, carrying the CARTO key when there is one."""
+        if self.carto_style:
+            return carto_tile_url(self.carto_style)
+        return self.tile_url
 
 @dataclass
 class LayerConfig:
@@ -189,6 +197,21 @@ MODE_COLORMAPS = {
     "mv": "RdPu",
 }
 
+CARTO_TILE_TEMPLATE = "https://basemaps.cartocdn.com/{style}/{{z}}/{{x}}/{{y}}{{r}}.png"
+
+def carto_tile_url(style):
+    """Build a CARTO basemap tile URL, keyed when CARTO_API_KEY is set.
+
+    The key is read on every call rather than at import time: this module is
+    imported before app.py loads the .env file, and on the server the key
+    arrives from systemd's EnvironmentFile. With no key the unkeyed URL still
+    works, but CARTO watermarks the tiles.
+    """
+    url = CARTO_TILE_TEMPLATE.format(style=style)
+    api_key = os.getenv("CARTO_API_KEY", "").strip()
+    return f"{url}?key={api_key}" if api_key else url
+
+
 osm_basemap = BasemapConfig(
     name="OSM",
     tile_url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -197,18 +220,20 @@ osm_basemap = BasemapConfig(
 
 dark_matter_basemap = BasemapConfig(
     name="Dark Matter",
-    tile_url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    carto_style="dark_all",
     attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>"
 )
 positron_basemap = BasemapConfig(
     name="Positron",
-    tile_url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    carto_style="light_all",
     attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>",
     default=True,
 )
 
+DEFAULT_BASEMAPS = [osm_basemap, positron_basemap, dark_matter_basemap]
+
 TOP_CORRIDOR_CONFIG = MappingConfig(
-    basemaps=[osm_basemap, positron_basemap, dark_matter_basemap],
+    basemaps=DEFAULT_BASEMAPS,
     layers={
         "top_corridors": LayerConfig(
             layer_name="Top Crash Score Corridors",
@@ -224,7 +249,7 @@ TOP_CORRIDOR_CONFIG = MappingConfig(
 )
 
 SWA_MAP_CONFIG = MappingConfig(
-    basemaps=[osm_basemap, positron_basemap, dark_matter_basemap],
+    basemaps=DEFAULT_BASEMAPS,
     layers={
         "ped": GraduatedLayerConfig(
             layer_name="Sliding Window Crash Scores (Pedestrian)",
