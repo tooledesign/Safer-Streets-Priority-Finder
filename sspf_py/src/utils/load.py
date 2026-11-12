@@ -244,8 +244,6 @@ def get_col_list(table, schema, col_types=[]):
 
     return cols
 
-STAGING_SCHEMA = "tmp_staging"
-
 def staging_table(kind, username, study_name, qualified=True):
     """
     Name of the staging table holding a user's uploaded data ("roads" or "crashes") before formatting.
@@ -253,11 +251,11 @@ def staging_table(kind, username, study_name, qualified=True):
     the browser (e.g. a dcc.Store), since a client can send any value.
     """
     table = f"_tmp_{kind}_{username}_{study_name}".lower()
-    return f"{STAGING_SCHEMA}.{table}" if qualified else table
+    return f"tmp_staging.{table}" if qualified else table
 
 def staging_cols_exist(kind, username, study_name, cols):
     "True if every name in cols is a column of the user's staging table. Check client-selected columns with this before using them in SQL."
-    existing = set(get_col_list(table=staging_table(kind, username, study_name, qualified=False), schema=STAGING_SCHEMA))
+    existing = set(get_col_list(table=staging_table(kind, username, study_name, qualified=False), schema="tmp_staging"))
     return all(c in existing for c in cols)
 
 def column_dropdown(id_, label, options, value=None):
