@@ -704,6 +704,7 @@ def upload_crashes_formatted(username, study_name, store, id_col, year_col, mode
     crs = df["crs"].iloc[0]
 
     source = store.get("source")
+    params = {"source": source}
 
     if source == "builtin":
         source_table = "static.fars_crashes"
@@ -723,25 +724,38 @@ def upload_crashes_formatted(username, study_name, store, id_col, year_col, mode
             crash_sev_map = NULL,
         """
     elif source == "upload":
-        source_table = store.get("staging_table")
-        source_crs = store.get("staging_crs")
+        source_table = staging_table("crashes", un, sn)
+        try:
+            source_crs = int(store.get("staging_crs"))
+        except (TypeError, ValueError):
+            return False, "Crashes data failed to load: the uploaded file's coordinate system was not found. Please upload the file again."
         id_col = id_col
         year_col = year_col
         mode_recode = f"{recode_case_stmt(col=mode_col, recode_dict=store.get('crash_mode_map'), else_value='unknown mode')} AS crash_mode"
         severity_recode = f"{recode_case_stmt(col=severity_col, recode_dict=store.get('crash_severity_map'), else_value='unknown severity')} AS crash_severity"
-        studies_crash_attr_sql = f"""
-            crash_id_col = '{id_col}',
-            crash_year_col = '{year_col}',
-            crash_mode_col = '{mode_col}',
-            crash_sev_col = '{severity_col}',
-            crash_mode_map = '{json.dumps(store.get("crash_mode_map"))}'::jsonb,
-            crash_sev_map = '{json.dumps(store.get("crash_severity_map"))}'::jsonb,
+        studies_crash_attr_sql = """
+            crash_id_col = :id_col,
+            crash_year_col = :year_col,
+            crash_mode_col = :mode_col,
+            crash_sev_col = :severity_col,
+            crash_mode_map = CAST(:crash_mode_map AS jsonb),
+            crash_sev_map = CAST(:crash_sev_map AS jsonb),
         """
-        
+        params.update({
+            "id_col": id_col,
+            "year_col": year_col,
+            "mode_col": mode_col,
+            "severity_col": severity_col,
+            "crash_mode_map": json.dumps(store.get("crash_mode_map")),
+            "crash_sev_map": json.dumps(store.get("crash_severity_map")),
+        })
+
         # check for ID uniqueness
         is_unique, no_nulls = check_uniqueness(table=source_table, col=id_col)
         if not is_unique:
             return False, f"Crashes ID column '{id_col}' contains duplicate or NULL values. Please ensure all values are unique and non-null or select a different column."
+    else:
+        return False, "Crashes data failed to load: unknown crash data source."
 
     q = f"""
         DROP TABLE IF EXISTS _tmp_study_area_{un}_{sn};
@@ -778,7 +792,7 @@ def upload_crashes_formatted(username, study_name, store, id_col, year_col, mode
         -- update studies table with crashes info
         UPDATE gen_management.studies
         SET
-            crash_data_source = '{source}',
+            crash_data_source = :source,
             {studies_crash_attr_sql}
             crash_updated = NOW()
         WHERE 
@@ -813,7 +827,7 @@ def upload_crashes_formatted(username, study_name, store, id_col, year_col, mode
     print(f"Starting crashes upload for {un}_{sn} at {start_time}")
     try:
         with eng.begin() as conn:
-            conn.execute(sqlalchemy.text(q))
+            conn.execute(sqlalchemy.text(q), params)
         load_success = True
     except Exception as e:
         load_success = False
