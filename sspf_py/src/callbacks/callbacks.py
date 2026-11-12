@@ -749,10 +749,14 @@ def register_callbacks(app: dash.Dash):
                 fclass_assign_msg = dbc.Alert("Using built-in OSM roads; adjust functional class assignment as needed", color="info")
                 roads_fclass_mapping_children = [ld.attribute_map_card(attr_type="fclass", source="builtin")]
                 
-            elif roads_source == "upload" and store and store.get("staging_table"):
-                fclass_assign_msg = dbc.Alert("Please assign functional class values to standardized values", color="info")
-                roads_fclass_mapping_children = [ld.attribute_map_card(attr_type="fclass", source="upload", source_table=store.get("staging_table"), attr_col=fclass_col)]
-                roads_fclass_mapping_style = {"display": "block"}
+            elif roads_source == "upload" and cu and store and store.get("staging_table"):
+                # table name comes from the session, and the client-selected column must exist in that table
+                if ld.staging_cols_exist("roads", cu.username, sn, [fclass_col]):
+                    fclass_assign_msg = dbc.Alert("Please assign functional class values to standardized values", color="info")
+                    roads_fclass_mapping_children = [ld.attribute_map_card(attr_type="fclass", source="upload", source_table=ld.staging_table("roads", cu.username, sn), attr_col=fclass_col)]
+                    roads_fclass_mapping_style = {"display": "block"}
+                else:
+                    fclass_assign_msg = dbc.Alert("The selected functional class column was not found in the uploaded roads file.", color="danger")
                     
             fclass_assign_disabled = True
             confirm_disabled = False
@@ -844,16 +848,22 @@ def register_callbacks(app: dash.Dash):
         if not store.get("fclass_map"):
             return preset_modals.simple_modal(message="No functional class mapping found!", color="red"), False
 
-        un = current_user().username
+        cu = current_user()
+        if not cu:
+            return preset_modals.simple_modal(message="Please log in to load roads.", color="red"), False
+        un = cu.username
         sn = session["study_name"]
-        
+
         # need a study area first
         if not utils.db.table_exists(table_name=f"study_area_{un}_{sn}", schema="inputs"):
             return preset_modals.simple_modal(message="No study area found! Please upload a study area before loading roads.", color="red"), False
-        
+
         # ensure ID column is unique and no nulls are present
         if store.get("source") == "upload":
-            is_unique, no_nulls = ld.check_uniqueness(store.get("staging_table"), id_col)
+            # client-selected columns must exist in the user's staging table
+            if not ld.staging_cols_exist("roads", un, sn, [id_col, name_col, fclass_col]):
+                return preset_modals.simple_modal(message="The selected columns were not found in the uploaded roads file. Please upload the file again.", color="red"), False
+            is_unique, no_nulls = ld.check_uniqueness(ld.staging_table("roads", un, sn), id_col)
             # check id uniqueness
             if not is_unique:
                 return preset_modals.simple_modal(message=f"ID column '{id_col}' contains duplicate values or NULL values. Please select a different column.", color="red"), False
@@ -985,8 +995,15 @@ def register_callbacks(app: dash.Dash):
             return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="No crashes datastore found!", color="red")
         if not mode_col:
             return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="No crash mode column selected!", color="red")
+        cu = current_user()
+        if not cu:
+            return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="Please log in to load crashes.", color="red")
+        un, sn = cu.username, session["study_name"]
+        # client-selected column must exist in the user's staging table
+        if not ld.staging_cols_exist("crashes", un, sn, [mode_col]):
+            return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="The selected crash mode column was not found in the uploaded crashes file.", color="red")
 
-        table = store.get("staging_table")
+        table = ld.staging_table("crashes", un, sn)
         mapping_card = ld.attribute_map_card(attr_type="crash_mode", source="upload", source_table=table, attr_col=mode_col)
 
         return mapping_card, {"display": "block"}, True, preset_modals.simple_modal(message="Please assign crash mode values to standardized values", color="info")
@@ -1011,8 +1028,15 @@ def register_callbacks(app: dash.Dash):
             return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="No crashes datastore found!", color="red")
         if not severity_col:
             return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="No crash severity column selected!", color="red")
+        cu = current_user()
+        if not cu:
+            return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="Please log in to load crashes.", color="red")
+        un, sn = cu.username, session["study_name"]
+        # client-selected column must exist in the user's staging table
+        if not ld.staging_cols_exist("crashes", un, sn, [severity_col]):
+            return dash.no_update, dash.no_update, dash.no_update, preset_modals.simple_modal(message="The selected crash severity column was not found in the uploaded crashes file.", color="red")
 
-        table = store.get("staging_table")
+        table = ld.staging_table("crashes", un, sn)
         mapping_card = ld.attribute_map_card(attr_type="crash_severity", source="upload", source_table=table, attr_col=severity_col)
 
         return mapping_card, {"display": "block"}, True, preset_modals.simple_modal(message="Please assign crash severity values to standardized values", color="info")
@@ -1081,12 +1105,19 @@ def register_callbacks(app: dash.Dash):
             if not store.get("crash_severity_map"):
                 return preset_modals.simple_modal(message="No crash severity assignment found!\nPlease assign crash severities", color="red"), False
 
-        un = current_user().username
+        cu = current_user()
+        if not cu:
+            return preset_modals.simple_modal(message="Please log in to load crashes.", color="red"), False
+        un = cu.username
         sn = session["study_name"]
 
         # need a study area first
         if not utils.db.table_exists(table_name=f"study_area_{un}_{sn}", schema="inputs"):
             return preset_modals.simple_modal(message="No study area found! Please upload a study area before loading crashes.", color="red"), False
+
+        # client-selected columns must exist in the user's staging table
+        if store.get("source") == "upload" and not ld.staging_cols_exist("crashes", un, sn, [id_col, year_col, mode_col, severity_col]):
+            return preset_modals.simple_modal(message="The selected columns were not found in the uploaded crashes file. Please upload the file again.", color="red"), False
 
         load_success, message = ld.upload_crashes_formatted(username=un, study_name=sn, 
                                                             store=store, id_col=id_col, year_col=year_col, 

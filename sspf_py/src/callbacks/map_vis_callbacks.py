@@ -81,9 +81,10 @@ def register_map_vis_callbacks(app):
         if not init_data:
             raise dash.exceptions.PreventUpdate
         print("[map_vis] Step 2: loading crashes")
-        un, sn = init_data["un"], init_data["sn"]
         crash_dropdowns = [{"label": "No Crashes", "value": "No Crashes"}]
         try:
+            # look up names from the signed session, not the client-side init store
+            un, sn = utils.db.get_user_and_study_names(study_id=session["active_study_id"])
             crash_layers, _, crash_meta = utils.map_vis_func.get_crash_dl_layer(username=un, study_name=sn)
             layers = {}
             legends = {}
@@ -170,8 +171,9 @@ def register_map_vis_callbacks(app):
         if not init_data:
             raise dash.exceptions.PreventUpdate
         print("[map_vis] Step 5: loading fatality block groups")
-        un, sn = init_data["un"], init_data["sn"]
         try:
+            # look up names from the signed session, not the client-side init store
+            un, sn = utils.db.get_user_and_study_names(study_id=session["active_study_id"])
             fatality_layers, fatality_legend = utils.map_vis_func.fatality_bg_dl_layer(username=un, study_name=sn)
             layers = {}
             legends = {}

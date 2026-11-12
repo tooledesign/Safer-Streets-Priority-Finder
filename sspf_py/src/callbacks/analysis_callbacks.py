@@ -1,5 +1,6 @@
 from dash import Input, Output, State, ClientsideFunction, html, no_update, ctx, dcc
 import time
+import math
 import dash
 import re
 import os
@@ -126,6 +127,9 @@ def register_analysis_callbacks(app):
 
             # crash costs must maintain ordinality (K >= A >= B >= C >= O)
             costs_list = [analysis_params["crash_costs"][s] for s in CRASH_SEVERITIES.keys() if s != "Omit From Analysis"]
+            # costs are saved and later used in analysis SQL, so they must be real numbers
+            if any([c is None or isinstance(c, bool) or not isinstance(c, (int, float)) or not math.isfinite(c) for c in costs_list]):
+                return no_update, preset_modals.simple_modal(message="Error: Crash Costs must be numbers.", color="red")
             if not all([costs_list[i] >= costs_list[i+1] for i in range(len(costs_list)-1)]):
                 return no_update, preset_modals.simple_modal(message="Error: Crash Costs must maintain ordinality (K ≥ A ≥ B ≥ C ≥ O).", color="red")
 
@@ -137,14 +141,18 @@ def register_analysis_callbacks(app):
                 short_window_length = {analysis_params['sliding_window_length']}::FLOAT / {analysis_params['window_length_ratio']}::FLOAT,
                 crash_join_distance = {analysis_params['crash_join_distance']},
                 top_streets_threshold = {analysis_params['top_streets_threshold']},
-                crash_weights = '{json.dumps(analysis_params['crash_weights'])}',
-                crash_costs = '{json.dumps(analysis_params['crash_costs'])}',
+                crash_weights = :crash_weights,
+                crash_costs = :crash_costs,
                 analysis_params_updated = NOW()
             WHERE study_id = {study_id}
             """
+            params = {
+                "crash_weights": json.dumps(analysis_params["crash_weights"]),
+                "crash_costs": json.dumps(analysis_params["crash_costs"]),
+            }
             eng = utils.db.get_database_engine()
             with eng.connect() as conn:
-                conn.execute(sqlalchemy.text(q))
+                conn.execute(sqlalchemy.text(q), params)
                 conn.commit()
 
             return _analysis_settings_children(study_id=study_id, use_defaults=False), dbc.Alert("Analysis parameters saved successfully.", color="success", is_open=True)
