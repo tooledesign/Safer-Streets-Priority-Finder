@@ -36,28 +36,28 @@ def get_state_list(table="static.us_counties", state_col="state_name"):
 def get_county_list(state, table="static.us_counties", state_col="state_name", county_col="namelsad"):
     "Get list of counties for a given state from the given table and columns"
     engine = db.get_database_engine()
-    query = f"""
+    query = sqlalchemy.text(f"""
         SELECT
             {county_col}::TEXT AS county
         FROM {table}
-        WHERE {state_col} = '{state}'
+        WHERE {state_col} = :state
         ORDER BY {county_col}::TEXT;
-    """
+    """)
     with engine.connect() as conn:
-        county_list = sorted(list(pd.read_sql(query, conn)["county"]))
+        county_list = sorted(list(pd.read_sql(query, conn, params={"state": state})["county"]))
     return county_list
 
 def get_county_geojson(state, county, table="static.us_counties", state_col="state_name", county_col="namelsad"):
     "Get geometry of a specific county in a state from the given table and columns as a GeoDataFrame"
     engine = db.get_database_engine()
-    query = f"""
+    query = sqlalchemy.text(f"""
         SELECT
             ST_AsGeoJSON(ST_Transform(ST_Union(geom), 4326)) AS geom_geojson
         FROM {table}
-        WHERE {state_col} = '{state}' AND {county_col} = '{county}';
-    """
+        WHERE {state_col} = :state AND {county_col} = :county;
+    """)
     with engine.connect() as conn:
-        df = pd.read_sql(query, conn)
+        df = pd.read_sql(query, conn, params={"state": state, "county": county})
     if df.empty or not df.iloc[0]["geom_geojson"]:
         return None
     return json.loads(df.iloc[0]["geom_geojson"])
@@ -398,7 +398,7 @@ def upload_study_area(store, username, study_name, state_abbr, schema="inputs"):
         SET
             crs = {utm_epsg},
             study_area_updated = NOW(),
-            study_area_data_source = '{source}',
+            study_area_data_source = :source,
             study_centroid_4326 = ST_SetSRID(ST_MakePoint({lon}, {lat}), 4326),
             study_area_bbox_4326 = '{json.dumps(study_area_bbox_4326)}'::jsonb,
             study_state_lookup = '{state_abbr}'
@@ -421,7 +421,7 @@ def upload_study_area(store, username, study_name, state_abbr, schema="inputs"):
     """
     print(f"Uploading study area for {username}_{study_name} at {pd.Timestamp.now()}")
     with eng.begin() as conn:
-        conn.execute(sqlalchemy.text(q), {"geom": json.dumps(geom)})
+        conn.execute(sqlalchemy.text(q), {"geom": json.dumps(geom), "source": source})
 
     print(f"Creating clipped block group table for {username}_{study_name} at {pd.Timestamp.now()}")
     # also create a clipped block group table for the study area
