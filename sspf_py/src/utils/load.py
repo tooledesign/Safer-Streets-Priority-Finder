@@ -241,8 +241,24 @@ def get_col_list(table, schema, col_types=[]):
         q += f"AND LOWER(data_type) IN ({', '.join([f"'{ct.lower()}'" for ct in col_types])})"
     with eng.connect() as conn:
         cols = [row["column_name"] for row in conn.execute(sqlalchemy.text(q)).mappings().all()]
-    
+
     return cols
+
+STAGING_SCHEMA = "tmp_staging"
+
+def staging_table(kind, username, study_name, qualified=True):
+    """
+    Name of the staging table holding a user's uploaded data ("roads" or "crashes") before formatting.
+    Always build it from the logged-in user and active study. Never use a table name sent back from
+    the browser (e.g. a dcc.Store), since a client can send any value.
+    """
+    table = f"_tmp_{kind}_{username}_{study_name}".lower()
+    return f"{STAGING_SCHEMA}.{table}" if qualified else table
+
+def staging_cols_exist(kind, username, study_name, cols):
+    "True if every name in cols is a column of the user's staging table. Check client-selected columns with this before using them in SQL."
+    existing = set(get_col_list(table=staging_table(kind, username, study_name, qualified=False), schema=STAGING_SCHEMA))
+    return all(c in existing for c in cols)
 
 def column_dropdown(id_, label, options, value=None):
     "Create a dropdown for selecting a column from a list of options"
@@ -535,7 +551,9 @@ def recode_case_stmt(col, recode_dict, null_key="Null Values", empty_string_key=
         logger.error("Database connection failed in recode_case_stmt", exc_info=True)
         raise RuntimeError(f"Database connection failed: {e.pgerror or e.diag.message_primary}") from None
 
-    return case_stmt
+    # The CASE is embedded in statements run through sqlalchemy.text(), which reads ":name" as a bind
+    # parameter even inside quoted literals. Escape colons so mapped values containing ":" stay literal.
+    return case_stmt.replace(":", r"\:")
 
 def upload_roads_formatted(username, study_name, store, id_col, name_col, fclass_col):
     "Upload formatted roads to postgis inputs table"
@@ -555,13 +573,18 @@ def upload_roads_formatted(username, study_name, store, id_col, name_col, fclass
         name_col = "name"
         fclass_col = "highway"
     elif source == "upload":
-        source_table = store.get("staging_table")
-        source_crs = store.get("staging_crs")
+        source_table = staging_table("roads", un, sn)
+        try:
+            source_crs = int(store.get("staging_crs"))
+        except (TypeError, ValueError):
+            return False, "Roads data failed to load: the uploaded file's coordinate system was not found. Please upload the file again."
         id_col = id_col
         name_col = name_col
         fclass_col = fclass_col
         # check for ID uniqueness
-    
+    else:
+        return False, "Roads data failed to load: unknown roads data source."
+
     fclass_map = store.get("fclass_map")
     fclass_map_case_stmt = recode_case_stmt(col=fclass_col, 
                                             recode_dict=fclass_map,
@@ -600,11 +623,11 @@ def upload_roads_formatted(username, study_name, store, id_col, name_col, fclass
         -- update studies table with roads info
         UPDATE gen_management.studies
         SET
-            roads_data_source = '{source}',
-            roads_id_col = '{id_col}',
-            roads_name_col = '{name_col}',
-            roads_fclass_col = '{fclass_col}',
-            roads_fclass_map = '{json.dumps(fclass_map)}'::jsonb,
+            roads_data_source = :source,
+            roads_id_col = :id_col,
+            roads_name_col = :name_col,
+            roads_fclass_col = :fclass_col,
+            roads_fclass_map = CAST(:fclass_map AS jsonb),
             roads_updated = NOW()
         WHERE 
             study_name = '{sn}'
@@ -626,9 +649,16 @@ def upload_roads_formatted(username, study_name, store, id_col, name_col, fclass
     # print time 
     start_time = pd.Timestamp.now()
     print(f"Starting roads upload at {start_time}")
+    params = {
+        "source": source,
+        "id_col": id_col,
+        "name_col": name_col,
+        "fclass_col": fclass_col,
+        "fclass_map": json.dumps(fclass_map),
+    }
     try:
         with eng.begin() as conn:
-            conn.execute(sqlalchemy.text(q))
+            conn.execute(sqlalchemy.text(q), params)
         load_success = True
     except Exception as e:
         load_success = False
